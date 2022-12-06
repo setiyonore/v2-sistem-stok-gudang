@@ -24,13 +24,13 @@ class UserTableSeeder extends Seeder
             'password'=> bcrypt('password'),
         ]);
         //get all permission
-        $permission = Permission::all();
+        $permissions = Permission::all();
 
         //get role admin
         $role = Role::find(1);
 
         //assign permission to role
-        $role->syncPermission($permission);
+        $role->syncPermissions($permissions);
 
         //assign role to user
         $user->assignRole($role);
