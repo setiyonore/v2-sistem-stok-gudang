@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Apps\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+//    return view('welcome');
+    return \Inertia\Inertia::render('Auth/Login');
+})->middleware('guest');
+//prefix apps
+Route::prefix('apps')->group(function (){
+    //middleware auth
+    Route::group(['middleware' => ['auth']],function (){
+        //route dashboard
+        Route::get('dashboard',DashboardController::class)->name('apps.dashboard');
+    });
 });
