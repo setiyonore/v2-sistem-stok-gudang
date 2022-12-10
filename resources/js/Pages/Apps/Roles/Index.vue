@@ -43,7 +43,7 @@
                                             </span>
                                         </td>
                                         <td class="text-center">
-                                            <Link href="#" v-if="hasAnyPermission(['roles.edit'])"
+                                            <Link :href="`/apps/roles/${role.id}/edit`" v-if="hasAnyPermission(['roles.edit'])"
                                                   class="btn btn-success btn-sm me-2"><i
                                                 class="fa fa-pencil-alt me-1"></i> EDIT
                                             </Link>
