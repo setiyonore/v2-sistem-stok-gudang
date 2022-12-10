@@ -31,9 +31,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        $permission = Permission::all();
+        $permissions = Permission::all();
         return Inertia::render('Apps/Roles/Create', [
-            'permission' => $permission,
+            'permissions' => $permissions,
         ]);
     }
 
@@ -52,7 +52,7 @@ class RoleController extends Controller
         $role = Role::create([
             'name' => $request->name,
         ]);
-        $role->givePermissionTo($request->permission);
+        $role->givePermissionTo($request->permissions);
         return redirect()->route('apps.roles.index');
     }
 
