@@ -18,7 +18,8 @@
                                               class="btn btn-primary input-group-text"><i
                                             class="fa fa-plus-circle me-2"></i> NEW
                                         </Link>
-                                        <input type="text" v-model="search" class="form-control" placeholder="search by role name...">
+                                        <input type="text" v-model="search" class="form-control"
+                                               placeholder="search by role name...">
 
                                         <button class="btn btn-primary input-group-text" type="submit"><i
                                             class="fa fa-search me-2"></i> SEARCH
@@ -43,11 +44,13 @@
                                             </span>
                                         </td>
                                         <td class="text-center">
-                                            <Link :href="`/apps/roles/${role.id}/edit`" v-if="hasAnyPermission(['roles.edit'])"
+                                            <Link :href="`/apps/roles/${role.id}/edit`"
+                                                  v-if="hasAnyPermission(['roles.edit'])"
                                                   class="btn btn-success btn-sm me-2"><i
                                                 class="fa fa-pencil-alt me-1"></i> EDIT
                                             </Link>
-                                            <button v-if="hasAnyPermission(['roles.delete'])"
+                                            <button @click.prevent="destroy(role.id)"
+                                                    v-if="hasAnyPermission(['roles.delete'])"
                                                     class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> DELETE
                                             </button>
                                         </td>
@@ -70,6 +73,7 @@ import Pagination from '../../../Components/Pagination.vue';
 import {Link, Head} from "@inertiajs/inertia-vue3";
 import {ref} from "vue";
 import {Inertia} from "@inertiajs/inertia";
+import Swal from "sweetalert2";
 
 
 export default {
@@ -84,7 +88,30 @@ export default {
                 q: search.value,
             });
         }
-        return {search, handleSearch}
+        const destroy = (id) => {
+            Swal.fire({
+                title: 'Konfirmasi !!!',
+                text: 'Anda Akan Menghapus Data ?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Hapus',
+            })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        Inertia.delete(`/apps/roles/${id}`);
+                        Swal.fire({
+                            title: 'Sukses',
+                            text: 'Data Berhasil Di Hapus',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false,
+                        })
+                    }
+                })
+        }
+        return {search, handleSearch, destroy}
     }
 }
 </script>
