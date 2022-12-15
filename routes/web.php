@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Apps\DashboardController;
+use App\Http\Controllers\Apps\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,4 +29,6 @@ Route::prefix('apps')->group(function () {
     //route resource roles
     Route::resource('/roles', \App\Http\Controllers\Apps\RoleController::class, ['as' => 'apps'])
         ->middleware('permission:roles.index|roles.create|roles.edit|roles.delete');
+    Route::resource('/users',UserController::class,['as'=>'apps'])
+        ->middleware('permission:user.index|user.create|user.edit|user.delete');
 });
