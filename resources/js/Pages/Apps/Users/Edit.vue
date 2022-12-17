@@ -1,7 +1,5 @@
 <template>
-  <head>
-    <title>Tambah User - Sistem Informasi Stok Gudang</title>
-  </head>
+  <Head>Edit User - Sistem Informasi Stok Gudang</Head>
   <main class="c-main">
     <div class="container-fluid">
       <div class="fade-in">
@@ -9,8 +7,8 @@
           <div class="col-md-12">
             <div class="card border-0 rounded-3 shadow border-top-purple">
               <div class="card-header">
-                <span class="font-weight-bold"
-                  ><i class="fas fa-users"></i> Tambah User</span
+                <span class="font-font-weight-bold"
+                  ><i class="fas fa-user"></i> Edit user</span
                 >
               </div>
               <div class="card-body">
@@ -18,13 +16,13 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="mb-3">
-                        <label class="font-weight-bold">Nama</label>
+                        <label class="fw-bold">Name</label>
                         <input
                           class="form-control"
                           v-model="form.name"
                           :class="{ 'is-invalid': errors.name }"
                           type="text"
-                          placeholder="Nama"
+                          placeholder="Name"
                         />
                       </div>
                       <div v-if="errors.name" class="alert alert-danger">
@@ -33,10 +31,10 @@
                     </div>
                     <div class="col-md-6">
                       <div class="mb-3">
-                        <label class="font-weight-bold">Email</label>
+                        <label for="email">Email</label>
                         <input
+                          type="text"
                           class="form-control"
-                          type="email"
                           v-model="form.email"
                           :class="{ 'is-invalid': errors.email }"
                           placeholder="Email"
@@ -50,12 +48,12 @@
                   <div class="row">
                     <div class="col-md-6">
                       <div class="mb-3">
-                        <label class="font-weight-bold">Password</label>
+                        <label class="fw-bold">Password</label>
                         <input
-                          type="password"
                           class="form-control"
                           v-model="form.password"
                           :class="{ 'is-invalid': errors.password }"
+                          type="password"
                           placeholder="Password"
                         />
                       </div>
@@ -65,14 +63,12 @@
                     </div>
                     <div class="col-md-6">
                       <div class="mb-3">
-                        <label class="font-weight-bold"
-                          >Konfirmasi Password</label
-                        >
+                        <label class="fw-bold">Password Confirmation</label>
                         <input
-                          type="password"
                           class="form-control"
                           v-model="form.password_confirmation"
-                          placeholder="Konfirmasi Password"
+                          type="password"
+                          placeholder="Password Confirmation"
                         />
                       </div>
                     </div>
@@ -80,7 +76,9 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="mb-3">
-                        <label class="font-weight-bold">Roles</label>
+                        <label for="roles" class="font-weight-bold"
+                          >Roles</label
+                        >
                         <br />
                         <div
                           class="form-check form-check-inline"
@@ -92,13 +90,10 @@
                             class="form-check-input"
                             v-model="form.roles"
                             :value="role.name"
-                            :id="`check-${role.id}`"
                           />
-                          <label
-                            class="form-check-label"
-                            :for="`check-${role.id}`"
-                            >{{ role.name }}</label
-                          >
+                          <label :for="`check-${role.id}`">{{
+                            role.name
+                          }}</label>
                         </div>
                       </div>
                       <div v-if="errors.roles" class="alert alert-danger">
@@ -112,7 +107,7 @@
                         class="btn btn-primary shadow-sm rounded-sm"
                         type="submit"
                       >
-                        SAVE
+                        UPDATE
                       </button>
                       <button
                         class="btn btn-warning shadow-sm rounded-sm ms-3"
@@ -134,30 +129,32 @@
 
 <script>
 import LayoutApp from "../../../Layouts/App.vue";
-import { Head, Link } from "@inertiajs/inertia-vue3";
+import { Link, Head } from "@inertiajs/inertia-vue3";
 import { reactive } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import Swal from "sweetalert2";
-
 export default {
-  name: "Create",
   layout: LayoutApp,
-  components: { Head, Link },
+  components: {
+    Head,
+    Link,
+  },
   props: {
     errors: Object,
+    user: Object,
     roles: Array,
   },
-  setup() {
+  setup(props) {
     const form = reactive({
-      name: "",
-      email: "",
+      name: props.user.name,
+      email: props.user.email,
       password: "",
       password_confirmation: "",
-      roles: [],
+      roles: props.user.roles.map((obj) => obj.name),
     });
     const submit = () => {
-      Inertia.post(
-        "/apps/users",
+      Inertia.put(
+        `/apps/users/${props.user.id}`,
         {
           name: form.name,
           email: form.email,
@@ -169,7 +166,7 @@ export default {
           onSuccess: () => {
             Swal.fire({
               title: "Success",
-              text: "Data User Berhasil Disimpan",
+              text: "Data User Berhasil Diupdate",
               icon: "success",
               showConfirmButton: false,
               timer: 2000,
@@ -182,6 +179,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-</style>
