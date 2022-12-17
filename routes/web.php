@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Apps\DashboardController;
 use App\Http\Controllers\Apps\UserController;
+use App\Http\Controllers\Apps\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,7 @@ use App\Http\Controllers\Apps\UserController;
 */
 
 Route::get('/', function () {
-//    return view('welcome');
+    //    return view('welcome');
     return \Inertia\Inertia::render('Auth/Login');
 })->middleware('guest');
 //prefix apps
@@ -27,8 +28,8 @@ Route::prefix('apps')->group(function () {
         Route::get('dashboard', DashboardController::class)->name('apps.dashboard');
     });
     //route resource roles
-    Route::resource('/roles', \App\Http\Controllers\Apps\RoleController::class, ['as' => 'apps'])
+    Route::resource('/roles', RoleController::class, ['as' => 'apps'])
         ->middleware('permission:roles.index|roles.create|roles.edit|roles.delete');
-    Route::resource('/users',UserController::class,['as'=>'apps'])
+    Route::resource('/users', UserController::class, ['as' => 'apps'])
         ->middleware('permission:user.index|user.create|user.edit|user.delete');
 });

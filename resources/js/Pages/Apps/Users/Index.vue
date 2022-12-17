@@ -15,7 +15,7 @@
                                 <form>
                                     <div class="input-group mb-3">
 
-                                        <Link href="/apps/users/create" v-if="hasAnyPermission(['users.create'])"
+                                        <Link href="/apps/users/create" v-if="hasAnyPermission(['user.add'])"
                                               class="btn btn-primary input-group-text"><i
                                             class="fa fa-plus-circle me-2"></i> NEW
                                         </Link>
