@@ -14,7 +14,7 @@
                 >
               </div>
               <div class="card-body">
-                <form>
+                <form @submit.prevent="handleSearch">
                   <div class="input-group mb-3">
                     <Link
                       href="/apps/users/create"
@@ -27,6 +27,7 @@
                       type="text"
                       class="form-control"
                       placeholder="search by user name..."
+                      v-model="search"
                     />
 
                     <button
@@ -95,6 +96,8 @@ import Pagination from "../../../Components/Pagination.vue";
 
 //import Heade and Link from Inertia
 import { Head, Link } from "@inertiajs/inertia-vue3";
+import { ref } from "vue";
+import { Inertia } from "@inertiajs/inertia";
 
 export default {
   //layout
@@ -110,6 +113,15 @@ export default {
   //props
   props: {
     users: Object,
+  },
+  setup() {
+    const search = ref("" || new URL(document.location).searchParams.get("q"));
+    const handleSearch = () => {
+      Inertia.get("/apps/users/", {
+        q: search.value,
+      });
+    };
+    return { search, handleSearch };
   },
 };
 </script>
