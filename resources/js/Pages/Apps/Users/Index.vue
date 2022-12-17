@@ -70,6 +70,7 @@
                         <button
                           v-if="hasAnyPermission(['user.delete'])"
                           class="btn btn-danger btn-sm"
+                          @click.prevent="destroy(user.id)"
                         >
                           <i class="fa fa-trash"></i> DELETE
                         </button>
@@ -98,7 +99,7 @@ import Pagination from "../../../Components/Pagination.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import { ref } from "vue";
 import { Inertia } from "@inertiajs/inertia";
-
+import Swal from "sweetalert2";
 export default {
   //layout
   layout: LayoutApp,
@@ -121,7 +122,29 @@ export default {
         q: search.value,
       });
     };
-    return { search, handleSearch };
+    const destroy = (id) => {
+      Swal.fire({
+        title: "Konfirmasi",
+        text: "Anda Akan Menghapus Data ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Hapus",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Inertia.delete(`/apps/users/${id}`);
+          Swal.fire({
+            title: "Success",
+            text: "Data Berhasil Dihapus",
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+        }
+      });
+    };
+    return { search, handleSearch, destroy };
   },
 };
 </script>
