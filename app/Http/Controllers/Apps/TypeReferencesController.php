@@ -19,4 +19,8 @@ class TypeReferencesController extends Controller
             'jenis_referensi' => $jenis_referensi,
         ]);
     }
+    public function create()
+    {
+        return Inertia::render('Apps/TypeReferences/Create');
+    }
 }
