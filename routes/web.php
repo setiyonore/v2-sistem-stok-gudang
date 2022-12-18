@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Apps\DashboardController;
 use App\Http\Controllers\Apps\UserController;
 use App\Http\Controllers\Apps\RoleController;
+use App\Http\Controllers\Apps\TypeReferencesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,8 @@ Route::prefix('apps')->group(function () {
         //route dashboard
         Route::get('dashboard', DashboardController::class)->name('apps.dashboard');
     });
+    Route::resource('/type_references', TypeReferencesController::class)
+        ->middleware('permission:jenis_referensi.index|jenis_referensi.add|jenis_referensi.edit|jenis_referensi.delete');
     //route resource roles
     Route::resource('/roles', RoleController::class, ['as' => 'apps'])
         ->middleware('permission:roles.index|roles.create|roles.edit|roles.delete');
