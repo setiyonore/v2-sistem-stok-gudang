@@ -28,7 +28,7 @@ Route::prefix('apps')->group(function () {
         //route dashboard
         Route::get('dashboard', DashboardController::class)->name('apps.dashboard');
     });
-    Route::resource('/type_references', TypeReferencesController::class)
+    Route::resource('/type_references', TypeReferencesController::class,['as'=>'apps'])
         ->middleware('permission:jenis_referensi.index|jenis_referensi.add|jenis_referensi.edit|jenis_referensi.delete');
     //route resource roles
     Route::resource('/roles', RoleController::class, ['as' => 'apps'])
