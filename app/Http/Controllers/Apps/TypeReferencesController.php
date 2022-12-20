@@ -43,4 +43,24 @@ class TypeReferencesController extends Controller
             'jenis_referensi' => $jenis_referensi,
         ]);
     }
+
+    public function update(Request $request)
+    {
+        $this->validate($request,[
+            'nama' => 'required',
+            'deskripsi' => 'required'
+        ]);
+        $jenis_referensi = JenisReferensi::query()->find($request->id);
+        $jenis_referensi->nama = $request->nama;
+        $jenis_referensi->deskripsi = $request->deskripsi;
+        $jenis_referensi->save();
+        return redirect()->route('apps.type_references.index');
+    }
+
+    public function destroy($id)
+    {
+        $jenis_referensi = JenisReferensi::query()->findOrFail($id);
+        $jenis_referensi->delete();
+        return redirect()->route('apps.type_references.index');
+    }
 }

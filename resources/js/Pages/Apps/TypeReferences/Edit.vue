@@ -1,72 +1,74 @@
 <template>
   <Head>
     <title>Edit Jenis Referensi - Sistem Informasi Stok Gudang</title>
-    <main class="c-main">
-      <div class="container-fluid">
-        <div class="fade-in">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="card border-0 rounded-3 shadow border-top-purple">
-                <div class="card-header">
-                  <span class="font-weight-bold"
-                    ><i class="fas fa-list"></i> Edit Jenis Referensi</span
-                  >
-                </div>
-                <div class="card-body">
-                  <form @submit.prevent="submit">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="mb-3">
-                          <label for="name" class="font-weight-bold"
-                            >Nama</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            v-model="form.nama"
-                            :class="{ 'is-invalid': errors.nama }"
-                          />
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="mb-3">
-                          <label for="name" class="font-weight-bold"
-                            >Deskripsi</label
-                          >
-                          <input
-                            type="text"
-                            class="form-control"
-                            v-model="form.deskripsi"
-                            :class="{ 'is-invalid': errors.deskripsi }"
-                          />
+  </Head>
+  <main class="c-main">
+    <div class="container-fluid">
+      <div class="fade-in">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card border-0 rounded-3 shadow border-top-purple">
+              <div class="card-header">
+                <span class="font-weight-bold"
+                  ><i class="fas fa-list"></i
+                ></span>
+                Edit Jenis Referensi
+              </div>
+              <div class="card-body">
+                <form @submit.prevent="submit">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="name" class="font-weight-bold">Nama</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          v-model="form.nama"
+                          :class="{ 'is-invalid': errors.nama }"
+                        />
+                        <div v-if="errors.nama" class="alert alert-danger">
+                          {{ errors.nama }}
                         </div>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-12">
-                        <button
-                          class="btn btn-primary shadow-sm rounded-sm"
-                          type="submit"
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="description" class="font-weight-bold"
+                          >Deskripsi</label
                         >
-                          UPDATE
-                        </button>
-                        <button
-                          class="btn btn-warning shadow-sm rounded-sm ms-3"
-                          type="reset"
-                        >
-                          RESET
-                        </button>
+                        <input
+                          type="text"
+                          class="form-control"
+                          v-model="form.deskripsi"
+                          :class="{ 'is-invalid': errors.deskripsi }"
+                        />
                       </div>
                     </div>
-                  </form>
-                </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <button
+                        class="btn btn-primary shadow-sm rounded-sm"
+                        type="submit"
+                      >
+                        Simpan
+                      </button>
+                      <button
+                        class="btn btn-warning shadow-sm rounded-sm ms-3"
+                        type="reset"
+                      >
+                        Reset
+                      </button>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </main>
-  </Head>
+    </div>
+  </main>
 </template>
 <script>
 import LayoutApp from "../../../Layouts/App.vue";
@@ -94,6 +96,7 @@ export default {
         `/apps/type_references/${props.jenis_referensi.id}`,
         {
           _method: "PUT",
+          id: props.jenis_referensi.id,
           nama: form.nama,
           deskripsi: form.deskripsi,
         },

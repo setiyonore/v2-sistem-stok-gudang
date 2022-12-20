@@ -45,7 +45,10 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(data, index) in jenis_referensi.data" :key="index">
+                  <tr
+                    v-for="(data, index) in jenis_referensi.data"
+                    :key="index"
+                  >
                     <td>{{ data.nama }}</td>
                     <td>{{ data.deskripsi }}</td>
                     <td class="text-center">
@@ -56,6 +59,7 @@
                         ><i class="fa fa-pencil-alt me-1"></i> Edit</Link
                       >
                       <button
+                        @click.prevent="destroy(data.id)"
                         v-if="hasAnyPermission(['jenis_referensi.delete'])"
                         class="btn btn-danger btn-sm"
                       >
@@ -65,7 +69,7 @@
                   </tr>
                 </tbody>
               </table>
-              <Pagination :links="jenis_referensi.links" align="end"/>
+              <Pagination :links="jenis_referensi.links" align="end" />
             </div>
           </div>
         </div>
@@ -78,6 +82,7 @@ import LayoutApp from "../../../Layouts/App.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Pagination from "../../../Components/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
+import Swal from "sweetalert2";
 
 export default {
   layout: LayoutApp,
@@ -89,6 +94,30 @@ export default {
   props: {
     jenis_referensi: Object,
   },
-  setup() {},
+  setup() {
+    const destroy = (id) => {
+      Swal.fire({
+        title: "Konfirmasi !!!",
+        text: "Anda Akan Menghapus Data ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Hapus",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Inertia.delete(`/apps/type_references/${id}`);
+          Swal.fire({
+            title: "Sukses",
+            text: "Data Berhasil Di Hapus",
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+        }
+      });
+    };
+    return { destroy };
+  },
 };
 </script>
