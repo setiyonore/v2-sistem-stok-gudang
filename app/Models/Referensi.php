@@ -1,19 +1,21 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class JenisReferensi extends Model
+class Referensi extends Model
 {
     use HasFactory;
-    protected $table = 'jenis_referensi';
+    protected $table = 'referensi';
     protected $fillable = [
         'nama',
         'deskripsi',
+        'jenis_referensi_id'
     ];
-
-    public function referensi(){
-        return $this->hasMany(Referensi::class);
+    public function jenis_referensi()
+    {
+        return $this->belongsTo(JenisReferensi::class);
     }
 }

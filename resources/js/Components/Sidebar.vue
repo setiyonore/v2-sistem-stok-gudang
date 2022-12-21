@@ -35,7 +35,10 @@
     >
       MASTER
     </li>
-    <li class="c-sidebar-nav-item" v-if="hasAnyPermission(['roles.index'])">
+    <li
+      class="c-sidebar-nav-item"
+      v-if="hasAnyPermission(['jenis_referensi.index'])"
+    >
       <Link
         class="c-sidebar-nav-link"
         href="/apps/type_references"
@@ -43,6 +46,16 @@
       >
         <i class="fas fa-list"></i>
         <span class="ms-2">Jenis Referensi</span>
+      </Link>
+    </li>
+    <li class="c-sidebar-nav-item" v-if="hasAnyPermission(['referensi.index'])">
+      <Link
+        class="c-sidebar-nav-link"
+        href="/apps/references"
+        :class="{ active: $page.url.startsWith('/apps/references') }"
+      >
+      <i class="fas fa-list-ul"></i>
+        <span class="ms-2">Referensi</span>
       </Link>
     </li>
     <li
