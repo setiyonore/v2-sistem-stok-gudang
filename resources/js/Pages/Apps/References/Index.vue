@@ -15,24 +15,86 @@
                 Referensi
               </div>
               <div class="card-body">
-                <form>
-                  <div class="input-group mb-3">
+                <form @submit.prevent="filter">
+                  <div class="row">
+                    <div class="col-md-10">
+                      <div class="mb-3">
+                        <label for="jenis" class="font-weight-bold"
+                          >Jenis Referensi</label
+                        >
+                        <select
+                          class="form-select"
+                          aria-label="Default select example"
+                          v-model="form.jenis_referensi"
+                        >
+                          <!-- <option value="" disabled hidden>
+                            Pilih Jenis Referensi
+                          </option> -->
+                          <option
+                            v-for="(data, index) in jenis_referensi"
+                            :key="index"
+                            :value="data.id"
+                            :selected="
+                              form.jenis_referensi == id_jenis_referensi
+                            "
+                          >
+                            {{ data.nama }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="mb-3">
+                        <label class="form-label fw-bold text-white">*</label>
+                        <button
+                          class="btn btn-md btn-purple border-0 shadow w-100"
+                        >
+                          <i class="fa fa-filter"></i> FILTER
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <div v-if="referensi">
+                  <div class="mb-3">
                     <Link
                       href="/apps/roles/create"
                       v-if="hasAnyPermission(['roles.add'])"
                       class="btn btn-primary input-group-text"
-                      ><i class="fa fa-plus-circle me-2"></i> Tambah
+                      ><i class="fa fa-plus-circle me-2"></i> NEW
                     </Link>
-                    <select
-                      class="form-control"
-                      aria-label="Default select example"
-                    >
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                    </select>
                   </div>
-                </form>
+                  <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Nama</th>
+                        <th scope="col">Deskripsi</th>
+                        <th scope="col" style="width: 20%">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(data, index) in referensi" :key="index">
+                        <td>{{ data.nama }}</td>
+                        <td>{{ data.deskripsi }}</td>
+                        <td class="text-center">
+                          <Link
+                            :href="`/apps/roles/${data.id}/edit`"
+                            v-if="hasAnyPermission(['roles.edit'])"
+                            class="btn btn-success btn-sm me-2"
+                            ><i class="fa fa-pencil-alt me-1"></i> EDIT
+                          </Link>
+                          <button
+                            @click.prevent="destroy(data.id)"
+                            v-if="hasAnyPermission(['roles.delete'])"
+                            class="btn btn-danger btn-sm"
+                          >
+                            <i class="fa fa-trash"></i> DELETE
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -44,6 +106,9 @@
 <script>
 import LayoutApp from "../../../Layouts/App.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
+import { reactive } from "vue";
+import { Inertia } from "@inertiajs/inertia";
+
 export default {
   layout: LayoutApp,
   components: {
@@ -51,7 +116,23 @@ export default {
     Link,
   },
   props: {
-    jenis_refernsi: Object,
+    id_jenis_referensi: "",
+    jenis_referensi: Array,
+    referensi: Array,
+  },
+  setup() {
+    const form = reactive({
+      jenis_referensi: "",
+    });
+    const filter = () => {
+      Inertia.get("/apps/referensi/filter", {
+        jenis_referensi: form.jenis_referensi,
+      });
+    };
+    return { form, filter };
+  },
+  mounted() {
+    this.form.jenis_referensi = this.props.id_jenis_referensi;
   },
 };
 </script>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Apps\UserController;
 use App\Http\Controllers\Apps\RoleController;
 use App\Http\Controllers\Apps\TypeReferencesController;
 use App\Http\Controllers\Apps\ReferencesController;
+use App\Models\Referensi;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +37,8 @@ Route::prefix('apps')->group(function () {
     //references
     Route::resource('/references', ReferencesController::class, ['as' => 'apps'])
         ->middleware('permission:referensi.index|referensi.add|referensi.edit|referensi.delete');
-    //route resource roles
+    Route::get('/referensi/filter',[ReferencesController::class,'filter'])->name('apps.references.filter');
+        //route resource roles
     Route::resource('/roles', RoleController::class, ['as' => 'apps'])
         ->middleware('permission:roles.index|roles.create|roles.edit|roles.delete');
     Route::resource('/users', UserController::class, ['as' => 'apps'])
