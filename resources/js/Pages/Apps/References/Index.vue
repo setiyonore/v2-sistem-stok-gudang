@@ -27,9 +27,9 @@
                           aria-label="Default select example"
                           v-model="form.jenis_referensi"
                         >
-                          <!-- <option value="" disabled hidden>
+                          <option value="" disabled hidden>
                             Pilih Jenis Referensi
-                          </option> -->
+                          </option>
                           <option
                             v-for="(data, index) in jenis_referensi"
                             :key="index"
@@ -69,7 +69,7 @@
                       <tr>
                         <th scope="col">Nama</th>
                         <th scope="col">Deskripsi</th>
-                        <th scope="col" style="width: 20%">Actions</th>
+                        <th scope="col" style="width: 30%">Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -128,11 +128,15 @@ export default {
       Inertia.get("/apps/referensi/filter", {
         jenis_referensi: form.jenis_referensi,
       });
+      localStorage.setItem("id_filter", form.jenis_referensi);
     };
     return { form, filter };
   },
   mounted() {
-    this.form.jenis_referensi = this.props.id_jenis_referensi;
+    const id_filter = localStorage.getItem("id_filter");
+    if (id_filter != null) {
+      this.form.jenis_referensi = localStorage.getItem("id_filter");
+    }
   },
 };
 </script>

@@ -52,7 +52,7 @@
       <Link
         class="c-sidebar-nav-link"
         href="/apps/references"
-        :class="{ active: $page.url.startsWith('/apps/references') }"
+        :class="{ active: $page.url.startsWith('/apps/references')||$page.url.startsWith('/apps/referensi') }"
       >
       <i class="fas fa-list-ul"></i>
         <span class="ms-2">Referensi</span>
