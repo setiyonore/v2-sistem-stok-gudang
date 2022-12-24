@@ -71,7 +71,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(data, index) in referensi" :key="index">
+                      <tr v-for="(data, index) in referensi.data" :key="index">
                         <td>{{ data.nama }}</td>
                         <td>{{ data.deskripsi }}</td>
                         <td class="text-center">
@@ -92,6 +92,7 @@
                       </tr>
                     </tbody>
                   </table>
+                  <Pagination :links="referensi.links" align="end" />
                 </div>
               </div>
             </div>
@@ -103,6 +104,7 @@
 </template>
 <script>
 import LayoutApp from "../../../Layouts/App.vue";
+import Pagination from "../../../Components/Pagination.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import { reactive } from "vue";
 import { Inertia } from "@inertiajs/inertia";
@@ -112,6 +114,7 @@ export default {
   components: {
     Head,
     Link,
+    Pagination,
   },
   props: {
     id_jenis_referensi: "",

@@ -16,7 +16,7 @@ class ReferencesController extends Controller
         $referensi = Referensi::query()
             ->where('jenis_referensi_id', 1)
             ->select('id', 'nama', 'deskripsi')
-            ->get();
+            ->paginate(config('config.paginate'));
 
         return Inertia::render('Apps/References/Index', [
             'jenis_referensi' => $jenis_referensi,
@@ -91,7 +91,7 @@ class ReferencesController extends Controller
         $referensi = Referensi::query()
             ->where('jenis_referensi_id', $request->jenis_referensi)
             ->select('id', 'nama', 'deskripsi')
-            ->get();
+            ->paginate(config('config.paginate'));
         return Inertia::render('Apps/References/Index', [
             'referensi' => $referensi,
             'jenis_referensi' => $jenis_referensi,
