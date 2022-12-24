@@ -19,13 +19,13 @@ class Referensi extends Model
         return $this->belongsTo(JenisReferensi::class);
     }
 
-    public function barang_kategori()
-    {
-        return $this->hasMany(Barang::class);
-    }
+    // public function kategori()
+    // {
+    //     return $this->hasMany(Barang::class);
+    // }
 
-    public function barang_satuan()
-    {
-        return $this->hasMany(Barang::class);
-    }
+    // public function satuan()
+    // {
+    //     return $this->hasMany(Barang::class);
+    // }
 }

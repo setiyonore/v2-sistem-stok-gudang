@@ -37,6 +37,19 @@
     </li>
     <li
       class="c-sidebar-nav-item"
+      v-if="hasAnyPermission(['barang.index'])"
+    >
+    <Link
+        class="c-sidebar-nav-link"
+        href="/apps/goods"
+        :class="{ active: $page.url.startsWith('/apps/goods') }"
+      >
+        <i class="fas fa-boxes"></i>
+        <span class="ms-2">Barang</span>
+      </Link>
+    </li>
+    <li
+      class="c-sidebar-nav-item"
       v-if="hasAnyPermission(['jenis_referensi.index'])"
     >
       <Link
@@ -52,9 +65,13 @@
       <Link
         class="c-sidebar-nav-link"
         href="/apps/references"
-        :class="{ active: $page.url.startsWith('/apps/references')||$page.url.startsWith('/apps/referensi') }"
+        :class="{
+          active:
+            $page.url.startsWith('/apps/references') ||
+            $page.url.startsWith('/apps/referensi'),
+        }"
       >
-      <i class="fas fa-list-ul"></i>
+        <i class="fas fa-list-ul"></i>
         <span class="ms-2">Referensi</span>
       </Link>
     </li>

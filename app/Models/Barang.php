@@ -16,11 +16,11 @@ class Barang extends Model
         'referensi_satuan',
     ];
 
-    public function kategori(){
-        return $this->belongsTo(Referensi::class);
-    }
-    public function satuan()
-    {
-        return $this->belongsTo(Referensi::class);
-    }
+    // public function kategori(){
+    //     return $this->belongsTo(Referensi::class);
+    // }
+    // public function satuan()
+    // {
+    //     return $this->belongsTo(Referensi::class);
+    // }
 }
