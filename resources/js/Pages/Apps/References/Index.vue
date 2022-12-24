@@ -76,7 +76,7 @@
                         <td>{{ data.deskripsi }}</td>
                         <td class="text-center">
                           <Link
-                            :href="`/apps/roles/${data.id}/edit`"
+                            :href="`/apps/references/${data.id}/edit`"
                             v-if="hasAnyPermission(['roles.edit'])"
                             class="btn btn-success btn-sm me-2"
                             ><i class="fa fa-pencil-alt me-1"></i> EDIT

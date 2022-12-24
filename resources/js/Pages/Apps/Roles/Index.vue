@@ -42,7 +42,7 @@
                     <tr>
                       <th scope="col">Nama</th>
                       <th scope="col" style="width: 50%">Hak Akses</th>
-                      <th scope="col" style="width: 20%">Actions</th>
+                      <th scope="col" style="width: 30%">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
