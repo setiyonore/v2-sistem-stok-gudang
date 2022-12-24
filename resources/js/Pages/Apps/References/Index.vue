@@ -27,9 +27,6 @@
                           aria-label="Default select example"
                           v-model="form.jenis_referensi"
                         >
-                          <option value="" disabled hidden>
-                            Pilih Jenis Referensi
-                          </option>
                           <option
                             v-for="(data, index) in jenis_referensi"
                             :key="index"
@@ -57,12 +54,13 @@
                 </form>
                 <div v-if="referensi">
                   <div class="mb-3">
-                    <Link
-                      href="/apps/roles/create"
-                      v-if="hasAnyPermission(['roles.add'])"
+                    <button
+                      @click.prevent="create"
                       class="btn btn-primary input-group-text"
-                      ><i class="fa fa-plus-circle me-2"></i> NEW
-                    </Link>
+                      v-if="hasAnyPermission(['referensi.add'])"
+                    >
+                      <i class="fa fa-plus-circle me-2"></i> Tambah
+                    </button>
                   </div>
                   <table class="table table-striped table-bordered table-hover">
                     <thead>
@@ -130,12 +128,18 @@ export default {
       });
       localStorage.setItem("id_filter", form.jenis_referensi);
     };
-    return { form, filter };
+    const create = () => {
+      Inertia.get("/apps/references/create");
+    };
+    return { form, filter, create };
   },
-  mounted() {
+  beforeMount() {
     const id_filter = localStorage.getItem("id_filter");
     if (id_filter != null) {
       this.form.jenis_referensi = localStorage.getItem("id_filter");
+    } else {
+      this.form.jenis_referensi = 1;
+      localStorage.setItem("id_filter", 1);
     }
   },
 };
