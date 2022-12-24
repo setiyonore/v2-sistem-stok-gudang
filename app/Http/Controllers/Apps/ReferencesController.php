@@ -75,6 +75,12 @@ class ReferencesController extends Controller
         $referensi->save();
         return redirect()->route('apps.references.index');
     }
+    public function destroy($id)
+    {
+        $referensi = Referensi::query()->findOrFail($id);
+        $referensi->delete();
+        return redirect()->route('apps.references.index');
+    }
 
     public function filter(Request $request)
     {

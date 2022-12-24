@@ -106,7 +106,7 @@ import LayoutApp from "../../../Layouts/App.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import { reactive } from "vue";
 import { Inertia } from "@inertiajs/inertia";
-
+import Swal from "sweetalert2";
 export default {
   layout: LayoutApp,
   components: {
@@ -131,7 +131,29 @@ export default {
     const create = () => {
       Inertia.get("/apps/references/create");
     };
-    return { form, filter, create };
+    const destroy = (id) => {
+      Swal.fire({
+        title: "Konfirmasi !!!",
+        text: "Anda Akan Menghapus Data ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Hapus",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Inertia.delete(`/apps/references/${id}`);
+          Swal.fire({
+            title: "Sukses",
+            text: "Data Berhasil Di Hapus",
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+        }
+      });
+    };
+    return { form, filter, create, destroy };
   },
   beforeMount() {
     const id_filter = localStorage.getItem("id_filter");
