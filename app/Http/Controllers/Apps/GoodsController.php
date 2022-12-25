@@ -49,7 +49,6 @@ class GoodsController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
         $this->validate(
             $request,
             [
@@ -71,6 +70,50 @@ class GoodsController extends Controller
             'referensi_kategori' => $request->kategori,
             'stok' => $request->stok
         ]);
+        return redirect()->route('apps.goods.index');
+    }
+
+    public function edit($id)
+    {
+        $barang = Barang::query()->findOrFail($id);
+
+        $kategori = Referensi::query()
+            ->where('jenis_referensi_id', config('config.referensi_kategori'))
+            ->select('id', 'nama')
+            ->get();
+        $satuan = Referensi::query()
+            ->where('jenis_referensi_id', config('config.referensi_satuan'))
+            ->select('id', 'nama')
+            ->get();
+        return Inertia::render('Apps/Goods/Edit',[
+            'barang' => $barang,
+            'kategori' => $kategori,
+            'satuan' => $satuan,
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        $this->validate(
+            $request,
+            [
+                'nama' => 'required',
+                'satuan' => 'required',
+                'kategori' => 'required',
+
+            ],
+            [
+                'nama.required' => 'Mohon Inputkan Nama',
+                'satuan.required' => 'Mohon Pilih Satuan',
+                'kategori.required' => 'Mohon Pilih Kategori',
+            ]
+        );
+        $barang = Barang::query()->find($request->id);
+        $barang->nama = $request->nama;
+        $barang->referensi_satuan = $request->satuan;
+        $barang->referensi_kategori = $request->kategori;
+        $barang->stok = $request->stok;
+        $barang->save();
         return redirect()->route('apps.goods.index');
     }
 }
