@@ -35,17 +35,24 @@
     >
       MASTER
     </li>
-    <li
-      class="c-sidebar-nav-item"
-      v-if="hasAnyPermission(['barang.index'])"
-    >
-    <Link
+    <li class="c-sidebar-nav-item" v-if="hasAnyPermission(['barang.index'])">
+      <Link
         class="c-sidebar-nav-link"
         href="/apps/goods"
         :class="{ active: $page.url.startsWith('/apps/goods') }"
       >
         <i class="fas fa-boxes"></i>
         <span class="ms-2">Barang</span>
+      </Link>
+    </li>
+    <li class="c-sidebar-nav-item" v-if="hasAnyPermission(['pegawai.index'])">
+      <Link
+        class="c-sidebar-nav-link"
+        href="/apps/employees"
+        :class="{ active: $page.url.startsWith('/apps/employees') }"
+      >
+        <i class="fas fa-address-card"></i>
+        <span class="ms-2">Pegawai</span>
       </Link>
     </li>
     <li

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Apps\DashboardController;
+use App\Http\Controllers\Apps\EmployeesController;
 use App\Http\Controllers\Apps\UserController;
 use App\Http\Controllers\Apps\RoleController;
 use App\Http\Controllers\Apps\TypeReferencesController;
@@ -39,8 +40,12 @@ Route::prefix('apps')->group(function () {
     Route::resource('/references', ReferencesController::class, ['as' => 'apps'])
         ->middleware('permission:referensi.index|referensi.add|referensi.edit|referensi.delete');
     Route::get('/referensi/filter', [ReferencesController::class, 'filter'])->name('apps.references.filter');
+    // barang
     Route::resource('/goods', GoodsController::class, ['as' => 'apps'])
         ->middleware('permission:barang.index|barang.add|barang.edit|barang.delete');
+    // pegawai
+    Route::resource('/employees', EmployeesController::class, ['as' => 'apps'])
+        ->middleware('permission:pegawai.index|pegawai.add|pegawai.edit|pegawai.delete');
     //route resource roles
     Route::resource('/roles', RoleController::class, ['as' => 'apps'])
         ->middleware('permission:roles.index|roles.create|roles.edit|roles.delete');
