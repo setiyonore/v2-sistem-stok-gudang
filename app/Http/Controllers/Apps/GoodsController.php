@@ -116,4 +116,10 @@ class GoodsController extends Controller
         $barang->save();
         return redirect()->route('apps.goods.index');
     }
+    public function destroy($id)
+    {
+        $barang = Barang::query()->findOrFail($id);
+        $barang->delete();
+        return redirect()->route('apps.goods.index');
+    }
 }

@@ -85,6 +85,7 @@ import Pagination from "../../../Components/Pagination.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import { ref } from "@vue/reactivity";
 import { Inertia } from "@inertiajs/inertia";
+import Swal from "sweetalert2";
 export default {
   layout: LayoutApp,
   components: {
@@ -102,7 +103,29 @@ export default {
         q: search.value,
       });
     };
-    return { search, handleSearch };
+    const destroy = (id) => {
+      Swal.fire({
+        title: "Konfirmasi !!!",
+        text: "Anda Akan Menghapus Data ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Hapus",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Inertia.delete(`/apps/goods/${id}`);
+          Swal.fire({
+            title: "Sukses",
+            text: "Data Berhasil Di Hapus",
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+        }
+      });
+    };
+    return { search, handleSearch, destroy };
   },
 };
 </script>
