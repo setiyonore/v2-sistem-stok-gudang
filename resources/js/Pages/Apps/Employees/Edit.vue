@@ -1,6 +1,6 @@
 <template>
   <Head>
-    <title>Tambah Pegawai - Sistem Informasi Stok Gudang</title>
+    <title>Edit Pegawai - Sistem Informasi Stok Gudang</title>
   </Head>
   <main class="c-main">
     <div class="container-fluid">
@@ -10,7 +10,7 @@
             <div class="card border-0 rounded-3 shadow border-top-purple">
               <div class="card-header">
                 <span class="font-weight-bold"
-                  ><i class="fas fa-address-card"></i> Tambah Pegawai</span
+                  ><i class="fas fa-address-card"></i> Edit Pegawai</span
                 >
               </div>
               <div class="card-body"></div>
@@ -29,6 +29,10 @@ export default {
   components: {
     Head,
     Link,
+  },
+  props: {
+    pegawai: Object,
+    jabatan: Array,
   },
 };
 </script>
