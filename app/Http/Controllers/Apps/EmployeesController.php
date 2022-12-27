@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Apps;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pegawai;
-use App\Models\Referensi;
 use Inertia\Inertia;
 use App\Traits\HelperMasterTraits;
 
@@ -99,6 +98,12 @@ class EmployeesController extends Controller
         $pegawai->no_hp = $request->no_hp;
         $pegawai->alamat = $request->alamat;
         $pegawai->save();
+        return redirect()->route('apps.employees.index');
+    }
+    public function destroy($id)
+    {
+        $pegawai = Pegawai::query()->findOrFail($id);
+        $pegawai->delete();
         return redirect()->route('apps.employees.index');
     }
 }
