@@ -106,4 +106,21 @@ class EmployeesController extends Controller
         $pegawai->delete();
         return redirect()->route('apps.employees.index');
     }
+
+    public function show($id)
+    {
+        $pegawai = Pegawai::query()->where('pegawai.id', $id)
+            ->leftJoin('referensi as r', 'r.id', 'pegawai.referensi_jabatan')
+            ->select(
+                'pegawai.nama',
+                'pegawai.nip',
+                'pegawai.no_hp',
+                'pegawai.alamat',
+                'pegawai.tgl_lahir',
+                'r.nama as jabatan'
+            )->first();
+        return Inertia::render('Apps/Employees/Detil', [
+            'pegawai' => $pegawai,
+        ]);
+    }
 }
