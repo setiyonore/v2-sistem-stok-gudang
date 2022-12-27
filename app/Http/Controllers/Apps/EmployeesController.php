@@ -42,13 +42,13 @@ class EmployeesController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'nama' => 'required',
             'tanggal_lahir' => 'required',
             'jabatan' => 'required',
             'no_hp' => 'required',
             'alamat' => 'required',
-        ],[
+        ], [
             'nama.required' => 'Mohon inputkan nama',
             'tanggal_lahir.required' => 'Mohon inputkan tanggal lahir',
             'jabatan.required' => 'Mohon inputkan jabatan',
@@ -56,14 +56,14 @@ class EmployeesController extends Controller
             'alamat.required' => 'Mohon inputkan alamat',
         ]);
         $pegawai = Pegawai::query()
-        ->create([
-            'nama' => $request->nama,
-            'referensi_jabatan' => $request->jabatan,
-            'tgl_lahir' => $request->tanggal_lahir,
-            'nip' => $request->nip,
-            'no_hp' => $request->no_hp,
-            'alamat' => $request->alamat,
-        ]);
+            ->create([
+                'nama' => $request->nama,
+                'referensi_jabatan' => $request->jabatan,
+                'tgl_lahir' => $request->tanggal_lahir,
+                'nip' => $request->nip,
+                'no_hp' => $request->no_hp,
+                'alamat' => $request->alamat,
+            ]);
         return redirect()->route('apps.employees.index');
     }
 
@@ -71,9 +71,34 @@ class EmployeesController extends Controller
     {
         $pegawai = Pegawai::query()->findOrFail($id);
         $jabatan = $this->getReferensi(config('config.referensi_jabatan'));
-        return Inertia::render('Apps/Employees/Edit',[
+        return Inertia::render('Apps/Employees/Edit', [
             'pegawai' => $pegawai,
             'jabatan' => $jabatan,
         ]);
+    }
+    public function update(Request $request)
+    {
+        $this->validate($request, [
+            'nama' => 'required',
+            'tanggal_lahir' => 'required',
+            'jabatan' => 'required',
+            'no_hp' => 'required',
+            'alamat' => 'required',
+        ], [
+            'nama.required' => 'Mohon inputkan nama',
+            'tanggal_lahir.required' => 'Mohon inputkan tanggal lahir',
+            'jabatan.required' => 'Mohon inputkan jabatan',
+            'no_hp.required' => 'Mohon inputkan no hp',
+            'alamat.required' => 'Mohon inputkan alamat',
+        ]);
+        $pegawai = Pegawai::query()->find($request->id);
+        $pegawai->nama = $request->nama;
+        $pegawai->referensi_jabatan = $request->jabatan;
+        $pegawai->tgl_lahir = $request->tanggal_lahir;
+        $pegawai->nip = $request->nip;
+        $pegawai->no_hp = $request->no_hp;
+        $pegawai->alamat = $request->alamat;
+        $pegawai->save();
+        return redirect()->route('apps.employees.index');
     }
 }

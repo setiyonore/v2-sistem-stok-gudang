@@ -14,7 +14,7 @@
                 >
               </div>
               <div class="card-body">
-                <form action="">
+                <form @submit.prevent="submit">
                   <div class="row">
                     <div class="col-md-6">
                       <div class="mb-3">
@@ -65,6 +65,80 @@
                         {{ errors.tanggal_lahir }}
                       </div>
                     </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="jenis" class="font-weight-bold"
+                          >Jabatan</label
+                        >
+                        <select
+                          class="form-select"
+                          aria-label="Default select example"
+                          v-model="form.jabatan"
+                        >
+                          <option value="">Pilih Jabatan</option>
+                          <option
+                            v-for="(data, index) in jabatan"
+                            :key="index"
+                            :value="data.id"
+                          >
+                            {{ data.nama }}
+                          </option>
+                        </select>
+                      </div>
+                      <div v-if="errors.jabatan" class="alert alert-danger">
+                        {{ errors.jabatan }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="alamat" class="font-weight-bold"
+                          >Alamat</label
+                        >
+                        <textarea
+                          class="form-control"
+                          rows="3"
+                          v-model="form.alamat"
+                          :class="{ 'is-invalid': errors.no_hp }"
+                        ></textarea>
+                      </div>
+                      <div v-if="errors.alamat" class="alert alert-danger">
+                        {{ errors.alamat }}
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="no_hp" class="font-weight-bold"
+                          >No Hp</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          v-model="form.no_hp"
+                          :class="{ 'is-invalid': errors.no_hp }"
+                        />
+                      </div>
+                      <div v-if="errors.no_hp" class="alert alert-danger">
+                        {{ errors.no_hp }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <button
+                        class="btn btn-primary shadow-sm rounded-sm"
+                        type="submit"
+                      >
+                        Simpan
+                      </button>
+                      <button
+                        class="btn btn-warning shadow-sm rounded-sm ms-3"
+                        type="reset"
+                      >
+                        Reset
+                      </button>
+                    </div>
                   </div>
                 </form>
               </div>
@@ -79,6 +153,8 @@
 import LayoutApp from "../../../Layouts/App.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import { reactive } from "vue";
+import { Inertia } from "@inertiajs/inertia";
+import Swal from "sweetalert2";
 export default {
   layout: LayoutApp,
   components: {
@@ -93,13 +169,38 @@ export default {
   setup(props) {
     const form = reactive({
       nama: props.pegawai.nama,
-      jabatan: props.pegawai.jabatan,
-      tanggal_lahir: props.tanggal,
+      jabatan: props.pegawai.referensi_jabatan,
+      tanggal_lahir: props.pegawai.tgl_lahir,
       nip: props.pegawai.nip,
       no_hp: props.pegawai.no_hp,
       alamat: props.pegawai.alamat,
     });
-    return { form };
+    const submit = () => {
+      Inertia.put(
+        `/apps/employees/${props.pegawai.id}`,
+        {
+          nama: form.nama,
+          jabatan: form.jabatan,
+          tanggal_lahir: form.tanggal_lahir,
+          nip: form.nip,
+          no_hp: form.no_hp,
+          alamat: form.alamat,
+          id: props.pegawai.id,
+        },
+        {
+          onSuccess: () => {
+            Swal.fire({
+              title: "Success !",
+              text: "Data Berhasil di Update",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 2000,
+            });
+          },
+        }
+      );
+    };
+    return { form, submit };
   },
 };
 </script>
