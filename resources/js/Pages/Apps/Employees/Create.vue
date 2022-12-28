@@ -100,7 +100,7 @@
                           class="form-control"
                           rows="3"
                           v-model="form.alamat"
-                          :class="{ 'is-invalid': errors.no_hp }"
+                          :class="{ 'is-invalid': errors.alamat }"
                         ></textarea>
                       </div>
                       <div v-if="errors.alamat" class="alert alert-danger">
