@@ -17,7 +17,7 @@
                 <form @submit.prevent="handleSearch">
                   <div class="input-group mb-3">
                     <Link
-                      href="/apps/roles/create"
+                      href="/apps/company/create"
                       v-if="hasAnyPermission(['perusahaan.add'])"
                       class="btn btn-primary input-group-text"
                       ><i class="fa fa-plus-circle me-2"></i> Tambah

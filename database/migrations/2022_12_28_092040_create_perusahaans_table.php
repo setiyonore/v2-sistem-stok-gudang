@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('no_hp');
             $table->string('email');
             $table->string('pic')->nullable();
-            $table->string('no_hp_hp')->nullable();
+            $table->string('no_hp_pic')->nullable();
             $table->foreign('referensi_jenis_perusahaan')->references('id')->on('referensi');
             $table->timestamps();
         });
