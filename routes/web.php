@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Apps\CompanyController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Apps\DashboardController;
 use App\Http\Controllers\Apps\EmployeesController;
@@ -46,6 +47,9 @@ Route::prefix('apps')->group(function () {
     // pegawai
     Route::resource('/employees', EmployeesController::class, ['as' => 'apps'])
         ->middleware('permission:pegawai.index|pegawai.add|pegawai.edit|pegawai.delete');
+    //perusahaan
+    Route::resource('/company', CompanyController::class, ['as' => 'apps'])
+        ->middleware('permission:perusahaan.index|perusahaan.add|perusahaan.edit|perusahaan.delete');
     //route resource roles
     Route::resource('/roles', RoleController::class, ['as' => 'apps'])
         ->middleware('permission:roles.index|roles.create|roles.edit|roles.delete');

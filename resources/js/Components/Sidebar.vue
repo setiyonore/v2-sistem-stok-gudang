@@ -57,6 +57,19 @@
     </li>
     <li
       class="c-sidebar-nav-item"
+      v-if="hasAnyPermission(['perusahaan.index'])"
+    >
+      <Link
+        class="c-sidebar-nav-link"
+        href="/apps/company"
+        :class="{ active: $page.url.startsWith('/apps/company') }"
+      >
+        <i class="fas fa-building"></i>
+        <span class="ms-2">Perusahaan</span>
+      </Link>
+    </li>
+    <li
+      class="c-sidebar-nav-item"
       v-if="hasAnyPermission(['jenis_referensi.index'])"
     >
       <Link
