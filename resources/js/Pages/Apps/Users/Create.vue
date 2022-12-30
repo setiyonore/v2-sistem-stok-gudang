@@ -78,6 +78,32 @@
                     </div>
                   </div>
                   <div class="row">
+                    <div class="col-md-6">
+                      <div class="mb-3">
+                        <label for="jenis" class="font-weight-bold"
+                          >Jabatan</label
+                        >
+                        <select
+                          class="form-select"
+                          aria-label="Default select example"
+                          v-model="form.pegawai"
+                        >
+                          <option value="">Pilih Pegawai</option>
+                          <option
+                            v-for="(data, index) in pegawai"
+                            :key="index"
+                            :value="data.id"
+                          >
+                            {{ data.nama }}
+                          </option>
+                        </select>
+                      </div>
+                      <div v-if="errors.jabatan" class="alert alert-danger">
+                        {{ errors.jabatan }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
                     <div class="col-md-12">
                       <div class="mb-3">
                         <label class="font-weight-bold">Roles</label>
@@ -146,6 +172,7 @@ export default {
   props: {
     errors: Object,
     roles: Array,
+    pegawai: Array,
   },
   setup() {
     const form = reactive({
@@ -153,6 +180,7 @@ export default {
       email: "",
       password: "",
       password_confirmation: "",
+      pegawai: "",
       roles: [],
     });
     const submit = () => {
@@ -164,6 +192,7 @@ export default {
           password: form.password,
           password_confirmation: form.password_confirmation,
           roles: form.roles,
+          pegawai: form.pegawai,
         },
         {
           onSuccess: () => {

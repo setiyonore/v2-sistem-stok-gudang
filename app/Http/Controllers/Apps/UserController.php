@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pegawai;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,11 +15,11 @@ class UserController extends Controller
     public function index()
     {
         $users = User::query()
-            ->when(request()->q,function ($users){
-                $users = $users->where('name','like','%'.request()->q.'%');
+            ->when(request()->q, function ($users) {
+                $users = $users->where('name', 'like', '%' . request()->q . '%');
             })->with('roles')->latest()->paginate(config('config.paginate'));
 
-        return Inertia::render('Apps/Users/Index',[
+        return Inertia::render('Apps/Users/Index', [
             'users' => $users,
         ]);
     }
@@ -26,17 +27,20 @@ class UserController extends Controller
     public function create()
     {
         $roles = Role::all();
-        return Inertia::render('Apps/Users/Create',[
-            'roles' => $roles
+        $pegawai = Pegawai::query()->select('id', 'nama')->get();
+        return Inertia::render('Apps/Users/Create', [
+            'roles' => $roles,
+            'pegawai' => $pegawai,
         ]);
     }
 
     public function store(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'name' => 'required',
             'email' => 'required|unique:users',
-            'password' => 'required|confirmed'
+            'password' => 'required|confirmed',
+            'pegawai' => 'required',
         ]);
 
         $user = User::query()
@@ -44,6 +48,7 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
+                'pegawai_id' => $request->pegawai,
             ]);
         $user->assignRole($request->roles);
         return redirect()->route('apps.users.index');
@@ -53,29 +58,33 @@ class UserController extends Controller
     {
         $user = User::with('roles')->findOrFail($id);
         $roles = Role::all();
-        return Inertia::render('Apps/Users/Edit',[
+        $pegawai = Pegawai::query()->select('id', 'nama')->get();
+        return Inertia::render('Apps/Users/Edit', [
             'user' => $user,
             'roles' => $roles,
+            'pegawai' => $pegawai,
         ]);
     }
 
     public function update(Request $request, User $user)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|unique:users,email,'.$user->id,
+            'email' => 'required|unique:users,email,' . $user->id,
             'password' => 'nullable|confirmed'
         ]);
-        if ($request->password == ''){
+        if ($request->password == '') {
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
+                'pegawai_id' => $request->pegawai,
             ]);
-        }else{
+        } else {
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
+                'pegawai_id' => $request->pegawai,
             ]);
         }
 
