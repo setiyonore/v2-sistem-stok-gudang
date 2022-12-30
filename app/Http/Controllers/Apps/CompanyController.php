@@ -98,4 +98,11 @@ class CompanyController extends Controller
         $perusahaan->save();
         return redirect()->route('apps.company.index');
     }
+
+    public function destroy($id)
+    {
+        $perusahaan = Perusahaan::query()->findOrFail($id);
+        $perusahaan->delete();
+        return redirect()->route('apps.company.index');
+    }
 }
