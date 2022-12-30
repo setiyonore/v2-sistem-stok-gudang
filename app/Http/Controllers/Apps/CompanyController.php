@@ -98,6 +98,24 @@ class CompanyController extends Controller
         $perusahaan->save();
         return redirect()->route('apps.company.index');
     }
+    public function show($id)
+    {
+        $perusahaan = Perusahaan::query()
+            ->leftJoin('referensi as r', 'r.id', 'perusahaan.referensi_jenis_perusahaan')
+            ->select(
+                'r.nama as jenis_perusahaan',
+                'perusahaan.nama',
+                'perusahaan.no_hp',
+                'perusahaan.pic',
+                'perusahaan.no_hp_pic',
+                'perusahaan.email',
+                'perusahaan.alamat',
+            )
+            ->first();
+        return Inertia::render('Apps/Company/Detil', [
+            'perusahaan' => $perusahaan,
+        ]);
+    }
 
     public function destroy($id)
     {

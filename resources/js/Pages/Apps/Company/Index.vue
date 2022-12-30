@@ -59,7 +59,7 @@
                           ><i class="fa fa-pencil-alt me-1"></i> EDIT
                         </Link>
                         <Link
-                          :href="`/apps/employees/${data.id}`"
+                          :href="`/apps/company/${data.id}`"
                           v-if="hasAnyPermission(['roles.edit'])"
                           class="btn btn-primary btn-sm me-2"
                           ><i class="fas fa-eye"></i> DETIL
