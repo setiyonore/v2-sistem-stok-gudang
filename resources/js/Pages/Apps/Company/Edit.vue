@@ -1,6 +1,6 @@
 <template>
   <Head>
-    <title>Tambah Perusahaan - Sistem Informasi Stok Gudang</title>
+    <title>Edit Perusahaan - Sistem Informasi Stok Gudang</title>
   </Head>
   <main class="c-main">
     <div class="container-fluid">
@@ -17,7 +17,7 @@
                 <form @submit.prevent="submit">
                   <div class="row">
                     <div class="col-md-6">
-                      <div class="md-3">
+                      <div class="mb-3">
                         <label for="nama" class="font-weight-bold">Nama</label>
                         <input
                           type="text"
@@ -169,35 +169,37 @@ export default {
   },
   props: {
     jenis: Array,
+    perusahaan: Object,
     errors: Object,
   },
-  setup() {
+  setup(props) {
     const form = reactive({
-      nama: "",
-      no_hp: "",
-      email: "",
-      pic: "",
-      no_pic: "",
-      jenis_perusahaan: "",
-      alamat: "",
+      nama: props.perusahaan.nama,
+      jenis_perusahaan: props.perusahaan.referensi_jenis_perusahaan,
+      alamat: props.perusahaan.alamat,
+      no_hp: props.perusahaan.no_hp,
+      email: props.perusahaan.email,
+      pic: props.perusahaan.pic,
+      no_pic: props.perusahaan.no_hp_pic,
     });
     const submit = () => {
-      Inertia.post(
-        "/apps/company",
+      Inertia.put(
+        `/apps/company/${props.perusahaan.id}`,
         {
           nama: form.nama,
+          jenis_perusahaan: form.jenis_perusahaan,
+          alamat: form.alamat,
           no_hp: form.no_hp,
           email: form.email,
           pic: form.pic,
           no_pic: form.no_pic,
-          jenis_perusahaan: form.jenis_perusahaan,
-          alamat: form.alamat,
+          id: props.perusahaan.id,
         },
         {
           onSuccess: () => {
             Swal.fire({
               title: "Success !",
-              text: "Data Berhasil Disimpan",
+              text: "Data Berhasil di Update",
               icon: "success",
               showConfirmButton: false,
               timer: 2000,

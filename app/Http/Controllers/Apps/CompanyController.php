@@ -60,4 +60,42 @@ class CompanyController extends Controller
             ]);
         return redirect()->route('apps.company.index');
     }
+
+    public function edit($id)
+    {
+        $perusahaan = Perusahaan::query()->findOrFail($id);
+        $jenis = $this->getReferensi(config('config.jenis_perusahaan'));
+        return Inertia::render('Apps/Company/Edit', [
+            'perusahaan' => $perusahaan,
+            'jenis' => $jenis,
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        $this->validate($request, [
+            'nama' => 'required',
+            'no_hp' => 'required',
+            'email' => 'required',
+            'alamat' => 'required',
+            'jenis_perusahaan' => 'required'
+        ], [
+            'nama.required' => 'Mohon inputkan nama',
+            'no_hp.required' => 'Mohon inputkan no hp',
+            'email.required' => 'Mohon inputkan email',
+            'alamat.required' => 'Mohon inputkan alamat',
+            'jenis_perusahaan' => 'Mohon pilih jenis perusahaan',
+
+        ]);
+        $perusahaan = Perusahaan::query()->find($request->id);
+        $perusahaan->nama = $request->nama;
+        $perusahaan->referensi_jenis_perusahaan = $request->jenis_perusahaan;
+        $perusahaan->alamat = $request->alamat;
+        $perusahaan->no_hp = $request->no_hp;
+        $perusahaan->email = $request->email;
+        $perusahaan->pic = $request->pic;
+        $perusahaan->no_hp_pic = $request->no_pic;
+        $perusahaan->save();
+        return redirect()->route('apps.company.index');
+    }
 }
