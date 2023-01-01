@@ -30,7 +30,32 @@
       class="c-sidebar-nav-title"
       v-if="
         hasAnyPermission(['referensi.index']) ||
-        hasAnyPermission(['jenis_referensi.index'])
+        hasAnyPermission(['jenis_referensi.index']) ||
+        hasAnyPermission(['barang.index']) ||
+        hasAnyPermission(['perusahaan.index']) ||
+        hasAnyPermission(['pegawai.index'])
+      "
+    >
+      TRANSAKSI
+    </li>
+    <li class="c-sidebar-nav-item" v-if="hasAnyPermission(['barang.index'])">
+      <Link
+        class="c-sidebar-nav-link"
+        href="/apps/received_goods"
+        :class="{ active: $page.url.startsWith('/apps/received_goods') }"
+      >
+        <i class="fas fa-box-open"></i>
+        <span class="ms-2">Barang Masuk</span>
+      </Link>
+    </li>
+    <li
+      class="c-sidebar-nav-title"
+      v-if="
+        hasAnyPermission(['referensi.index']) ||
+        hasAnyPermission(['jenis_referensi.index']) ||
+        hasAnyPermission(['barang.index']) ||
+        hasAnyPermission(['perusahaan.index']) ||
+        hasAnyPermission(['pegawai.index'])
       "
     >
       MASTER

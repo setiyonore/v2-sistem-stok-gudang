@@ -9,6 +9,7 @@ use App\Http\Controllers\Apps\RoleController;
 use App\Http\Controllers\Apps\TypeReferencesController;
 use App\Http\Controllers\Apps\ReferencesController;
 use App\Http\Controllers\Apps\GoodsController;
+use App\Http\Controllers\Apps\GoodsReceivedController;
 use App\Models\Referensi;
 
 /*
@@ -50,6 +51,9 @@ Route::prefix('apps')->group(function () {
     //perusahaan
     Route::resource('/company', CompanyController::class, ['as' => 'apps'])
         ->middleware('permission:perusahaan.index|perusahaan.add|perusahaan.edit|perusahaan.delete');
+    //barang masuk
+    Route::resource('/received_goods', GoodsReceivedController::class, ['as' => 'apps'])
+        ->middleware('permission:barang_masuk.index|barang_masuk.add|barang_masuk.edit|barang_masuk.delete');
     //route resource roles
     Route::resource('/roles', RoleController::class, ['as' => 'apps'])
         ->middleware('permission:roles.index|roles.create|roles.edit|roles.delete');
