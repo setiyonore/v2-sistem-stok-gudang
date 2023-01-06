@@ -100,4 +100,19 @@ class GoodsReceivedController extends Controller
         }
         return redirect()->route('apps.received_goods.index');
     }
+    public function edit($id)
+    {
+        $barang_masuk = barang_masuk::query()->findOrFail($id);
+        $barang = barang_masuk_detil::query()
+            ->leftJoin('barang as b', 'b.id', 'barang_masuk_detil.barang_id')
+            ->where('barang_masuk_detil.barang_masuk_id', $id)
+            ->select(
+                'barang_masuk_detil.id',
+                'b.id as barang_id',
+                'barang_masuk_detil.jumlah',
+                'b.nama'
+            )
+            ->get();
+        dd($barang_masuk, $barang);
+    }
 }

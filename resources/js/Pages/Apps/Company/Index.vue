@@ -60,13 +60,13 @@
                         </Link>
                         <Link
                           :href="`/apps/company/${data.id}`"
-                          v-if="hasAnyPermission(['roles.edit'])"
+                          v-if="hasAnyPermission(['perusahaan.edit'])"
                           class="btn btn-primary btn-sm me-2"
                           ><i class="fas fa-eye"></i> DETIL
                         </Link>
                         <button
                           @click.prevent="destroy(data.id)"
-                          v-if="hasAnyPermission(['roles.delete'])"
+                          v-if="hasAnyPermission(['perusahaan.delete'])"
                           class="btn btn-danger btn-sm"
                         >
                           <i class="fa fa-trash"></i> DELETE

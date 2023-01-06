@@ -77,13 +77,13 @@
                         <td class="text-center">
                           <Link
                             :href="`/apps/references/${data.id}/edit`"
-                            v-if="hasAnyPermission(['roles.edit'])"
+                            v-if="hasAnyPermission(['referensi.edit'])"
                             class="btn btn-success btn-sm me-2"
                             ><i class="fa fa-pencil-alt me-1"></i> EDIT
                           </Link>
                           <button
                             @click.prevent="destroy(data.id)"
-                            v-if="hasAnyPermission(['roles.delete'])"
+                            v-if="hasAnyPermission(['referensi.delete'])"
                             class="btn btn-danger btn-sm"
                           >
                             <i class="fa fa-trash"></i> DELETE

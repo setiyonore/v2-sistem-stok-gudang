@@ -55,20 +55,20 @@
                       <td>{{ data.keterangan }}</td>
                       <td class="text-center">
                         <Link
-                          :href="`/apps/employees/${data.id}/edit`"
-                          v-if="hasAnyPermission(['roles.edit'])"
+                          :href="`/apps/received_goods/${data.id}/edit`"
+                          v-if="hasAnyPermission(['barang_masuk.edit'])"
                           class="btn btn-success btn-sm me-2"
                           ><i class="fa fa-pencil-alt me-1"></i> EDIT
                         </Link>
                         <Link
-                          :href="`/apps/employees/${data.id}`"
-                          v-if="hasAnyPermission(['roles.edit'])"
+                          :href="`/apps/received_goods/${data.id}`"
+                          v-if="hasAnyPermission(['barang_masuk.edit'])"
                           class="btn btn-primary btn-sm me-2"
                           ><i class="fas fa-eye"></i> DETIL
                         </Link>
                         <button
                           @click.prevent="destroy(data.id)"
-                          v-if="hasAnyPermission(['roles.delete'])"
+                          v-if="hasAnyPermission(['barang_masuk.delete'])"
                           class="btn btn-danger btn-sm"
                         >
                           <i class="fa fa-trash"></i> DELETE
