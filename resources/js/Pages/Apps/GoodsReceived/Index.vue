@@ -17,8 +17,8 @@
                 <form @submit.prevent="handleSearch">
                   <div class="input-group mb-3">
                     <Link
-                      href="/apps/employees/create"
-                      v-if="hasAnyPermission(['pegawai.add'])"
+                      href="/apps/received_goods/create"
+                      v-if="hasAnyPermission(['barang_masuk.add'])"
                       class="btn btn-primary input-group-text"
                       ><i class="fa fa-plus-circle me-2"></i> Tambah
                     </Link>

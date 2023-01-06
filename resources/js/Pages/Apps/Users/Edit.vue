@@ -77,7 +77,7 @@
                     <div class="col-md-6">
                       <div class="mb-3">
                         <label for="jenis" class="font-weight-bold"
-                          >Jabatan</label
+                          >Pegawai</label
                         >
                         <select
                           class="form-select"

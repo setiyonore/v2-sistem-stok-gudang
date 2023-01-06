@@ -33,30 +33,31 @@ Route::prefix('apps')->group(function () {
     Route::group(['middleware' => ['auth']], function () {
         //route dashboard
         Route::get('dashboard', DashboardController::class)->name('apps.dashboard');
-    });
-    //type references
-    Route::resource('/type_references', TypeReferencesController::class, ['as' => 'apps'])
-        ->middleware('permission:jenis_referensi.index|jenis_referensi.add|jenis_referensi.edit|jenis_referensi.delete');
+        //type references
+        Route::resource('/type_references', TypeReferencesController::class, ['as' => 'apps'])
+            ->middleware('permission:jenis_referensi.index|jenis_referensi.add|jenis_referensi.edit|jenis_referensi.delete');
 
-    //references
-    Route::resource('/references', ReferencesController::class, ['as' => 'apps'])
-        ->middleware('permission:referensi.index|referensi.add|referensi.edit|referensi.delete');
-    Route::get('/referensi/filter', [ReferencesController::class, 'filter'])->name('apps.references.filter');
-    // barang
-    Route::resource('/goods', GoodsController::class, ['as' => 'apps'])
-        ->middleware('permission:barang.index|barang.add|barang.edit|barang.delete');
-    // pegawai
-    Route::resource('/employees', EmployeesController::class, ['as' => 'apps'])
-        ->middleware('permission:pegawai.index|pegawai.add|pegawai.edit|pegawai.delete');
-    //perusahaan
-    Route::resource('/company', CompanyController::class, ['as' => 'apps'])
-        ->middleware('permission:perusahaan.index|perusahaan.add|perusahaan.edit|perusahaan.delete');
-    //barang masuk
-    Route::resource('/received_goods', GoodsReceivedController::class, ['as' => 'apps'])
-        ->middleware('permission:barang_masuk.index|barang_masuk.add|barang_masuk.edit|barang_masuk.delete');
-    //route resource roles
-    Route::resource('/roles', RoleController::class, ['as' => 'apps'])
-        ->middleware('permission:roles.index|roles.create|roles.edit|roles.delete');
-    Route::resource('/users', UserController::class, ['as' => 'apps'])
-        ->middleware('permission:user.index|user.create|user.edit|user.delete');
+        //references
+        Route::resource('/references', ReferencesController::class, ['as' => 'apps'])
+            ->middleware('permission:referensi.index|referensi.add|referensi.edit|referensi.delete');
+        Route::get('/referensi/filter', [ReferencesController::class, 'filter'])->name('apps.references.filter');
+        // barang
+        Route::resource('/goods', GoodsController::class, ['as' => 'apps'])
+            ->middleware('permission:barang.index|barang.add|barang.edit|barang.delete');
+        // pegawai
+        Route::resource('/employees', EmployeesController::class, ['as' => 'apps'])
+            ->middleware('permission:pegawai.index|pegawai.add|pegawai.edit|pegawai.delete');
+        //perusahaan
+        Route::resource('/company', CompanyController::class, ['as' => 'apps'])
+            ->middleware('permission:perusahaan.index|perusahaan.add|perusahaan.edit|perusahaan.delete');
+        //barang masuk
+        Route::post('/barang_masuk/searchGood/', [GoodsReceivedController::class, 'searchGood'])->name('apps.received_goods.search');
+        Route::resource('/received_goods', GoodsReceivedController::class, ['as' => 'apps'])
+            ->middleware('permission:barang_masuk.index|barang_masuk.add|barang_masuk.edit|barang_masuk.delete');
+        //route resource roles
+        Route::resource('/roles', RoleController::class, ['as' => 'apps'])
+            ->middleware('permission:roles.index|roles.create|roles.edit|roles.delete');
+        Route::resource('/users', UserController::class, ['as' => 'apps'])
+            ->middleware('permission:user.index|user.create|user.edit|user.delete');
+    });
 });
