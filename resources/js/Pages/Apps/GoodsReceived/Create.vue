@@ -185,7 +185,7 @@ import { reactive } from "vue";
 import Select2 from "vue3-select2-component";
 import axios from "axios";
 import { Inertia } from "@inertiajs/inertia";
-import  Swal  from "sweetalert2";
+import Swal from "sweetalert2";
 export default {
   layout: LayoutApp,
   components: {
@@ -220,7 +220,19 @@ export default {
         });
     },
     deleteBarang(index) {
-      this.items.splice(index, 1);
+      Swal.fire({
+        title: "Konfirmasi !!!",
+        text: "Anda Akan Menghapus Data ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Hapus",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.items.splice(index, 1);
+        }
+      });
     },
     submit() {
       Inertia.post(
@@ -246,12 +258,12 @@ export default {
       );
     },
     reset() {
-        this.form.tanggal = '';
-        this.form.yang_menyerahkan = '';
-        this.form.keterangan = '';
-        this.form.penyedia = '';
-        this.items = '';
-    }
+      this.form.tanggal = "";
+      this.form.yang_menyerahkan = "";
+      this.form.keterangan = "";
+      this.form.penyedia = "";
+      this.items = "";
+    },
   },
   setup() {
     const form = reactive({

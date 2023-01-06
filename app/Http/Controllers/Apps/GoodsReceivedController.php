@@ -29,7 +29,7 @@ class GoodsReceivedController extends Controller
                 'p.nama as supplier',
                 'barang_masuk.keterangan'
             )
-            ->get();
+            ->paginate(config('config.paginate'));
         return Inertia::render('Apps/GoodsReceived/Index', [
             'barang_masuk' => $barang_masuk
         ]);
@@ -88,6 +88,15 @@ class GoodsReceivedController extends Controller
                     'jumlah' => $items[$i]['jumlah'],
                     'barang_masuk_id' => $barang_masuk->id
                 ]);
+            $oldStock = Barang::query()
+                ->where('id', $items[$i]['barang_id'])
+                ->select('stok')
+                ->first();
+            $oldStock = $oldStock->stok;
+            $newstock = $oldStock + $items[$i]['jumlah'];
+            $barang = Barang::query()->find($items[$i]['barang_id']);
+            $barang->stok = $newstock;
+            $barang->save();
         }
         return redirect()->route('apps.received_goods.index');
     }

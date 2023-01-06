@@ -48,7 +48,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(data, index) in barang_masuk" :key="index">
+                    <tr v-for="(data, index) in barang_masuk.data" :key="index">
                       <td>{{ data.tanggal }}</td>
                       <td>{{ data.yang_menyerahkan }}</td>
                       <td>{{ data.pegawai }}</td>
@@ -77,6 +77,7 @@
                     </tr>
                   </tbody>
                 </table>
+                <Pagination :links="barang_masuk.links" align="end" />
               </div>
             </div>
           </div>
@@ -89,12 +90,14 @@
 import LayoutApp from "../../../Layouts/App.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import { Inertia } from "@inertiajs/inertia";
+import Pagination from "../../../Components/Pagination.vue";
 import { ref } from "vue";
 export default {
   layout: LayoutApp,
   components: {
     Head,
     Link,
+    Pagination,
   },
   props: {
     barang_masuk: Array,
