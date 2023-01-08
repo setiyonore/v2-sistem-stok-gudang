@@ -129,21 +129,15 @@
                 <table class="table table-bordered">
                   <thead>
                     <tr style="background-color: #e6e6e7">
-                      <th scope="col">#</th>
+                      <th scope="col">No</th>
                       <th scope="col">Barang</th>
                       <th scope="col">Jumlah</th>
+                      <th scope="col">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(item, index) in barang" :key="item.barang_id">
-                      <td class="text-center">
-                        <button
-                          class="btn btn-danger btn-sm rounded-pill"
-                          @click="deleteBarang(index)"
-                        >
-                          <i class="fa fa-trash"></i>
-                        </button>
-                      </td>
+                      <td>{{ index + 1 }}</td>
                       <td>
                         <Select2
                           v-model="item.barang_id"
@@ -153,6 +147,14 @@
                       </td>
                       <td>
                         <input type="number" v-model="item.jumlah" />
+                      </td>
+                      <td class="text-center">
+                        <button
+                          class="btn btn-danger btn-sm rounded-pill"
+                          @click="deleteBarang(index)"
+                        >
+                          <i class="fa fa-trash"></i>
+                        </button>
                       </td>
                     </tr>
                   </tbody>
