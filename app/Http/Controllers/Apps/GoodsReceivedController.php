@@ -186,4 +186,28 @@ class GoodsReceivedController extends Controller
         $barang_masuk = barang_masuk::query()->findOrFail($id)->delete();
         return redirect()->route('apps.received_goods.index');
     }
+    public function show($id)
+    {
+        $barang_masuk = barang_masuk::query()
+            ->where('barang_masuk.id', $id)
+            ->leftJoin('perusahaan as s', 's.id', 'barang_masuk.penyedia_id')
+            ->leftJoin('pegawai as p', 'p.id', 'barang_masuk.pegawai_id')
+            ->select(
+                'barang_masuk.tanggal',
+                'barang_masuk.yang_menyerahkan',
+                's.nama as penyedia',
+                'p.nama as pegawai',
+                'barang_masuk.keterangan'
+            )
+            ->first();
+        $barang = barang_masuk_detil::query()
+            ->where('barang_masuk_detil.barang_masuk_id', $id)
+            ->leftJoin('barang as b', 'b.id', 'barang_masuk_detil.barang_id')
+            ->select('nama as barang', 'jumlah')
+            ->get();
+        return Inertia::render('Apps/GoodsReceived/Detil', [
+            'barang_masuk' => $barang_masuk,
+            'barang' => $barang
+        ]);
+    }
 }
