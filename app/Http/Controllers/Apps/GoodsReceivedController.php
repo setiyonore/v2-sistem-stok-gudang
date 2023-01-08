@@ -107,12 +107,68 @@ class GoodsReceivedController extends Controller
             ->leftJoin('barang as b', 'b.id', 'barang_masuk_detil.barang_id')
             ->where('barang_masuk_detil.barang_masuk_id', $id)
             ->select(
-                'barang_masuk_detil.id',
                 'b.id as barang_id',
                 'barang_masuk_detil.jumlah',
-                'b.nama'
+                'b.nama',
+                'barang_masuk_detil.jumlah as jumlah_old'
             )
             ->get();
-        dd($barang_masuk, $barang);
+        $goods =  Barang::query()
+            ->select('id', 'nama as text')
+            ->get();
+        $penyedia = Perusahaan::query()
+            ->select('id', 'nama')
+            ->where('referensi_jenis_perusahaan', config('config.referensi_penyedia'))
+            ->get();
+        return Inertia::render('Apps/GoodsReceived/Edit', [
+            'barang_masuk' => $barang_masuk,
+            'barang' => $barang,
+            'penyedia' => $penyedia,
+            'goods' => $goods
+        ]);
+    }
+    public function update(Request $request)
+    {
+        $this->validate($request, [
+            'tanggal' => 'required',
+            'yang_menyerahkan' => 'required',
+            'penyedia' => 'required',
+            'barang' => 'required',
+        ], [
+            'tanggal.required' => 'Mohon inputkan tanggal',
+            'yang_menyerahkan.required' => 'Mohon inputkan yang menyerahkan',
+            'penyedia.required' => 'Mohon inputkan penyedia',
+            'barang.required' => 'Mohon inputkan barang',
+        ]);
+        $barang_masuk = barang_masuk::query()->find($request->id);
+        $barang_masuk->tanggal = $request->tanggal;
+        $barang_masuk->yang_menyerahkan = $request->yang_menyerahkan;
+        $barang_masuk->keterangan = $request->keterangan;
+        $barang_masuk->penyedia_id = $request->penyedia;
+        $barang_masuk->save();
+        $items = $request->barang;
+        barang_masuk_detil::query()->where('barang_masuk_id', $request->id)->delete();
+        for ($i = 0; $i < count($items); $i++) {
+            $barang_masuk_detil = barang_masuk_detil::query()
+                ->create([
+                    'barang_id' => $items[$i]['barang_id'],
+                    'jumlah' => $items[$i]['jumlah'],
+                    'barang_masuk_id' => $request->id
+                ]);
+            $oldStock = $items[$i]['jumlah_old'];
+            $newstock = $items[$i]['jumlah'];
+            //jika stok lama lebih kecil dari stok baru
+            if ($oldStock < $newstock) {
+                $barang = Barang::query()->find($items[$i]['barang_id']);
+                $barang->stok = $barang->stok - $oldStock + $newstock;
+                $barang->save();
+            } else if ($oldStock > $newstock) {
+                //jika stok lama lebih besar dari stok baru
+                $barang = Barang::query()->find($items[$i]['barang_id']);
+                $barang->stok = $barang->stok - $newstock;
+                $barang->save();
+            }
+        }
+        return redirect()->route('apps.received_goods.index');
     }
 }
