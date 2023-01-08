@@ -171,4 +171,19 @@ class GoodsReceivedController extends Controller
         }
         return redirect()->route('apps.received_goods.index');
     }
+    public function destroy($id)
+    {
+        $barang_masuk_detil = barang_masuk_detil::query()
+            ->where('barang_masuk_id', $id)
+            ->select('barang_id', 'jumlah')
+            ->get();
+        for ($i = 0; $i < count($barang_masuk_detil); $i++) {
+            $barang = Barang::query()->find($barang_masuk_detil[$i]['barang_id']);
+            $barang->stok = $barang->stok - $barang_masuk_detil[$i]['jumlah'];
+            $barang->save();
+        }
+        $barang_masuk_detil = barang_masuk_detil::query()->where('barang_masuk_id', $id)->delete();
+        $barang_masuk = barang_masuk::query()->findOrFail($id)->delete();
+        return redirect()->route('apps.received_goods.index');
+    }
 }
