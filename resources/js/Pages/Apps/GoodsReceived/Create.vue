@@ -144,8 +144,14 @@
                           <i class="fa fa-trash"></i>
                         </button>
                       </td>
-                      <td>{{ item.nama }}</td>
-                      <td>{{ item.jumlah }}</td>
+                      <td>
+                        <Select2
+                          v-model="item.barang_id"
+                          :options="barang"
+                          :settings="{ width: '100%' }"
+                        />
+                      </td>
+                      <td><input type="number" v-model="item.jumlah" /></td>
                     </tr>
                   </tbody>
                 </table>
