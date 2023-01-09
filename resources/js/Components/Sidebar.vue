@@ -29,16 +29,17 @@
     <li
       class="c-sidebar-nav-title"
       v-if="
-        hasAnyPermission(['referensi.index']) ||
-        hasAnyPermission(['jenis_referensi.index']) ||
-        hasAnyPermission(['barang.index']) ||
-        hasAnyPermission(['perusahaan.index']) ||
-        hasAnyPermission(['pegawai.index'])
+        hasAnyPermission(['barang_masuk.index']) ||
+        hasAnyPermission(['barang_keluar.index']) ||
+        hasAnyPermission(['order.index'])
       "
     >
       TRANSAKSI
     </li>
-    <li class="c-sidebar-nav-item" v-if="hasAnyPermission(['barang.index'])">
+    <li
+      class="c-sidebar-nav-item"
+      v-if="hasAnyPermission(['barang_masuk.index'])"
+    >
       <Link
         class="c-sidebar-nav-link"
         href="/apps/received_goods"
@@ -46,6 +47,19 @@
       >
         <i class="fas fa-box-open"></i>
         <span class="ms-2">Barang Masuk</span>
+      </Link>
+    </li>
+    <li
+      class="c-sidebar-nav-item"
+      v-if="hasAnyPermission(['order.index'])"
+    >
+      <Link
+        class="c-sidebar-nav-link"
+        href="/apps/order"
+        :class="{ active: $page.url.startsWith('/apps/order') }"
+      >
+        <i class="fas fa-envelope-open-text"></i>
+        <span class="ms-2">Order Barang</span>
       </Link>
     </li>
     <li

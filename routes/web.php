@@ -10,6 +10,7 @@ use App\Http\Controllers\Apps\TypeReferencesController;
 use App\Http\Controllers\Apps\ReferencesController;
 use App\Http\Controllers\Apps\GoodsController;
 use App\Http\Controllers\Apps\GoodsReceivedController;
+use App\Http\Controllers\Apps\LetterRequestController;
 use App\Models\Referensi;
 
 /*
@@ -54,6 +55,9 @@ Route::prefix('apps')->group(function () {
         Route::post('/barang_masuk/searchGood/', [GoodsReceivedController::class, 'searchGood'])->name('apps.received_goods.search');
         Route::resource('/received_goods', GoodsReceivedController::class, ['as' => 'apps'])
             ->middleware('permission:barang_masuk.index|barang_masuk.add|barang_masuk.edit|barang_masuk.delete');
+        //surat permintaan
+        Route::resource('/order', LetterRequestController::class, ['as' => 'apps'])
+            ->middleware('permission:order.index|order.add|order.edit|order.delete|order.approval');
         //route resource roles
         Route::resource('/roles', RoleController::class, ['as' => 'apps'])
             ->middleware('permission:roles.index|roles.create|roles.edit|roles.delete');
