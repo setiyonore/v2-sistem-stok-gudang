@@ -17,7 +17,7 @@
                 <form @submit.prevent="handleSearch">
                   <div class="input-group mb-3">
                     <Link
-                      href="/apps/employees/create"
+                      href="/apps/order/create"
                       v-if="hasAnyPermission(['pegawai.add'])"
                       class="btn btn-primary input-group-text"
                       ><i class="fa fa-plus-circle me-2"></i> Tambah
@@ -51,7 +51,7 @@
                     <tr v-for="(data, index) in order.data" :key="index">
                       <td>{{ data.tanggal }}</td>
                       <td>{{ data.no_sp }}</td>
-                      <td>{{ data.Keterangan }}</td>
+                      <td>{{ data.keterangan }}</td>
                       <td>{{ data.status }}</td>
                       <td class="text-center">
                         <Link

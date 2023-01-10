@@ -56,6 +56,7 @@ Route::prefix('apps')->group(function () {
         Route::resource('/received_goods', GoodsReceivedController::class, ['as' => 'apps'])
             ->middleware('permission:barang_masuk.index|barang_masuk.add|barang_masuk.edit|barang_masuk.delete');
         //surat permintaan
+        Route::post('/permintaan/searchGood', [LetterRequestController::class, 'searchGood'])->name('apps.permintaan.search');
         Route::resource('/order', LetterRequestController::class, ['as' => 'apps'])
             ->middleware('permission:order.index|order.add|order.edit|order.delete|order.approval');
         //route resource roles
