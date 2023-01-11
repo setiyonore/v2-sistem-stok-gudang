@@ -9,4 +9,5 @@ return
         'referensi_penyedia' => 10,
         'referensi_pelanggan' => 9,
         'status_permintaan_pending' => 11,
+        'status_permintaan_approve' => 12,
     ];

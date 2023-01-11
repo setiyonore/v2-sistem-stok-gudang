@@ -15,5 +15,6 @@ class SuratPermintaan extends Model
         'referensi_status_sp',
         'keterangan',
         'pelanggan_id',
+        'pegawai_id',
     ];
 }

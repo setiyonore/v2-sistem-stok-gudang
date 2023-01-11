@@ -57,6 +57,7 @@ Route::prefix('apps')->group(function () {
             ->middleware('permission:barang_masuk.index|barang_masuk.add|barang_masuk.edit|barang_masuk.delete');
         //surat permintaan
         Route::post('/permintaan/searchGood', [LetterRequestController::class, 'searchGood'])->name('apps.permintaan.search');
+        Route::post('/permintaan/approve', [LetterRequestController::class, 'approve'])->name('apps.permintaan.approve');
         Route::resource('/order', LetterRequestController::class, ['as' => 'apps'])
             ->middleware('permission:order.index|order.add|order.edit|order.delete|order.approval');
         //route resource roles

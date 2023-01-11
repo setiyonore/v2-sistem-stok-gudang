@@ -20,8 +20,10 @@ return new class extends Migration
             $table->unsignedBigInteger('referensi_status_sp');
             $table->string('keterangan')->nullable();
             $table->unsignedBigInteger('pelanggan_id');
+            $table->unsignedBigInteger('pegawai_id');
             $table->foreign('referensi_status_sp')->references('id')->on('referensi');
             $table->foreign('pelanggan_id')->references('id')->on('perusahaan');
+            $table->foreign('pegawai_id')->references('id')->on('pegawai');
             $table->timestamps();
         });
     }
