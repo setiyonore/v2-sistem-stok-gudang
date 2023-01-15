@@ -56,19 +56,19 @@
                       <td class="text-center">
                         <Link
                           :href="`/apps/order/${data.id}/edit`"
-                          v-if="hasAnyPermission(['pegawai.edit'])"
+                          v-if="hasAnyPermission(['order.edit'])"
                           class="btn btn-success btn-sm me-2"
                           ><i class="fa fa-pencil-alt me-1"></i> EDIT
                         </Link>
                         <Link
                           :href="`/apps/order/${data.id}`"
-                          v-if="hasAnyPermission(['pegawai.edit'])"
+                          v-if="hasAnyPermission(['order.edit'])"
                           class="btn btn-primary btn-sm me-2"
                           ><i class="fas fa-eye"></i> DETIL
                         </Link>
                         <button
                           @click.prevent="destroy(data.id)"
-                          v-if="hasAnyPermission(['pegawai.delete'])"
+                          v-if="hasAnyPermission(['order.delete'])"
                           class="btn btn-danger btn-sm"
                         >
                           <i class="fa fa-trash"></i> DELETE

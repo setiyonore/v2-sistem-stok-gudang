@@ -61,7 +61,7 @@
                     </tr>
                   </tbody>
                 </table>
-                <div class="row">
+                <div class="row" v-if="hasAnyPermission(['order.approval'])">
                   <div class="col-6">
                     <button
                       class="btn btn-success shadow-sm rounded-sm"
