@@ -8,6 +8,7 @@ use App\Models\BarangKeluar;
 use App\Models\BarangKeluarDetil;
 use App\Models\Perusahaan;
 use App\Models\SuratPermintaan;
+use App\Traits\GoodsTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -15,6 +16,7 @@ use Inertia\Inertia;
 
 class LetterRequestController extends Controller
 {
+    use GoodsTraits;
     public function index()
     {
         $order = SuratPermintaan::query()
@@ -169,6 +171,90 @@ class LetterRequestController extends Controller
             $barang = Barang::query()->find($items[$i]['barang_id']);
             $barang->stok = $newstock;
             $barang->save();
+        }
+        return redirect()->route('apps.order.index');
+    }
+    public function edit($id)
+    {
+        $order = SuratPermintaan::query()->findOrFail($id);
+        $pelanggan = Perusahaan::query()
+            ->where('referensi_jenis_perusahaan', config('config.referensi_pelanggan'))
+            ->select('id', 'nama as text')
+            ->get();
+        $goods = Barang::query()
+            ->select('id', 'nama as text')
+            ->get();
+        $barang_keluar = BarangKeluar::query()->where('sp_id', $id)
+            ->select('id')
+            ->first();
+        $barang = BarangKeluarDetil::query()
+            ->where('barang_keluar_id', $barang_keluar->id)
+            ->leftJoin('barang as b', 'b.id', 'barang_keluar_detil.barang_id')
+            ->select(
+                'b.id as barang_id',
+                'barang_keluar_detil.jumlah',
+                'barang_keluar_detil.jumlah as jumlah_old'
+            )
+            ->get();
+        return Inertia::render('Apps/Order/Edit', [
+            'order' => $order,
+            'pelanggan' => $pelanggan,
+            'barang' => $barang,
+            'goods' => $goods,
+        ]);
+    }
+    public function update(Request $request)
+    {
+        $this->validate($request, [
+            'tanggal' => 'required',
+            'pelanggan' => 'required',
+            'barang' => 'required',
+        ], [
+            'tanggal.required' => 'Mohon inputkan tanggal',
+            'pelanggan.required' => 'Mohon inputkan pelanggan',
+            'barang.required' => 'Mohon inputkan barang',
+        ]);
+        $order = SuratPermintaan::query()->find($request->id);
+        $order->tanggal = $request->tanggal;
+        $order->keterangan = $request->keterangan;
+        $order->pelanggan_id = $request->pelanggan;
+        $order->save();
+        $barang_kembali = $request->barang_kembalikan;
+        if (count($barang_kembali) > 0) {
+            for ($i = 0; $i < count($barang_kembali); $i++) {
+                $barang = Barang::query()->find($barang_kembali[$i]['barang_id']);
+                $barang->stok = $barang->stok + $barang_kembali[$i]['jumlah'];
+                $barang->save();
+            }
+        }
+        $items = $request->barang;
+        $barang_keluar = BarangKeluar::query()->where('sp_id', $request->id)
+            ->select('id')->first();
+        BarangKeluarDetil::query()->where('barang_keluar_id', $barang_keluar->id)->delete();
+        for ($i = 0; $i < count($items); $i++) {
+            $barang_keluar_detil = BarangKeluarDetil::query()
+                ->create([
+                    'barang_keluar_id' => $barang_keluar->id,
+                    'barang_id' => $items[$i]['barang_id'],
+                    'jumlah' => $items[$i]['jumlah'],
+                ]);
+            $oldStock = $items[$i]['jumlah_old'];
+            $newstock = $items[$i]['jumlah'];
+            $sp_status = SuratPermintaan::query()->where('id', $request->id)
+                ->select('referensi_status_sp as status')->first();
+            if ($sp_status->status == config('config.status_permintaan_approve')) {
+                //cek apakah surar permintaan sudah disetujui
+                if ($oldStock == 0) {
+                    //permintaan barang baru
+                    $barang = Barang::query()->find($items[$i]['barang_id']);
+                    $barang->stok = $barang->stok - $newstock;
+                    $barang->save();
+                } else {
+                    $barang = Barang::query()->find($items[$i]['barang_id']);
+                    $barang->stok = $barang->stok + $oldStock - $newstock;
+                    $barang->save();
+                }
+            }
         }
         return redirect()->route('apps.order.index');
     }

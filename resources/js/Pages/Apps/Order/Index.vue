@@ -55,7 +55,7 @@
                       <td>{{ data.status }}</td>
                       <td class="text-center">
                         <Link
-                          :href="`/apps/employees/${data.id}/edit`"
+                          :href="`/apps/order/${data.id}/edit`"
                           v-if="hasAnyPermission(['pegawai.edit'])"
                           class="btn btn-success btn-sm me-2"
                           ><i class="fa fa-pencil-alt me-1"></i> EDIT
