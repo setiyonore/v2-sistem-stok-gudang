@@ -18,7 +18,7 @@
                   <div class="input-group mb-3">
                     <Link
                       href="/apps/order/create"
-                      v-if="hasAnyPermission(['pegawai.add'])"
+                      v-if="hasAnyPermission(['order.add'])"
                       class="btn btn-primary input-group-text"
                       ><i class="fa fa-plus-circle me-2"></i> Tambah
                     </Link>
@@ -56,7 +56,10 @@
                       <td class="text-center">
                         <Link
                           :href="`/apps/order/${data.id}/edit`"
-                          v-if="hasAnyPermission(['order.edit'])"
+                          v-if="
+                            hasAnyPermission(['order.edit']) &&
+                            data.pegawai_id == pegawai
+                          "
                           class="btn btn-success btn-sm me-2"
                           ><i class="fa fa-pencil-alt me-1"></i> EDIT
                         </Link>
@@ -68,7 +71,10 @@
                         </Link>
                         <button
                           @click.prevent="destroy(data.id)"
-                          v-if="hasAnyPermission(['order.delete'])"
+                          v-if="
+                            hasAnyPermission(['order.delete']) &&
+                            data.pegawai_id == pegawai
+                          "
                           class="btn btn-danger btn-sm"
                         >
                           <i class="fa fa-trash"></i> DELETE
@@ -102,6 +108,7 @@ export default {
   },
   props: {
     order: Object,
+    pegawai: Array,
   },
   setup() {
     const search = ref("" || new URL(document.location).searchParams.get("q"));

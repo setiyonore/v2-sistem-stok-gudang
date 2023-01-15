@@ -29,11 +29,14 @@ class LetterRequestController extends Controller
                 'no_sp',
                 'surat_permintaan.keterangan',
                 'r.nama as status',
-                'surat_permintaan.id'
+                'surat_permintaan.id',
+                'surat_permintaan.pegawai_id'
             )
             ->paginate(config('config.paginate'));
+        $pegawai = Auth::user()->pegawai_id;
         return Inertia::render('Apps/Order/Index', [
             'order' => $order,
+            'pegawai' => $pegawai,
         ]);
     }
     public function create()
