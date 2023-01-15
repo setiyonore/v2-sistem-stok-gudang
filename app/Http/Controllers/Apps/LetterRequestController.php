@@ -258,4 +258,32 @@ class LetterRequestController extends Controller
         }
         return redirect()->route('apps.order.index');
     }
+    public function destroy($id)
+    {
+        $sp_status = SuratPermintaan::query()
+            ->where('id', $id)
+            ->select('referensi_status_sp as status')
+            ->first();
+        $barang_keluar = BarangKeluar::query()
+            ->where('sp_id', $id)->select('id')->first();
+        if ($sp_status->status == config('config.status_permintaan_approve')) {
+            //cek apakah permintaan sudah di approve
+
+            $barang_keluar_detil = BarangKeluarDetil::query()
+                ->where('barang_keluar_id', $barang_keluar->id)
+                ->get();
+            for ($i = 0; $i < count($barang_keluar_detil); $i++) {
+                $barang = Barang::query()->find($barang_keluar_detil[$i]['barang_id']);
+                $barang->stok = $barang->stok + $barang_keluar_detil[$i]['jumlah'];
+                $barang->save();
+            }
+        }
+        $barang_keluar_detil = BarangKeluarDetil::query()
+            ->where('barang_keluar_id', $barang_keluar->id)->delete();
+        $barang_keluar = BarangKeluar::query()
+            ->where('sp_id', $id)->delete();
+        $order = SuratPermintaan::query()
+            ->where('id', $id)->delete();
+        return redirect()->route('apps.order.index');
+    }
 }
