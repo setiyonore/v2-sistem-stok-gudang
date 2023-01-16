@@ -177,6 +177,13 @@ class LetterRequestController extends Controller
         }
         return redirect()->route('apps.order.index');
     }
+    public function notApprove(Request $request)
+    {
+        $order = SuratPermintaan::query()->find($request->id);
+        $order->referensi_status_sp = config('config.status_permintaan_notApprove');
+        $order->save();
+        return redirect()->route('apps.order.index');
+    }
     public function edit($id)
     {
         $order = SuratPermintaan::query()->findOrFail($id);

@@ -73,7 +73,7 @@
                     <button
                       class="btn btn-warning shadow-sm rounded-sm ms-3"
                       type="reset"
-                      @click="reset"
+                      @click="notApprove"
                     >
                       Tolak
                     </button>
@@ -105,24 +105,67 @@ export default {
   },
   methods: {
     approve() {
-      Inertia.post(
-        "/apps/permintaan/approve",
-        {
-          id: this.order.id,
-        },
-        {
-          onSuccess: () => {
-            Swal.fire({
-              title: "Success !",
-              text: "Data Berhasil Disimpan",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 2000,
-            });
-          },
+      Swal.fire({
+        title: "Konfirmasi !!!",
+        text: "Anda Menyetujui Permintaan Barang ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#6469EB",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Setujui",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Inertia.post(
+            "/apps/permintaan/approve",
+            {
+              id: this.order.id,
+            },
+            {
+              onSuccess: () => {
+                Swal.fire({
+                  title: "Success !",
+                  text: "Data Berhasil Disimpan",
+                  icon: "success",
+                  showConfirmButton: false,
+                  timer: 2000,
+                });
+              },
+            }
+          );
         }
-      );
+      });
     },
+    notApprove(){
+        Swal.fire({
+        title: "Konfirmasi !!!",
+        text: "Anda Menolak Permintaan Barang ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#EEC122",
+        cancelButtonColor: "#6469EB",
+        confirmButtonText: "Tolak",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Inertia.post(
+            "/apps/permintaan/notApprove",
+            {
+              id: this.order.id,
+            },
+            {
+              onSuccess: () => {
+                Swal.fire({
+                  title: "Success !",
+                  text: "Data Berhasil Disimpan",
+                  icon: "success",
+                  showConfirmButton: false,
+                  timer: 2000,
+                });
+              },
+            }
+          );
+        }
+      });
+    }
   },
   computed: {
     formattedDate() {

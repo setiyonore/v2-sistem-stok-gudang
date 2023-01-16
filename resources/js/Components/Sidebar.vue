@@ -63,6 +63,19 @@
       </Link>
     </li>
     <li
+      class="c-sidebar-nav-item"
+      v-if="hasAnyPermission(['order.index'])"
+    >
+      <Link
+        class="c-sidebar-nav-link"
+        href="/apps/outgoing_goods"
+        :class="{ active: $page.url.startsWith('/apps/outgoing_goods') }"
+      >
+        <i class="fas fa-box"></i>
+        <span class="ms-2">Barang Keluar</span>
+      </Link>
+    </li>
+    <li
       class="c-sidebar-nav-title"
       v-if="
         hasAnyPermission(['referensi.index']) ||

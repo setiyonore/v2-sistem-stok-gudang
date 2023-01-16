@@ -58,6 +58,7 @@ Route::prefix('apps')->group(function () {
         //surat permintaan
         Route::post('/permintaan/searchGood', [LetterRequestController::class, 'searchGood'])->name('apps.permintaan.search');
         Route::post('/permintaan/approve', [LetterRequestController::class, 'approve'])->name('apps.permintaan.approve');
+        Route::post('/permintaan/notApprove',[LetterRequestController::class,'notApprove'])->name('apps.permintaan.notApprove');
         Route::post('/permintaan/hapusBarangPermintaan', [LetterRequestController::class, 'hapusBarangPermintaan'])->name('apps.permintaan.hapusBarang');
         Route::resource('/order', LetterRequestController::class, ['as' => 'apps'])
             ->middleware('permission:order.index|order.add|order.edit|order.delete|order.approval');
