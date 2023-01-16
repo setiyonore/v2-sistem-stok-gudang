@@ -135,7 +135,8 @@ class LetterRequestController extends Controller
                 'keterangan',
                 'e.nama as pegawai',
                 'r.nama as status',
-                'surat_permintaan.id'
+                'surat_permintaan.id',
+                'surat_permintaan.referensi_status_sp as status'
             )
             ->first();
         $barang_keluar = BarangKeluar::query()

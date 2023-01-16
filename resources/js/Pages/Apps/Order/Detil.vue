@@ -61,7 +61,12 @@
                     </tr>
                   </tbody>
                 </table>
-                <div class="row" v-if="hasAnyPermission(['order.approval'])">
+                <div
+                  class="row"
+                  v-if="
+                    hasAnyPermission(['order.approval']) && order.status == 11
+                  "
+                >
                   <div class="col-6">
                     <button
                       class="btn btn-success shadow-sm rounded-sm"
@@ -135,8 +140,8 @@ export default {
         }
       });
     },
-    notApprove(){
-        Swal.fire({
+    notApprove() {
+      Swal.fire({
         title: "Konfirmasi !!!",
         text: "Anda Menolak Permintaan Barang ?",
         icon: "warning",
@@ -165,7 +170,7 @@ export default {
           );
         }
       });
-    }
+    },
   },
   computed: {
     formattedDate() {
