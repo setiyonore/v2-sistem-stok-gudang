@@ -64,7 +64,7 @@
     </li>
     <li
       class="c-sidebar-nav-item"
-      v-if="hasAnyPermission(['order.index'])"
+      v-if="hasAnyPermission(['barang_keluar.index'])"
     >
       <Link
         class="c-sidebar-nav-link"
