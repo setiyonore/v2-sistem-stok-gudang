@@ -15,6 +15,9 @@ class OutgoingGoodsController extends Controller
     public function index()
     {
         $barang_keluar = BarangKeluar::query()
+            ->when(request()->q, function ($barang_keluar) {
+                $barang_keluar->where('sp.tanggal', request()->q);
+            })
             ->leftJoin('surat_permintaan as sp', 'sp.id', 'barang_keluar.sp_id')
             ->leftJoin('perusahaan as p', 'p.id', 'sp.pelanggan_id')
             ->leftJoin('referensi as r', 'r.id', 'sp.referensi_status_sp')
@@ -84,6 +87,13 @@ class OutgoingGoodsController extends Controller
             $barang->stok = $newstock;
             $barang->save();
         }
+        return redirect()->route('apps.outgoing_goods.index');
+    }
+    public function notApprove(Request $request)
+    {
+        $order = SuratPermintaan::query()->find($request->id);
+        $order->referensi_status_sp = config('config.status_permintaan_notApprove');
+        $order->save();
         return redirect()->route('apps.outgoing_goods.index');
     }
 }

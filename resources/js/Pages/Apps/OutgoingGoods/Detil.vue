@@ -137,7 +137,35 @@ export default {
       });
     },
     notApprove() {
-      alert("not approve");
+      Swal.fire({
+        title: "Konfirmasi !!!",
+        text: "Anda Tidak Menolak Barang Keluar ?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#EEC122",
+        cancelButtonColor: "#6469EB",
+        confirmButtonText: "Tolak",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Inertia.post(
+            "/apps/barang_keluar/notApprove",
+            {
+              id: this.barang_keluar.sp_id,
+            },
+            {
+              onSuccess: () => {
+                Swal.fire({
+                  title: "Success !",
+                  text: "Data Berhasil Disimpan",
+                  icon: "success",
+                  showConfirmButton: false,
+                  timer: 2000,
+                });
+              },
+            }
+          );
+        }
+      });
     },
   },
   computed: {

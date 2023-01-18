@@ -14,6 +14,22 @@
                 >
               </div>
               <div class="card-body">
+                <form @submit.prevent="handleSearch">
+                  <div class="input-group mb-3">
+                    <input
+                      type="date"
+                      v-model="search"
+                      class="form-control"
+                      placeholder="Cari barang masuk berdasarkan tanggal..."
+                    />
+                    <button
+                      class="btn btn-primary input-group-text"
+                      type="submit"
+                    >
+                      <i class="fa fa-search me-2"></i> Cari
+                    </button>
+                  </div>
+                </form>
                 <table class="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
@@ -64,6 +80,8 @@
 import LayoutApp from "../../../Layouts/App.vue";
 import { Head, Link } from "@inertiajs/inertia-vue3";
 import Pagination from "../../../Components/Pagination.vue";
+import { ref } from "vue";
+import { Inertia } from "@inertiajs/inertia";
 export default {
   layout: LayoutApp,
   components: {
@@ -73,6 +91,15 @@ export default {
   },
   props: {
     barang_keluar: Array,
+  },
+  setup() {
+    const search = ref("" || new URL(document.location).searchParams.get("q"));
+    const handleSearch = () => {
+      Inertia.get("/apps/outgoing_goods", {
+        q: search.value,
+      });
+    };
+    return { search, handleSearch };
   },
 };
 </script>
