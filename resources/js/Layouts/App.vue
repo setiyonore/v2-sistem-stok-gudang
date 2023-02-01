@@ -2,7 +2,7 @@
     <div class="c-app">
         <div class="c-sidebar c-sidebar-dark c-sidebar-fixed" :class="{ 'c-sidebar-lg-show': !$page.url.startsWith('/apps/transactions') }" id="sidebar">
             <div class="c-sidebar-brand d-lg-down-none" style="background: #894b9d;">
-                <img src="/images/gudang-logo.png" class="bg-light rounded shadow-sm p-1" width="35"> <span class="ml-2 font-weight-bold">SI Stok Gudang</span>
+                <img src="/images/logo-small.png" class="bg-light rounded shadow-sm p-1" width="35"> <span class="ml-2 font-weight-bold">SI Stok Gudang</span>
             </div>
 
             <!-- sidebar -->
