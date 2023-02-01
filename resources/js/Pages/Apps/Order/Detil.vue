@@ -61,14 +61,13 @@
                     </tr>
                   </tbody>
                 </table>
-                <div
-                  class="row"
-                  v-if="
-                    hasAnyPermission(['order.approval']) && order.status == 11
-                  "
-                >
+                <div class="row">
                   <div class="col-6">
                     <button
+                      v-if="
+                        hasAnyPermission(['order.approval']) &&
+                        order.status == 11
+                      "
                       class="btn btn-success shadow-sm rounded-sm"
                       type="submit"
                       @click="approve"
@@ -76,11 +75,20 @@
                       Setujui
                     </button>
                     <button
+                      v-if="
+                        hasAnyPermission(['order.approval']) &&
+                        order.status == 11
+                      "
                       class="btn btn-warning shadow-sm rounded-sm ms-3"
                       type="reset"
                       @click="notApprove"
                     >
                       Tolak
+                    </button>
+                  </div>
+                  <div class="col-6 text-right">
+                    <button class="btn btn-primary" @click="print">
+                      Print
                     </button>
                   </div>
                 </div>
@@ -170,6 +178,9 @@ export default {
           );
         }
       });
+    },
+    print() {
+      window.open(`/apps/permintaan/print?id=${this.order.id}`, '_blank');
     },
   },
   computed: {

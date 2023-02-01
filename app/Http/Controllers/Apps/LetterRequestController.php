@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Inertia\Inertia;
+use PDF;
 
 class LetterRequestController extends Controller
 {
@@ -296,5 +297,42 @@ class LetterRequestController extends Controller
         $order = SuratPermintaan::query()
             ->where('id', $id)->delete();
         return redirect()->route('apps.order.index');
+    }
+
+    public function print(Request $request)
+    {
+        $order = SuratPermintaan::query()
+            ->where('surat_permintaan.id', $request->id)
+            ->leftJoin('perusahaan as p', 'p.id', 'surat_permintaan.pelanggan_id')
+            ->leftJoin('pegawai as e','e.id','surat_permintaan.pegawai_id')
+            ->leftJoin('referensi as r','r.id','e.referensi_jabatan')
+            ->select(
+                'no_sp',
+                'tanggal',
+                'p.nama',
+                'p.alamat',
+                'p.no_hp',
+                'p.email',
+                'e.nama as pegawai',
+                'e.nip',
+                'r.nama as jabatan'
+
+            )
+            ->first();
+        $barang_keluar = BarangKeluar::query()
+            ->where('sp_id', $request->id)
+            ->select('id')
+            ->first();
+        $barang_keluar_detil = BarangKeluarDetil::query()
+            ->where('barang_keluar_id', $barang_keluar->id)
+            ->leftJoin('barang as b', 'b.id', 'barang_keluar_detil.barang_id')
+            ->select('b.nama as barang', 'barang_keluar_detil.jumlah')
+            ->get();
+        $data = [
+            'order' => $order,
+            'barang' => $barang_keluar_detil
+        ];
+        $pdf = PDF::loadView('print_order', $data);
+        return $pdf->download('order.pdf');
     }
 }

@@ -61,13 +61,14 @@ Route::prefix('apps')->group(function () {
         Route::post('/permintaan/approve', [LetterRequestController::class, 'approve'])->name('apps.permintaan.approve');
         Route::post('/permintaan/notApprove', [LetterRequestController::class, 'notApprove'])->name('apps.permintaan.notApprove');
         Route::post('/permintaan/hapusBarangPermintaan', [LetterRequestController::class, 'hapusBarangPermintaan'])->name('apps.permintaan.hapusBarang');
+        Route::get('/permintaan/print/', [LetterRequestController::class, 'print'])->name('apps.permintaan.print');
         Route::resource('/order', LetterRequestController::class, ['as' => 'apps'])
             ->middleware('permission:order.index|order.add|order.edit|order.delete|order.approval');
         //barang keluar
         Route::resource('/outgoing_goods', OutgoingGoodsController::class, ['as' => 'apps'])
             ->middleware('permission:barang_keluar.index|barang_keluar.approval');
         Route::post('/barang_keluar/approve', [OutgoingGoodsController::class, 'approve'])->name('apps.barang_keluar.approve');
-        Route::post('/barang_keluar/notApprove',[OutgoingGoodsController::class,'notApprove'])->name('apps.barang_keluar.notApprove');
+        Route::post('/barang_keluar/notApprove', [OutgoingGoodsController::class, 'notApprove'])->name('apps.barang_keluar.notApprove');
         //route resource roles
         Route::resource('/roles', RoleController::class, ['as' => 'apps'])
             ->middleware('permission:roles.index|roles.create|roles.edit|roles.delete');
