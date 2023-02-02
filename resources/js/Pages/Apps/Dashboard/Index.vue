@@ -7,15 +7,36 @@
     <div class="container-fluid">
       <div class="fade-in">
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-6">
             <div class="card border-0 rounded-3 shadow border-top-purple">
               <div class="card-header">
                 <span class="font-weight-bold"
-                  ><i class="fa fa-chart-bar"></i> Chart Barang Keluar Masuk 7
+                  ><i class="fa fa-chart-bar"></i> Chart Barang Masuk 7
                   Hari</span
                 >
               </div>
-              <div class="card-body"></div>
+              <div class="card-body">
+                <BarChart
+                  :chartData="chartBarangMasukWeek"
+                  :options="options"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card border-0 rounded-3 shadow border-top-success">
+              <div class="card-header">
+                <span class="font-weight-bold"
+                  ><i class="fa fa-chart-bar"></i> Chart Barang Keluar 7
+                  Hari</span
+                >
+              </div>
+              <div class="card-body">
+                <BarChart
+                  :chartData="chartBarangKeluarWeek"
+                  :options="options"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -88,10 +109,15 @@
 <script>
 //import layout
 import LayoutApp from "../../../Layouts/App.vue";
-
+import { ref } from "vue";
 //import Head and useForm from Inertia
 import { Head } from "@inertiajs/inertia-vue3";
+//chart
+import { BarChart } from "vue-chart-3";
+import { Chart, registerables } from "chart.js";
 
+//register chart
+Chart.register(...registerables);
 export default {
   //layout
   layout: LayoutApp,
@@ -99,10 +125,73 @@ export default {
   //register component
   components: {
     Head,
+    BarChart,
   },
   props: {
     stok: Array,
     order: Array,
+    date_barang_masuk: Array,
+    total_barang_masuk: Array,
+    date_barang_keluar: Array,
+    total_barang_keluar: Array,
+  },
+  setup(props) {
+    //method random color
+    function randomBackgroundColor(length) {
+      var data = [];
+      for (var i = 0; i < length; i++) {
+        data.push(getRandomColor());
+      }
+      return data;
+    }
+
+    //method generate random color
+    function getRandomColor() {
+      var letters = "0123456789ABCDEF".split("");
+      var color = "#";
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+    //option chart
+    const options = ref({
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false,
+        },
+        title: {
+          display: false,
+        },
+      },
+      beginZero: true,
+    });
+    //chart barang masuk week
+    const chartBarangMasukWeek = {
+      labels: props.date_barang_masuk,
+      datasets: [
+        {
+          data: props.total_barang_masuk,
+          backgroundColor: randomBackgroundColor(
+            props.date_barang_masuk.length
+          ),
+        },
+      ],
+    };
+    //chart barang masuk week
+    const chartBarangKeluarWeek = {
+      labels: props.date_barang_keluar,
+      datasets: [
+        {
+          data: props.total_barang_keluar,
+          backgroundColor: randomBackgroundColor(
+            props.date_barang_keluar.length
+          ),
+        },
+      ],
+    };
+    return { options, chartBarangMasukWeek, chartBarangKeluarWeek };
   },
 };
 </script>
