@@ -13,10 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('pegawai_id');
-            // $table->foreign('pegawai_id')->references('id')->on('pegawai');
-        });
+        Schema::rename('barang_masuk_detil','barang_masuk_item');
     }
 
     /**
@@ -26,8 +23,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };

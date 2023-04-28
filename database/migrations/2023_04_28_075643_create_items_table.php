@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('barang_keluar_detil', function (Blueprint $table) {
+        Schema::create('item', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('barang_keluar_id');
             $table->unsignedBigInteger('barang_id');
-            $table->unsignedBigInteger('jumlah');
-            $table->foreign('barang_keluar_id')->references('id')->on('barang_keluar');
+            $table->unsignedBigInteger('referensi_kondisi_barang');
+            $table->string('no_serial');
             $table->foreign('barang_id')->references('id')->on('barang');
+            $table->foreign('referensi_kondisi_barang')->references('id')->on('referensi');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('barang_keluar_detils');
+        Schema::dropIfExists('items');
     }
 };
