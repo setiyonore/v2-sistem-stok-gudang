@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('barang_masuk', function (Blueprint $table) {
-//            $table->dropConstrainedForeignId('penyedia_id');
-//            $table->dropColumn('penyedia_id');
+        Schema::table('barang_masuk_item', function (Blueprint $table) {
+//            $table->dropConstrainedForeignId('barang_id');
+//            $table->dropColumn('barang_id');
+//            $table->dropColumn('jumlah');
         });
     }
 
@@ -26,7 +27,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('barang_masuk', function (Blueprint $table) {
+        Schema::table('barang_masuk_item', function (Blueprint $table) {
             //
         });
     }
