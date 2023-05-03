@@ -226,21 +226,22 @@ class GoodsReceivedController extends Controller
     {
         $barang_masuk = barang_masuk::query()
             ->where('barang_masuk.id', $id)
-            ->leftJoin('perusahaan as s', 's.id', 'barang_masuk.penyedia_id')
             ->leftJoin('pegawai as p', 'p.id', 'barang_masuk.pegawai_id')
             ->select(
                 'barang_masuk.tanggal',
                 'barang_masuk.yang_menyerahkan',
-                's.nama as penyedia',
                 'p.nama as pegawai',
-                'barang_masuk.keterangan'
+                'barang_masuk.keterangan',
+                'barang_masuk.no_sp'
             )
             ->first();
         $barang = barang_masuk_item::query()
             ->where('barang_masuk_item.barang_masuk_id', $id)
-            ->leftJoin('barang as b', 'b.id', 'barang_masuk_item.barang_id')
-            ->select('nama as barang', 'jumlah')
+            ->leftJoin('item as i','i.id','barang_masuk_item.item_id')
+            ->leftJoin('barang as b', 'b.id', 'i.barang_id')
+            ->select('nama as barang','i.no_serial')
             ->get();
+//        dd($barang);
         return Inertia::render('Apps/GoodsReceived/Detil', [
             'barang_masuk' => $barang_masuk,
             'barang' => $barang
