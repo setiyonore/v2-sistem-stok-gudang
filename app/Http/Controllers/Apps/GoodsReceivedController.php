@@ -26,7 +26,6 @@ class GoodsReceivedController extends Controller
                 $barang_masuk->where('barang_masuk.tanggal', request()->q);
             })
             ->leftJoin('pegawai as p', 'p.id', 'barang_masuk.pegawai_id')
-//            ->leftJoin('perusahaan as s', 's.id', 'barang_masuk.penyedia_id')
             ->select(
                 'barang_masuk.id',
                 'barang_masuk.tanggal',
@@ -101,18 +100,6 @@ class GoodsReceivedController extends Controller
                 ]);
             //insert to tbl history status item
             $this->storeHistory($item->id, $request->tanggal, config('config.referensi_status_barang_tersedia'), config('config.referensi_jenis_transaksi_barang_masuk'));
-            //update stok barang
-            /*
-            $oldStock = Barang::query()
-                ->where('id', $items[$i]['barang_id'])
-                ->select('stok')
-                ->first();
-            $oldStock = $oldStock->stok;
-            $newstock = $oldStock + $items[$i]['jumlah'];
-            $barang = Barang::query()->find($items[$i]['barang_id']);
-            $barang->stok = $newstock;
-            $barang->save();
-            */
         }
         return redirect()->route('apps.received_goods.index');
     }
@@ -132,7 +119,7 @@ class GoodsReceivedController extends Controller
                 'b.id as barang_id'
             )
             ->get();
-//        dd($barang);
+
         $goods = Barang::query()
             ->select('id', 'nama as text')
             ->get();
@@ -169,7 +156,6 @@ class GoodsReceivedController extends Controller
         $barang_masuk->no_sp = $request->no_sp;
         $barang_masuk->save();
         $items = $request->barang;
-//        dd($items);
         // insert or update tbl item
         for ($i = 0; $i < count($items); $i++) {
             $item = Item::query()
@@ -208,17 +194,24 @@ class GoodsReceivedController extends Controller
 
     public function destroy($id)
     {
-        $barang_masuk_detil = barang_masuk_item::query()
+        $barang_masuk_item = barang_masuk_item::query()
             ->where('barang_masuk_id', $id)
-            ->select('barang_id', 'jumlah')
+            ->select('item_id')
             ->get();
-        for ($i = 0; $i < count($barang_masuk_detil); $i++) {
-            $barang = Barang::query()->find($barang_masuk_detil[$i]['barang_id']);
-            $barang->stok = $barang->stok - $barang_masuk_detil[$i]['jumlah'];
-            $barang->save();
+        $item_tmp = [];
+        for ($i = 0; $i < count($barang_masuk_item); $i++) {
+            //delete history status item
+            HistoryStatusItem::query()->where('item_id', $barang_masuk_item[$i]['item_id'])
+                ->delete();
+            array_push($item_tmp, $barang_masuk_item[$i]['item_id']);
         }
-        $barang_masuk_detil = barang_masuk_item::query()->where('barang_masuk_id', $id)->delete();
-        $barang_masuk = barang_masuk::query()->findOrFail($id)->delete();
+        //delete barang masuk item
+        barang_masuk_item::query()->where('barang_masuk_id', $id)->delete();
+        //delete item
+        for ($i = 0; $i < count($item_tmp); $i++) {
+            Item::query()->findOrFail($item_tmp[$i])->delete();
+        }
+        barang_masuk::query()->findOrFail($id)->delete();
         return redirect()->route('apps.received_goods.index');
     }
 
@@ -237,11 +230,10 @@ class GoodsReceivedController extends Controller
             ->first();
         $barang = barang_masuk_item::query()
             ->where('barang_masuk_item.barang_masuk_id', $id)
-            ->leftJoin('item as i','i.id','barang_masuk_item.item_id')
+            ->leftJoin('item as i', 'i.id', 'barang_masuk_item.item_id')
             ->leftJoin('barang as b', 'b.id', 'i.barang_id')
-            ->select('nama as barang','i.no_serial')
+            ->select('nama as barang', 'i.no_serial')
             ->get();
-//        dd($barang);
         return Inertia::render('Apps/GoodsReceived/Detil', [
             'barang_masuk' => $barang_masuk,
             'barang' => $barang
