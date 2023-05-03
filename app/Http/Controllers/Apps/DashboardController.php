@@ -29,7 +29,7 @@ class DashboardController extends Controller
         $total_barang_keluar[] = "";
         $barang_masuk = DB::table('barang_masuk_item')
             ->leftJoin('barang_masuk as bm', 'bm.id', 'barang_masuk_item.barang_masuk_id')
-            ->addSelect(DB::raw('DATE(bm.created_at) as date,SUM(barang_masuk_item.id) as jumlah'))
+            ->addSelect(DB::raw('DATE(bm.created_at) as date,COUNT(barang_masuk_item.id) as jumlah'))
             // ->where('bm.created_at', '>=', $week)
             ->groupBy('date')
             ->get();

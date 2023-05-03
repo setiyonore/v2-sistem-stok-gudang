@@ -14,9 +14,11 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Traits\HistoryStatusItemTraits;
 use Carbon\Carbon;
+
 class GoodsReceivedController extends Controller
 {
     use HistoryStatusItemTraits;
+
     public function index()
     {
         $barang_masuk = barang_masuk::query()
@@ -98,13 +100,7 @@ class GoodsReceivedController extends Controller
                     'barang_masuk_id' => $barang_masuk->id
                 ]);
             //insert to tbl history status item
-            $history_status_item = HistoryStatusItem::query()
-                ->create([
-                    'item_id' => $item->id,
-                    'tanggal' => $request->tanggal,
-                    'referensi_status_item' => config('config.referensi_status_barang_tersedia'),
-                    'referensi_jenis_transaksi' => config('config.referensi_jenis_transaksi_barang_masuk')
-                ]);
+            $this->storeHistory($item->id, $request->tanggal, config('config.referensi_status_barang_tersedia'), config('config.referensi_jenis_transaksi_barang_masuk'));
             //update stok barang
             /*
             $oldStock = Barang::query()
@@ -204,7 +200,7 @@ class GoodsReceivedController extends Controller
                         'item_id' => $itemStore->id
                     ]);
                 //insert history status item
-                $this->storeHistory($itemStore->id,$today,config('config.referensi_status_barang_tersedia'),config('config.referensi_jenis_transaksi_barang_masuk'));
+                $this->storeHistory($itemStore->id, $today, config('config.referensi_status_barang_tersedia'), config('config.referensi_jenis_transaksi_barang_masuk'));
             }
         }
         return redirect()->route('apps.received_goods.index');
