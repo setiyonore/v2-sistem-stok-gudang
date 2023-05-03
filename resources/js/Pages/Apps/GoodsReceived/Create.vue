@@ -66,26 +66,16 @@
                   </div>
                   <div class="col-md-6">
                     <div class="mb-3">
-                      <label for="penyedia" class="font-weight-bold"
-                        >Penyedia</label
+                      <label for="no_sp" class="font-weight-bold"
+                        >No SP</label
                       >
-                      <select
-                        class="form-select"
-                        aria-label="Default select example"
-                        v-model="form.penyedia"
-                      >
-                        <option value="">Pilih Penyedia</option>
-                        <option
-                          v-for="(data, index) in penyedia"
-                          :key="index"
-                          :value="data.id"
-                        >
-                          {{ data.nama }}
-                        </option>
-                      </select>
+                        <input type="text"
+                        class="form-control"
+                        v-model="form.no_sp"
+                        :class="{ 'is-invalid': errors.no_sp }">
                     </div>
-                    <div v-if="errors.penyedia" class="alert alert-danger">
-                      {{ errors.penyedia }}
+                    <div v-if="errors.no_sp" class="alert alert-danger">
+                      {{ errors.no_sp }}
                     </div>
                   </div>
                 </div>
@@ -102,19 +92,19 @@
                       />
                     </div>
                   </div>
-                  <div class="col-md-2">
+                  <div class="col-md-3">
                     <div class="mb-3">
                       <label for="jumlah" class="font-weight-bold"
-                        >Jumlah</label
+                        >No serial</label
                       >
                       <input
                         type="text"
                         class="form-control"
-                        v-model="form.jumlah"
+                        v-model="form.no_serial"
                       />
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <div class="mb-3">
                       <label class="form-label fw-bold text-white">*</label>
                       <button
@@ -131,7 +121,7 @@
                     <tr style="background-color: #e6e6e7">
                       <th scope="col">No</th>
                       <th scope="col">Barang</th>
-                      <th scope="col">Jumlah</th>
+                      <th scope="col">No Serial</th>
                       <th scope="col">Actions</th>
                     </tr>
                   </thead>
@@ -145,7 +135,7 @@
                           :settings="{ width: '100%' }"
                         />
                       </td>
-                      <td><input type="number" v-model="item.jumlah" /></td>
+                      <td><input type="text" v-model="item.no_serial" /></td>
                       <td class="text-center">
                         <button
                           class="btn btn-danger btn-sm rounded-pill"
@@ -208,7 +198,6 @@ export default {
   },
   props: {
     errors: Object,
-    penyedia: Array,
     barang: Array,
   },
   methods: {
@@ -220,11 +209,11 @@ export default {
         .then((response) => {
           this.items.push({
             barang_id: this.form.barang,
-            jumlah: this.form.jumlah,
+            no_serial: this.form.no_serial,
             nama: response.data.nama,
           });
           this.form.barang = "";
-          this.form.jumlah = "";
+          this.form.no_serial = "";
         });
     },
     deleteBarang(index) {
@@ -249,7 +238,7 @@ export default {
           tanggal: this.form.tanggal,
           yang_menyerahkan: this.form.yang_menyerahkan,
           keterangan: this.form.keterangan,
-          penyedia: this.form.penyedia,
+          no_sp: this.form.no_sp,
           barang: this.items,
         },
         {
@@ -269,7 +258,7 @@ export default {
       this.form.tanggal = "";
       this.form.yang_menyerahkan = "";
       this.form.keterangan = "";
-      this.form.penyedia = "";
+      this.form.no_sp = "";
       this.items = "";
     },
   },
@@ -278,9 +267,9 @@ export default {
       tanggal: "",
       yang_menyerahkan: "",
       keterangan: "",
-      penyedia: "",
+      no_sp: "",
       barang: "",
-      jumlah: "",
+      no_serial: "",
     });
     return { form };
   },

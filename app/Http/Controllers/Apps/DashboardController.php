@@ -27,9 +27,9 @@ class DashboardController extends Controller
         $total_barang_masuk[] = "";
         $barang_keluar_date[] = "";
         $total_barang_keluar[] = "";
-        $barang_masuk = DB::table('barang_masuk_detil')
-            ->leftJoin('barang_masuk as bm', 'bm.id', 'barang_masuk_detil.barang_masuk_id')
-            ->addSelect(DB::raw('DATE(bm.created_at) as date,SUM(jumlah) as jumlah'))
+        $barang_masuk = DB::table('barang_masuk_item')
+            ->leftJoin('barang_masuk as bm', 'bm.id', 'barang_masuk_item.barang_masuk_id')
+            ->addSelect(DB::raw('DATE(bm.created_at) as date,SUM(barang_masuk_item.id) as jumlah'))
             // ->where('bm.created_at', '>=', $week)
             ->groupBy('date')
             ->get();

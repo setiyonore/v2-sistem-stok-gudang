@@ -5,14 +5,18 @@ namespace App\Http\Controllers\Apps;
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Models\barang_masuk;
-use App\Models\barang_masuk_detil;
+use App\Models\barang_masuk_item;
+use App\Models\HistoryStatusItem;
+use App\Models\Item;
 use App\Models\Perusahaan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-
+use App\Traits\HistoryStatusItemTraits;
+use Carbon\Carbon;
 class GoodsReceivedController extends Controller
 {
+    use HistoryStatusItemTraits;
     public function index()
     {
         $barang_masuk = barang_masuk::query()
@@ -20,7 +24,7 @@ class GoodsReceivedController extends Controller
                 $barang_masuk->where('barang_masuk.tanggal', request()->q);
             })
             ->leftJoin('pegawai as p', 'p.id', 'barang_masuk.pegawai_id')
-            ->leftJoin('perusahaan as s', 's.id', 'barang_masuk.penyedia_id')
+//            ->leftJoin('perusahaan as s', 's.id', 'barang_masuk.penyedia_id')
             ->select(
                 'barang_masuk.id',
                 'barang_masuk.tanggal',
@@ -40,15 +44,11 @@ class GoodsReceivedController extends Controller
         $barang = Barang::query()
             ->select('id', 'nama as text')
             ->get();
-        $penyedia = Perusahaan::query()
-            ->select('id', 'nama')
-            ->where('referensi_jenis_perusahaan', config('config.referensi_penyedia'))
-            ->get();
         return Inertia::render('Apps/GoodsReceived/Create', [
             'barang' => $barang,
-            'penyedia' => $penyedia,
         ]);
     }
+
     public function searchGood(Request $request)
     {
 
@@ -58,19 +58,21 @@ class GoodsReceivedController extends Controller
             ->first();
         return response()->json($barang);
     }
+
     public function store(Request $request)
     {
         $this->validate($request, [
             'tanggal' => 'required',
             'yang_menyerahkan' => 'required',
-            'penyedia' => 'required',
+            'no_sp' => 'required',
             'barang' => 'required',
         ], [
             'tanggal.required' => 'Mohon inputkan tanggal',
             'yang_menyerahkan.required' => 'Mohon inputkan yang menyerahkan',
-            'penyedia.required' => 'Mohon inputkan penyedia',
+            'no_sp.required' => 'Mohon inputkan No SP',
             'barang.required' => 'Mohon inputkan barang',
         ]);
+//        dd($request->barang);
         $pegawai_id = Auth::user()->pegawai_id;
         $barang_masuk = barang_masuk::query()
             ->create([
@@ -78,16 +80,33 @@ class GoodsReceivedController extends Controller
                 'keterangan' => $request->keterangan,
                 'yang_menyerahkan' => $request->yang_menyerahkan,
                 'pegawai_id' => $pegawai_id,
-                'penyedia_id' => $request->penyedia
+                'no_sp' => $request->no_sp
             ]);
         $items = $request->barang;
         for ($i = 0; $i < count($items); $i++) {
-            $barang_masuk_detil = barang_masuk_detil::query()
+            //insert to tbl item
+            $item = Item::query()
                 ->create([
                     'barang_id' => $items[$i]['barang_id'],
-                    'jumlah' => $items[$i]['jumlah'],
+                    'referensi_kondisi_barang' => config('config.refensi_kondisi_barang_normal'),
+                    'no_serial' => $items[$i]['no_serial']
+                ]);
+            //insert to tbl barang_masuk_item
+            $barang_masuk_item = barang_masuk_item::query()
+                ->create([
+                    'item_id' => $item->id,
                     'barang_masuk_id' => $barang_masuk->id
                 ]);
+            //insert to tbl history status item
+            $history_status_item = HistoryStatusItem::query()
+                ->create([
+                    'item_id' => $item->id,
+                    'tanggal' => $request->tanggal,
+                    'referensi_status_item' => config('config.referensi_status_barang_tersedia'),
+                    'referensi_jenis_transaksi' => config('config.referensi_jenis_transaksi_barang_masuk')
+                ]);
+            //update stok barang
+            /*
             $oldStock = Barang::query()
                 ->where('id', $items[$i]['barang_id'])
                 ->select('stok')
@@ -97,23 +116,28 @@ class GoodsReceivedController extends Controller
             $barang = Barang::query()->find($items[$i]['barang_id']);
             $barang->stok = $newstock;
             $barang->save();
+            */
         }
         return redirect()->route('apps.received_goods.index');
     }
+
     public function edit($id)
     {
         $barang_masuk = barang_masuk::query()->findOrFail($id);
-        $barang = barang_masuk_detil::query()
-            ->leftJoin('barang as b', 'b.id', 'barang_masuk_detil.barang_id')
-            ->where('barang_masuk_detil.barang_masuk_id', $id)
+        $barang = barang_masuk_item::query()
+            ->leftJoin('item as i', 'i.id', 'barang_masuk_item.item_id')
+            ->leftJoin('barang as b', 'b.id', 'i.barang_id')
+            ->where('barang_masuk_item.barang_masuk_id', $id)
             ->select(
-                'b.id as barang_id',
-                'barang_masuk_detil.jumlah',
+
+                'i.id as item_id',
+                'i.no_serial',
                 'b.nama',
-                'barang_masuk_detil.jumlah as jumlah_old'
+                'b.id as barang_id'
             )
             ->get();
-        $goods =  Barang::query()
+//        dd($barang);
+        $goods = Barang::query()
             ->select('id', 'nama as text')
             ->get();
         $penyedia = Perusahaan::query()
@@ -127,53 +151,68 @@ class GoodsReceivedController extends Controller
             'goods' => $goods
         ]);
     }
+
     public function update(Request $request)
     {
         $this->validate($request, [
             'tanggal' => 'required',
             'yang_menyerahkan' => 'required',
-            'penyedia' => 'required',
+            'no_sp' => 'required',
             'barang' => 'required',
         ], [
             'tanggal.required' => 'Mohon inputkan tanggal',
             'yang_menyerahkan.required' => 'Mohon inputkan yang menyerahkan',
-            'penyedia.required' => 'Mohon inputkan penyedia',
+            'no_sp.required' => 'Mohon inputkan No SP',
             'barang.required' => 'Mohon inputkan barang',
         ]);
+        //update data di tbl barang_masuk
         $barang_masuk = barang_masuk::query()->find($request->id);
         $barang_masuk->tanggal = $request->tanggal;
         $barang_masuk->yang_menyerahkan = $request->yang_menyerahkan;
         $barang_masuk->keterangan = $request->keterangan;
-        $barang_masuk->penyedia_id = $request->penyedia;
+        $barang_masuk->no_sp = $request->no_sp;
         $barang_masuk->save();
         $items = $request->barang;
-        barang_masuk_detil::query()->where('barang_masuk_id', $request->id)->delete();
+//        dd($items);
+        // insert or update tbl item
         for ($i = 0; $i < count($items); $i++) {
-            $barang_masuk_detil = barang_masuk_detil::query()
-                ->create([
-                    'barang_id' => $items[$i]['barang_id'],
-                    'jumlah' => $items[$i]['jumlah'],
-                    'barang_masuk_id' => $request->id
-                ]);
-            $oldStock = $items[$i]['jumlah_old'];
-            $newstock = $items[$i]['jumlah'];
-            //jika stok lama lebih kecil dari stok baru
-            if ($oldStock < $newstock) {
-                $barang = Barang::query()->find($items[$i]['barang_id']);
-                $barang->stok = $barang->stok - $oldStock + $newstock;
-                $barang->save();
-            } else if ($oldStock > $newstock) {
-                //jika stok lama lebih besar dari stok baru
-                $barang = Barang::query()->find($items[$i]['barang_id']);
-                $barang->stok = $barang->stok - $newstock;
-                $barang->save();
+            $item = Item::query()
+                ->where('id', $items[$i]['item_id'])->get()->count();
+            if ($item > 0) {
+                //update
+                $itemStore = Item::query()
+                    ->where('id', $items[$i]['item_id'])
+                    ->update([
+                        'barang_id' => $items[$i]['barang_id'],
+                        'no_serial' => $items[$i]['no_serial']
+                    ]);
+            } else {
+                $today = Carbon::now();
+                $today = $today->format('Y-m-d');
+                //insert
+                $itemStore = Item::query()
+                    ->create([
+                        'barang_id' => $items[$i]['barang_id'],
+                        'referensi_kondisi_barang' => config('config.refensi_kondisi_barang_normal'),
+                        'no_serial' => $items[$i]['no_serial']
+
+                    ]);
+                //insert barang_masuk_item
+                $barang_masuk_item = barang_masuk_item::query()
+                    ->create([
+                        'barang_masuk_id' => $request->id,
+                        'item_id' => $itemStore->id
+                    ]);
+                //insert history status item
+                $this->storeHistory($itemStore->id,$today,config('config.referensi_status_barang_tersedia'),config('config.referensi_jenis_transaksi_barang_masuk'));
             }
         }
         return redirect()->route('apps.received_goods.index');
     }
+
     public function destroy($id)
     {
-        $barang_masuk_detil = barang_masuk_detil::query()
+        $barang_masuk_detil = barang_masuk_item::query()
             ->where('barang_masuk_id', $id)
             ->select('barang_id', 'jumlah')
             ->get();
@@ -182,10 +221,11 @@ class GoodsReceivedController extends Controller
             $barang->stok = $barang->stok - $barang_masuk_detil[$i]['jumlah'];
             $barang->save();
         }
-        $barang_masuk_detil = barang_masuk_detil::query()->where('barang_masuk_id', $id)->delete();
+        $barang_masuk_detil = barang_masuk_item::query()->where('barang_masuk_id', $id)->delete();
         $barang_masuk = barang_masuk::query()->findOrFail($id)->delete();
         return redirect()->route('apps.received_goods.index');
     }
+
     public function show($id)
     {
         $barang_masuk = barang_masuk::query()
@@ -200,9 +240,9 @@ class GoodsReceivedController extends Controller
                 'barang_masuk.keterangan'
             )
             ->first();
-        $barang = barang_masuk_detil::query()
-            ->where('barang_masuk_detil.barang_masuk_id', $id)
-            ->leftJoin('barang as b', 'b.id', 'barang_masuk_detil.barang_id')
+        $barang = barang_masuk_item::query()
+            ->where('barang_masuk_item.barang_masuk_id', $id)
+            ->leftJoin('barang as b', 'b.id', 'barang_masuk_item.barang_id')
             ->select('nama as barang', 'jumlah')
             ->get();
         return Inertia::render('Apps/GoodsReceived/Detil', [
