@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Apps;
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Models\BarangKeluar;
-use App\Models\BarangKeluarDetil;
+use App\Models\BarangKeluarItem;
+use App\Models\OrderBarang;
 use App\Models\Perusahaan;
 use App\Models\SuratPermintaan;
 use App\Traits\GoodsTraits;
@@ -20,18 +21,18 @@ class LetterRequestController extends Controller
     use GoodsTraits;
     public function index()
     {
-        $order = SuratPermintaan::query()
+        $order = OrderBarang::query()
             ->when(request()->q, function ($order) {
                 $order->where('tanggal', request()->q);
             })
-            ->leftJoin('referensi as r', 'r.id', 'surat_permintaan.referensi_status_sp')
+            ->leftJoin('referensi as r', 'r.id', 'order_barang.referensi_status_order')
             ->select(
                 'tanggal',
                 'no_sp',
-                'surat_permintaan.keterangan',
+                'order_barang.keterangan',
                 'r.nama as status',
-                'surat_permintaan.id',
-                'surat_permintaan.pegawai_id'
+                'order_barang.id',
+                'order_barang.pegawai_id'
             )
             ->paginate(config('config.paginate'));
         $pegawai = Auth::user()->pegawai_id;
@@ -76,7 +77,6 @@ class LetterRequestController extends Controller
     public function store(Request $request)
     {
 
-
         $this->validate($request, [
             'tanggal' => 'required',
             'pelanggan' => 'required',
@@ -91,33 +91,32 @@ class LetterRequestController extends Controller
         tanggal,bulan,tahun/dtp/surat permintaan ke x ditgl tersebut
         */
         $pegawai_id = Auth::user()->pegawai_id;
-        $count = SuratPermintaan::query()->where('tanggal', $request->tanggal)->count() + 1;
+        $count = OrderBarang::query()->where('tanggal', $request->tanggal)->count() + 1;
         $count = sprintf("%03d", $count);
         $tgl = Carbon::createFromFormat('Y-m-d', $request->tanggal)->format('d/m/Y');
         $tgl = str_replace('/', '', $tgl);
         $nosp = $tgl . '/DTP/' . $count;
-        $order = SuratPermintaan::query()
+        //insert tbl order
+        $order = OrderBarang::query()
             ->create([
                 'tanggal' => $request->tanggal,
                 'no_sp' => $nosp,
-                'referensi_status_sp' => config('config.status_permintaan_pending'),
+                'referensi_status_order' => config('config.status_permintaan_pending'),
                 'keterangan' => $request->keterangan,
                 'pelanggan_id' => $request->pelanggan,
                 'pegawai_id' => $pegawai_id
             ]);
-        $barang_keluar = BarangKeluar::query()
-            ->create([
-                'tanggal' => $request->tanggal,
-                'sp_id' => $order->id,
-            ]);
+        //insert tbl barang keluar item
         $items = $request->barang;
-        for ($i = 0; $i < count($items); $i++) {
-            $barang_keluar_detil = BarangKeluarDetil::query()
-                ->create([
-                    'barang_keluar_id' => $barang_keluar->id,
-                    'barang_id' => $items[$i]['barang_id'],
-                    'jumlah' => $items[$i]['jumlah']
-                ]);
+        for ($i = 0;$i<count($items);$i++){
+            for ($j=0;$j<$items[$i]['jumlah'];$j++){
+                BarangKeluarItem::query()
+                    ->create([
+                        'order_barang_id' => $order->id,
+                        'barang_id' => $items[$i]['barang_id'],
+                        'item_id' => 0
+                    ]);
+            }
         }
         return redirect()->route('apps.order.index');
     }
@@ -144,7 +143,7 @@ class LetterRequestController extends Controller
             ->where('sp_id', $id)
             ->select('id')
             ->first();
-        $barang = BarangKeluarDetil::query()
+        $barang = BarangKeluarItem::query()
             ->where('barang_keluar_id', $barang_keluar->id)
             ->leftJoin('barang as b', 'b.id', 'barang_keluar_detil.barang_id')
             ->select('b.nama', 'barang_keluar_detil.jumlah')
@@ -162,7 +161,7 @@ class LetterRequestController extends Controller
         $barang_keluar = BarangKeluar::query()->where('sp_id', $request->id)
             ->select('id')
             ->first();
-        $items = BarangKeluarDetil::query()
+        $items = BarangKeluarItem::query()
             ->where('barang_keluar_id', $barang_keluar->id)
             ->select('barang_id', 'jumlah')
             ->get();
@@ -199,7 +198,7 @@ class LetterRequestController extends Controller
         $barang_keluar = BarangKeluar::query()->where('sp_id', $id)
             ->select('id')
             ->first();
-        $barang = BarangKeluarDetil::query()
+        $barang = BarangKeluarItem::query()
             ->where('barang_keluar_id', $barang_keluar->id)
             ->leftJoin('barang as b', 'b.id', 'barang_keluar_detil.barang_id')
             ->select(
@@ -242,9 +241,9 @@ class LetterRequestController extends Controller
         $items = $request->barang;
         $barang_keluar = BarangKeluar::query()->where('sp_id', $request->id)
             ->select('id')->first();
-        BarangKeluarDetil::query()->where('barang_keluar_id', $barang_keluar->id)->delete();
+        BarangKeluarItem::query()->where('barang_keluar_id', $barang_keluar->id)->delete();
         for ($i = 0; $i < count($items); $i++) {
-            $barang_keluar_detil = BarangKeluarDetil::query()
+            $barang_keluar_detil = BarangKeluarItem::query()
                 ->create([
                     'barang_keluar_id' => $barang_keluar->id,
                     'barang_id' => $items[$i]['barang_id'],
@@ -281,7 +280,7 @@ class LetterRequestController extends Controller
         if ($sp_status->status == config('config.status_permintaan_approve')) {
             //cek apakah permintaan sudah di approve
 
-            $barang_keluar_detil = BarangKeluarDetil::query()
+            $barang_keluar_detil = BarangKeluarItem::query()
                 ->where('barang_keluar_id', $barang_keluar->id)
                 ->get();
             for ($i = 0; $i < count($barang_keluar_detil); $i++) {
@@ -290,7 +289,7 @@ class LetterRequestController extends Controller
                 $barang->save();
             }
         }
-        $barang_keluar_detil = BarangKeluarDetil::query()
+        $barang_keluar_detil = BarangKeluarItem::query()
             ->where('barang_keluar_id', $barang_keluar->id)->delete();
         $barang_keluar = BarangKeluar::query()
             ->where('sp_id', $id)->delete();
@@ -323,7 +322,7 @@ class LetterRequestController extends Controller
             ->where('sp_id', $request->id)
             ->select('id')
             ->first();
-        $barang_keluar_detil = BarangKeluarDetil::query()
+        $barang_keluar_detil = BarangKeluarItem::query()
             ->where('barang_keluar_id', $barang_keluar->id)
             ->leftJoin('barang as b', 'b.id', 'barang_keluar_detil.barang_id')
             ->select('b.nama as barang', 'barang_keluar_detil.jumlah')

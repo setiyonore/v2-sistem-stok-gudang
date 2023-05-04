@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
 use App\Models\BarangKeluar;
-use App\Models\BarangKeluarDetil;
+use App\Models\BarangKeluarItem;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\SuratPermintaan;
@@ -53,7 +53,7 @@ class OutgoingGoodsController extends Controller
                 'sp.id as sp_id'
             )
             ->first();
-        $items = BarangKeluarDetil::query()
+        $items = BarangKeluarItem::query()
             ->where('barang_keluar_id', $id)
             ->leftJoin('barang as b', 'b.id', 'barang_keluar_detil.barang_id')
             ->select('b.nama as barang', 'barang_keluar_detil.jumlah')
@@ -72,7 +72,7 @@ class OutgoingGoodsController extends Controller
         $barang_keluar = BarangKeluar::query()->where('sp_id', $request->id)
             ->select('id')
             ->first();
-        $items = BarangKeluarDetil::query()
+        $items = BarangKeluarItem::query()
             ->where('barang_keluar_id', $barang_keluar->id)
             ->select('barang_id', 'jumlah')
             ->get();
