@@ -141,7 +141,7 @@
                                         <td class="text-center">
                                             <button
                                                 class="btn btn-danger btn-sm rounded-pill"
-                                                @click="deleteBarang(index)"
+                                                @click="deleteBarang(index,item.item_id)"
                                             >
                                                 <i class="fa fa-trash"></i>
                                             </button>
@@ -227,7 +227,7 @@ export default {
                     }
                 });
         },
-        deleteBarang(index) {
+        deleteBarang(index,item) {
             Swal.fire({
                 title: "Konfirmasi !!!",
                 text: "Anda Akan Menghapus Data ?",
@@ -238,7 +238,13 @@ export default {
                 confirmButtonText: "Hapus",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.barang.splice(index, 1);
+                    axios.get(`/apps/barang_masuk/deleteItem/${item}`)
+                        .then((response)=>{
+                            console.log(response.data)
+                            if(response.data === 'success'){
+                                this.barang.splice(index, 1);
+                            }
+                        })
                 }
             });
         },

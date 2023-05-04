@@ -56,6 +56,7 @@ Route::prefix('apps')->group(function () {
         Route::post('/barang_masuk/searchGood/', [GoodsReceivedController::class, 'searchGood'])->name('apps.received_goods.search');
         Route::resource('/received_goods', GoodsReceivedController::class, ['as' => 'apps'])
             ->middleware('permission:barang_masuk.index|barang_masuk.add|barang_masuk.edit|barang_masuk.delete');
+        Route::get('/barang_masuk/deleteItem/{id}', [GoodsReceivedController::class, 'deleteItem'])->name('apps.received_goods.deleteItem');
         //surat permintaan
         Route::post('/permintaan/searchGood', [LetterRequestController::class, 'searchGood'])->name('apps.permintaan.search');
         Route::post('/permintaan/approve', [LetterRequestController::class, 'approve'])->name('apps.permintaan.approve');

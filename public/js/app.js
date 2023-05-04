@@ -22567,7 +22567,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    deleteBarang: function deleteBarang(index) {
+    deleteBarang: function deleteBarang(index, item) {
       var _this2 = this;
       sweetalert2__WEBPACK_IMPORTED_MODULE_5___default().fire({
         title: "Konfirmasi !!!",
@@ -22579,7 +22579,12 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: "Hapus"
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this2.barang.splice(index, 1);
+          axios__WEBPACK_IMPORTED_MODULE_4___default().get("/apps/barang_masuk/deleteItem/".concat(item)).then(function (response) {
+            console.log(response.data);
+            if (response.data === 'success') {
+              _this2.barang.splice(index, 1);
+            }
+          });
         }
       });
     },
@@ -27449,7 +27454,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, null, 8 /* PROPS */, _hoisted_42), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, item.no_serial]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_43, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       "class": "btn btn-danger btn-sm rounded-pill",
       onClick: function onClick($event) {
-        return $options.deleteBarang(index);
+        return $options.deleteBarang(index, item.item_id);
       }
     }, _hoisted_46, 8 /* PROPS */, _hoisted_44)])]);
   }), 128 /* KEYED_FRAGMENT */))])]), $props.errors.barang ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_47, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.errors.barang), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_48, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
