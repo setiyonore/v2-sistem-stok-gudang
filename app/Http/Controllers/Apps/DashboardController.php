@@ -40,12 +40,12 @@ class DashboardController extends Controller
             }
         }
         // dd($total);
-        $barang_keluar = DB::table('barang_keluar_detil')
-            ->leftJoin('barang_keluar as bk', 'bk.id', 'barang_keluar_detil.barang_keluar_id')
-            ->leftJoin('surat_permintaan as sp', 'sp.id', 'bk.sp_id')
-            ->addSelect(DB::raw('DATE(bk.created_at) as date,SUM(jumlah) as jumlah'))
+        $barang_keluar = DB::table('barang_keluar_item')
+            ->leftJoin('order_barang as bk', 'bk.id', 'barang_keluar_item.order_barang_id')
+//            ->leftJoin('surat_permintaan as sp', 'sp.id', 'bk.sp_id')
+            ->addSelect(DB::raw('DATE(bk.created_at) as date,COUNT(barang_keluar_item.id) as jumlah'))
             // ->where('bk.created_at', '>=', $week)
-            ->where('sp.referensi_status_sp', config('config.status_permintaan_approve'))
+            ->where('bk.referensi_status_order', config('config.status_permintaan_approve'))
             ->groupBy('date')
             ->get();
         if (count($barang_keluar)) {
