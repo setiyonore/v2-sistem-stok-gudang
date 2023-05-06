@@ -21,6 +21,7 @@ use PDF;
 class OrderGoodsController extends Controller
 {
     use GoodsTraits;
+
     public function index()
     {
         $order = OrderBarang::query()
@@ -46,6 +47,7 @@ class OrderGoodsController extends Controller
             'config_status_pending' => $config_status_pending
         ]);
     }
+
     public function create()
     {
         $pelanggan = Perusahaan::query()
@@ -60,6 +62,7 @@ class OrderGoodsController extends Controller
             'barang' => $barang
         ]);
     }
+
     public function searchGood(Request $request)
     {
         $barang = Barang::query()
@@ -113,8 +116,8 @@ class OrderGoodsController extends Controller
             ]);
         //insert tbl barang keluar item
         $items = $request->barang;
-        for ($i = 0;$i<count($items);$i++){
-            for ($j=0;$j<$items[$i]['jumlah'];$j++){
+        for ($i = 0; $i < count($items); $i++) {
+            for ($j = 0; $j < $items[$i]['jumlah']; $j++) {
                 BarangKeluarItem::query()
                     ->create([
                         'order_barang_id' => $order->id,
@@ -147,7 +150,7 @@ class OrderGoodsController extends Controller
         $barang = BarangKeluarItem::query()
             ->where('order_barang_id', $id)
             ->leftJoin('barang as b', 'b.id', 'barang_keluar_item.barang_id')
-            ->select('b.nama',DB::raw('COUNT(item_id) as jumlah'))
+            ->select('b.nama', DB::raw('COUNT(item_id) as jumlah'))
             ->groupBy('barang_id')
             ->get();
         $config_status_pending = config('config.status_permintaan_pending');
@@ -157,6 +160,7 @@ class OrderGoodsController extends Controller
             'config_status_pending' => $config_status_pending,
         ]);
     }
+
     public function approve(Request $request)
     {
         $order = SuratPermintaan::query()->find($request->id);
@@ -182,6 +186,7 @@ class OrderGoodsController extends Controller
         }
         return redirect()->route('apps.order.index');
     }
+
     public function notApprove(Request $request)
     {
         $order = SuratPermintaan::query()->find($request->id);
@@ -189,6 +194,7 @@ class OrderGoodsController extends Controller
         $order->save();
         return redirect()->route('apps.order.index');
     }
+
     public function edit($id)
     {
 
@@ -201,7 +207,7 @@ class OrderGoodsController extends Controller
             ->select('id', 'nama as text')
             ->get();
         $barang = BarangKeluarItem::query()
-            ->select('barang_id',DB::raw('COUNT(item_id) as jumlah'))
+            ->select('barang_id', DB::raw('COUNT(item_id) as jumlah'))
             ->groupBy('barang_id')
             ->get();
         return Inertia::render('Apps/Order/Edit', [
@@ -211,6 +217,7 @@ class OrderGoodsController extends Controller
             'goods' => $goods,
         ]);
     }
+
     public function update(Request $request)
     {
         $this->validate($request, [
@@ -223,18 +230,18 @@ class OrderGoodsController extends Controller
             'barang.required' => 'Mohon inputkan barang',
         ]);
         $order = OrderBarang::query()
-            ->where('id',$request->id)
+            ->where('id', $request->id)
             ->update([
                 'tanggal' => $request->tanggal,
                 'keterangan' => $request->keterangan,
                 'pelanggan_id' => $request->pelanggan
             ]);
         BarangKeluarItem::query()
-            ->where('order_barang_id',$request->id)->delete();
+            ->where('order_barang_id', $request->id)->delete();
         //insert tbl barang keluar item
         $items = $request->barang;
-        for ($i = 0;$i<count($items);$i++){
-            for ($j=0;$j<$items[$i]['jumlah'];$j++){
+        for ($i = 0; $i < count($items); $i++) {
+            for ($j = 0; $j < $items[$i]['jumlah']; $j++) {
                 BarangKeluarItem::query()
                     ->create([
                         'order_barang_id' => $request->id,
@@ -246,11 +253,12 @@ class OrderGoodsController extends Controller
 
         return redirect()->route('apps.order.index');
     }
+
     public function destroy($id)
     {
 
         $barang_keluar_item = BarangKeluarItem::query()
-            ->where('order_barang_id',$id)->delete();
+            ->where('order_barang_id', $id)->delete();
         $order_barang = OrderBarang::query()
             ->findOrFail($id)->delete();
         return redirect()->route('apps.order.index');
@@ -258,11 +266,11 @@ class OrderGoodsController extends Controller
 
     public function print(Request $request)
     {
-        $order = SuratPermintaan::query()
-            ->where('surat_permintaan.id', $request->id)
-            ->leftJoin('perusahaan as p', 'p.id', 'surat_permintaan.pelanggan_id')
-            ->leftJoin('pegawai as e','e.id','surat_permintaan.pegawai_id')
-            ->leftJoin('referensi as r','r.id','e.referensi_jabatan')
+        $order = OrderBarang::query()
+            ->where('order_barang.id', $request->id)
+            ->leftJoin('perusahaan as p', 'p.id', 'order_barang.pelanggan_id')
+            ->leftJoin('pegawai as e', 'e.id', 'order_barang.pegawai_id')
+            ->leftJoin('referensi as r', 'r.id', 'e.referensi_jabatan')
             ->select(
                 'no_sp',
                 'tanggal',
@@ -276,14 +284,11 @@ class OrderGoodsController extends Controller
 
             )
             ->first();
-        $barang_keluar = BarangKeluar::query()
-            ->where('sp_id', $request->id)
-            ->select('id')
-            ->first();
         $barang_keluar_detil = BarangKeluarItem::query()
-            ->where('barang_keluar_id', $barang_keluar->id)
-            ->leftJoin('barang as b', 'b.id', 'barang_keluar_detil.barang_id')
-            ->select('b.nama as barang', 'barang_keluar_detil.jumlah')
+            ->where('barang_keluar_item.order_barang_id', $request->id)
+            ->leftJoin('barang as b', 'b.id', 'barang_keluar_item.barang_id')
+            ->select('b.nama as barang', DB::raw('COUNT(item_id) as jumlah'))
+            ->groupBy('barang_id')
             ->get();
         $data = [
             'order' => $order,
