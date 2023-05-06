@@ -10,7 +10,7 @@ use App\Http\Controllers\Apps\TypeReferencesController;
 use App\Http\Controllers\Apps\ReferencesController;
 use App\Http\Controllers\Apps\GoodsController;
 use App\Http\Controllers\Apps\GoodsReceivedController;
-use App\Http\Controllers\Apps\OderGoodsController;
+use App\Http\Controllers\Apps\OrderGoodsController;
 use App\Http\Controllers\Apps\OutgoingGoodsController;
 use App\Models\Referensi;
 
@@ -58,12 +58,12 @@ Route::prefix('apps')->group(function () {
             ->middleware('permission:barang_masuk.index|barang_masuk.add|barang_masuk.edit|barang_masuk.delete');
         Route::get('/barang_masuk/deleteItem/{id}', [GoodsReceivedController::class, 'deleteItem'])->name('apps.received_goods.deleteItem');
         //surat permintaan
-        Route::post('/permintaan/searchGood', [OderGoodsController::class, 'searchGood'])->name('apps.permintaan.search');
-        Route::post('/permintaan/approve', [OderGoodsController::class, 'approve'])->name('apps.permintaan.approve');
-        Route::post('/permintaan/notApprove', [OderGoodsController::class, 'notApprove'])->name('apps.permintaan.notApprove');
-        Route::post('/permintaan/hapusBarangPermintaan', [OderGoodsController::class, 'hapusBarangPermintaan'])->name('apps.permintaan.hapusBarang');
-        Route::get('/permintaan/print/', [OderGoodsController::class, 'print'])->name('apps.permintaan.print');
-        Route::resource('/order', OderGoodsController::class, ['as' => 'apps'])
+        Route::post('/permintaan/searchGood', [OrderGoodsController::class, 'searchGood'])->name('apps.permintaan.search');
+        Route::post('/permintaan/approve', [OrderGoodsController::class, 'approve'])->name('apps.permintaan.approve');
+        Route::post('/permintaan/notApprove', [OrderGoodsController::class, 'notApprove'])->name('apps.permintaan.notApprove');
+        Route::post('/permintaan/hapusBarangPermintaan', [OrderGoodsController::class, 'hapusBarangPermintaan'])->name('apps.permintaan.hapusBarang');
+        Route::get('/permintaan/print/', [OrderGoodsController::class, 'print'])->name('apps.permintaan.print');
+        Route::resource('/order', OrderGoodsController::class, ['as' => 'apps'])
             ->middleware('permission:order.index|order.add|order.edit|order.delete|order.approval');
         //barang keluar
         Route::resource('/outgoing_goods', OutgoingGoodsController::class, ['as' => 'apps'])

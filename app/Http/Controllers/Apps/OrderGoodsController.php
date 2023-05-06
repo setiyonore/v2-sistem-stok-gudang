@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Models\BarangKeluar;
 use App\Models\BarangKeluarItem;
+use App\Models\Item;
 use App\Models\OrderBarang;
 use App\Models\Perusahaan;
 use App\Models\SuratPermintaan;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use PDF;
 
-class OderGoodsController extends Controller
+class OrderGoodsController extends Controller
 {
     use GoodsTraits;
     public function index()

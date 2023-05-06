@@ -22778,11 +22778,17 @@ __webpack_require__.r(__webpack_exports__);
         if (response.data.available == 0) {
           sweetalert2__WEBPACK_IMPORTED_MODULE_3___default().fire({
             title: "Warning !",
-            text: "Jumlah stok barang tidak tersedia",
+            text: "Stok barang tidak tersedia di Gudang saat Ini,mohon menunggu barang dari Pusat",
             icon: "warning",
-            showConfirmButton: false,
-            timer: 2000
+            showConfirmButton: true
           });
+          _this.items.push({
+            barang_id: _this.form.barang,
+            jumlah: _this.form.jumlah,
+            nama: response.data.barang.nama
+          });
+          _this.form.barang = "";
+          _this.form.jumlah = "";
         } else {
           _this.items.push({
             barang_id: _this.form.barang,
@@ -27746,15 +27752,16 @@ var _hoisted_31 = {
 var _hoisted_32 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
   "class": "form-label fw-bold text-white"
 }, "*", -1 /* HOISTED */);
-var _hoisted_33 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+var _hoisted_33 = ["disabled"];
+var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "fa fa-plus"
 }, null, -1 /* HOISTED */);
-var _hoisted_34 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Tambah Barang ");
-var _hoisted_35 = [_hoisted_33, _hoisted_34];
-var _hoisted_36 = {
+var _hoisted_35 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Tambah Barang ");
+var _hoisted_36 = [_hoisted_34, _hoisted_35];
+var _hoisted_37 = {
   "class": "table table-bordered"
 };
-var _hoisted_37 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", {
+var _hoisted_38 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", {
   style: {
     "background-color": "#e6e6e7"
   }
@@ -27767,23 +27774,23 @@ var _hoisted_37 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 }, "Jumlah"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   scope: "col"
 }, "Actions")])], -1 /* HOISTED */);
-var _hoisted_38 = ["onUpdate:modelValue"];
-var _hoisted_39 = {
+var _hoisted_39 = ["onUpdate:modelValue"];
+var _hoisted_40 = {
   "class": "text-center"
 };
-var _hoisted_40 = ["onClick"];
-var _hoisted_41 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+var _hoisted_41 = ["onClick"];
+var _hoisted_42 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
   "class": "fa fa-trash"
 }, null, -1 /* HOISTED */);
-var _hoisted_42 = [_hoisted_41];
-var _hoisted_43 = {
+var _hoisted_43 = [_hoisted_42];
+var _hoisted_44 = {
   key: 0,
   "class": "alert alert-danger"
 };
-var _hoisted_44 = {
+var _hoisted_45 = {
   "class": "row"
 };
-var _hoisted_45 = {
+var _hoisted_46 = {
   "class": "col-12"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -27835,8 +27842,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "btn btn-md btn-success border-0 shadow w-100",
     onClick: _cache[5] || (_cache[5] = function () {
       return $options.addBarang && $options.addBarang.apply($options, arguments);
-    })
-  }, _hoisted_35)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_36, [_hoisted_37, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.items, function (item, index) {
+    }),
+    disabled: _ctx.disableBtnTambahBarang
+  }, _hoisted_36, 8 /* PROPS */, _hoisted_33)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_37, [_hoisted_38, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.items, function (item, index) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
       key: item.barang_id
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(index + 1), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Select2, {
@@ -27853,13 +27861,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return item.jumlah = $event;
       }
-    }, null, 8 /* PROPS */, _hoisted_38), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, item.jumlah]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_39, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    }, null, 8 /* PROPS */, _hoisted_39), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, item.jumlah]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_40, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       "class": "btn btn-danger btn-sm rounded-pill",
       onClick: function onClick($event) {
         return $options.deleteBarang(index);
       }
-    }, _hoisted_42, 8 /* PROPS */, _hoisted_40)])]);
-  }), 128 /* KEYED_FRAGMENT */))])]), $props.errors.barang ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.errors.barang), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_44, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_45, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    }, _hoisted_43, 8 /* PROPS */, _hoisted_41)])]);
+  }), 128 /* KEYED_FRAGMENT */))])]), $props.errors.barang ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_44, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.errors.barang), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_45, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_46, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "btn btn-primary shadow-sm rounded-sm",
     type: "submit",
     onClick: _cache[6] || (_cache[6] = function () {
