@@ -33,14 +33,17 @@ class OrderGoodsController extends Controller
                 'no_sp',
                 'order_barang.keterangan',
                 'r.nama as status',
+                'order_barang.referensi_status_order as status_id',
                 'order_barang.id',
                 'order_barang.pegawai_id'
             )
             ->paginate(config('config.paginate'));
+        $config_status_pending = config('config.status_permintaan_pending');
         $pegawai = Auth::user()->pegawai_id;
         return Inertia::render('Apps/Order/Index', [
             'order' => $order,
             'pegawai' => $pegawai,
+            'config_status_pending' => $config_status_pending
         ]);
     }
     public function create()
