@@ -128,11 +128,11 @@ class OrderGoodsController extends Controller
 
     public function show($id)
     {
-        $order = SuratPermintaan::query()
-            ->leftJoin('pegawai as e', 'e.id', 'surat_permintaan.pegawai_id')
-            ->leftJoin('perusahaan as p', 'p.id', 'surat_permintaan.pelanggan_id')
-            ->leftJoin('referensi as r', 'r.id', 'surat_permintaan.referensi_status_sp')
-            ->where('surat_permintaan.id', $id)
+        $order = OrderBarang::query()
+            ->leftJoin('pegawai as e', 'e.id', 'order_barang.pegawai_id')
+            ->leftJoin('perusahaan as p', 'p.id', 'order_barang.pelanggan_id')
+            ->leftJoin('referensi as r', 'r.id', 'order_barang.referensi_status_order')
+            ->where('order_barang.id', $id)
             ->select(
                 'tanggal',
                 'no_sp',
@@ -140,22 +140,21 @@ class OrderGoodsController extends Controller
                 'keterangan',
                 'e.nama as pegawai',
                 'r.nama as status',
-                'surat_permintaan.id',
-                'surat_permintaan.referensi_status_sp as status'
+                'order_barang.id',
+                'order_barang.referensi_status_order as status',
             )
             ->first();
-        $barang_keluar = BarangKeluar::query()
-            ->where('sp_id', $id)
-            ->select('id')
-            ->first();
         $barang = BarangKeluarItem::query()
-            ->where('barang_keluar_id', $barang_keluar->id)
-            ->leftJoin('barang as b', 'b.id', 'barang_keluar_detil.barang_id')
-            ->select('b.nama', 'barang_keluar_detil.jumlah')
+            ->where('order_barang_id', $id)
+            ->leftJoin('barang as b', 'b.id', 'barang_keluar_item.barang_id')
+            ->select('b.nama',DB::raw('COUNT(item_id) as jumlah'))
+            ->groupBy('barang_id')
             ->get();
+        $config_status_pending = config('config.status_permintaan_pending');
         return Inertia::render('Apps/Order/Detil', [
             'order' => $order,
-            'barang' => $barang
+            'barang' => $barang,
+            'config_status_pending' => $config_status_pending,
         ]);
     }
     public function approve(Request $request)
