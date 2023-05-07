@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Apps;
 use App\Http\Controllers\Controller;
 use App\Models\BarangKeluar;
 use App\Models\BarangKeluarItem;
+use App\Models\OrderBarang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use App\Models\SuratPermintaan;
 use App\Models\Barang;
@@ -14,19 +16,18 @@ class OutgoingGoodsController extends Controller
 {
     public function index()
     {
-        $barang_keluar = BarangKeluar::query()
+        $barang_keluar = OrderBarang::query()
             ->when(request()->q, function ($barang_keluar) {
-                $barang_keluar->where('sp.tanggal', request()->q);
+                $barang_keluar->where('order_barang.tanggal', request()->q);
             })
-            ->leftJoin('surat_permintaan as sp', 'sp.id', 'barang_keluar.sp_id')
-            ->leftJoin('perusahaan as p', 'p.id', 'sp.pelanggan_id')
-            ->leftJoin('referensi as r', 'r.id', 'sp.referensi_status_sp')
+            ->leftJoin('perusahaan as p', 'p.id', 'order_barang.pelanggan_id')
+            ->leftJoin('referensi as r', 'r.id', 'order_barang.referensi_status_order')
             ->select(
-                'sp.tanggal',
-                'sp.no_sp',
+                'order_barang.tanggal',
+                'order_barang.no_sp',
                 'p.nama as pelanggan',
                 'r.nama as status',
-                'barang_keluar.id'
+                'order_barang.id'
 
             )
             ->paginate(config('config.paginate'));
@@ -36,27 +37,27 @@ class OutgoingGoodsController extends Controller
     }
     public function show($id)
     {
-        $barang_keluar = BarangKeluar::query()
-            ->leftJoin('surat_permintaan as sp', 'sp.id', 'barang_keluar.sp_id')
-            ->leftJoin('pegawai as p', 'p.id', 'sp.pegawai_id')
-            ->leftJoin('referensi as r', 'r.id', 'sp.referensi_status_sp')
-            ->leftJoin('perusahaan as pr', 'pr.id', 'sp.pelanggan_id')
-            ->where('barang_keluar.id', $id)
+        $barang_keluar = OrderBarang::query()
+            ->leftJoin('pegawai as p', 'p.id', 'order_barang.pegawai_id')
+            ->leftJoin('referensi as r', 'r.id', 'order_barang.referensi_status_order')
+            ->leftJoin('perusahaan as pr', 'pr.id', 'order_barang.pelanggan_id')
+            ->where('order_barang.id', $id)
             ->select(
-                'sp.no_sp',
-                'sp.tanggal',
+                'order_barang.no_sp',
+                'order_barang.tanggal',
                 'r.nama as status',
                 'pr.nama as pelanggan',
                 'p.nama as pegawai',
-                'sp.keterangan',
-                'sp.referensi_status_sp as status_sp',
-                'sp.id as sp_id'
+                'order_barang.keterangan',
+                'order_barang.referensi_status_order as status_sp',
+                'order_barang.id as sp_id'
             )
             ->first();
         $items = BarangKeluarItem::query()
-            ->where('barang_keluar_id', $id)
-            ->leftJoin('barang as b', 'b.id', 'barang_keluar_detil.barang_id')
-            ->select('b.nama as barang', 'barang_keluar_detil.jumlah')
+            ->where('order_barang_id', $id)
+            ->leftJoin('barang as b', 'b.id', 'barang_keluar_item.barang_id')
+            ->select('b.nama as barang',DB::raw('COUNT(item_id) as jumlah'))
+            ->groupBy('barang_id')
             ->get();
 
         return Inertia::render('Apps/OutgoingGoods/Detil', [
@@ -66,33 +67,15 @@ class OutgoingGoodsController extends Controller
     }
     public function approve(Request $request)
     {
-        $order = SuratPermintaan::query()->find($request->id);
-        $order->referensi_status_sp = config('config.status_permintaan_approve');
+        $order = OrderBarang::query()->find($request->id);
+        $order->referensi_status_order = config('config.status_permintaan_approve');
         $order->save();
-        $barang_keluar = BarangKeluar::query()->where('sp_id', $request->id)
-            ->select('id')
-            ->first();
-        $items = BarangKeluarItem::query()
-            ->where('barang_keluar_id', $barang_keluar->id)
-            ->select('barang_id', 'jumlah')
-            ->get();
-        for ($i = 0; $i < count($items); $i++) {
-            $oldStock = Barang::query()
-                ->where('id', $items[$i]['barang_id'])
-                ->select('stok')
-                ->first();
-            $oldStock = $oldStock->stok;
-            $newstock = $oldStock - $items[$i]['jumlah'];
-            $barang = Barang::query()->find($items[$i]['barang_id']);
-            $barang->stok = $newstock;
-            $barang->save();
-        }
         return redirect()->route('apps.outgoing_goods.index');
     }
     public function notApprove(Request $request)
     {
-        $order = SuratPermintaan::query()->find($request->id);
-        $order->referensi_status_sp = config('config.status_permintaan_notApprove');
+        $order = OrderBarang::query()->find($request->id);
+        $order->referensi_status_order = config('config.status_permintaan_notApprove');
         $order->save();
         return redirect()->route('apps.outgoing_goods.index');
     }

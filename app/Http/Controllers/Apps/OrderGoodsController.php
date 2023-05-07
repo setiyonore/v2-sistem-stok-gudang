@@ -163,34 +163,16 @@ class OrderGoodsController extends Controller
 
     public function approve(Request $request)
     {
-        $order = SuratPermintaan::query()->find($request->id);
-        $order->referensi_status_sp = config('config.status_permintaan_approve');
+        $order = OrderBarang::query()->find($request->id);
+        $order->referensi_status_order = config('config.status_permintaan_approve');
         $order->save();
-        $barang_keluar = BarangKeluar::query()->where('sp_id', $request->id)
-            ->select('id')
-            ->first();
-        $items = BarangKeluarItem::query()
-            ->where('barang_keluar_id', $barang_keluar->id)
-            ->select('barang_id', 'jumlah')
-            ->get();
-        for ($i = 0; $i < count($items); $i++) {
-            $oldStock = Barang::query()
-                ->where('id', $items[$i]['barang_id'])
-                ->select('stok')
-                ->first();
-            $oldStock = $oldStock->stok;
-            $newstock = $oldStock - $items[$i]['jumlah'];
-            $barang = Barang::query()->find($items[$i]['barang_id']);
-            $barang->stok = $newstock;
-            $barang->save();
-        }
         return redirect()->route('apps.order.index');
     }
 
     public function notApprove(Request $request)
     {
-        $order = SuratPermintaan::query()->find($request->id);
-        $order->referensi_status_sp = config('config.status_permintaan_notApprove');
+        $order = OrderBarang::query()->find($request->id);
+        $order->referensi_status_order = config('config.status_permintaan_notApprove');
         $order->save();
         return redirect()->route('apps.order.index');
     }
