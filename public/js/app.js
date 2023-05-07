@@ -23273,6 +23273,11 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     barang_keluar: Array
   },
+  methods: {
+    print: function print(id) {
+      window.open("/apps/permintaan/print?id=".concat(id), '_blank');
+    }
+  },
   setup: function setup() {
     var search = (0,vue__WEBPACK_IMPORTED_MODULE_3__.ref)( false || new URL(document.location).searchParams.get("q"));
     var handleSearch = function handleSearch() {
@@ -28690,13 +28695,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return [_hoisted_15, _hoisted_16];
       }),
       _: 2 /* DYNAMIC */
-    }, 1032 /* PROPS, DYNAMIC_SLOTS */, ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.hasAnyPermission(['barang_masuk.delete']) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
-      key: 1,
-      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
-        return _ctx.destroy(data.id);
-      }, ["prevent"]),
+    }, 1032 /* PROPS, DYNAMIC_SLOTS */, ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      onClick: function onClick($event) {
+        return $options.print(data.id);
+      },
       "class": "btn btn-info btn-sm"
-    }, _hoisted_20, 8 /* PROPS */, _hoisted_17)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
+    }, _hoisted_20, 8 /* PROPS */, _hoisted_17)])]);
   }), 128 /* KEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Pagination, {
     links: $props.barang_keluar.links,
     align: "end"
