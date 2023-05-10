@@ -70,6 +70,10 @@ Route::prefix('apps')->group(function () {
             ->middleware('permission:barang_keluar.index|barang_keluar.approval');
         Route::post('/barang_keluar/approve', [OutgoingGoodsController::class, 'approve'])->name('apps.barang_keluar.approve');
         Route::post('/barang_keluar/notApprove', [OutgoingGoodsController::class, 'notApprove'])->name('apps.barang_keluar.notApprove');
+        Route::get('/barang_keluar/inputItem/{id}', [OutgoingGoodsController::class, 'inputItem'])->name('apps.barang_keluar.inputItem');
+        Route::post('/barang_keluar/insertItem', [OutgoingGoodsController::class, 'insertItem'])->name('apps.barang_keluar.insertItem');
+        Route::post('/barang_keluar/searchSerial/', [OutgoingGoodsController::class, 'searchSerial'])->name('apps.barang_keluar.searchSerial');
+        Route::get('/barang_keluar/availableItem/{serial}', [OutgoingGoodsController::class, 'availableItem'])->name('apps.barang_keluar.availableItem');
         //route resource roles
         Route::resource('/roles', RoleController::class, ['as' => 'apps'])
             ->middleware('permission:roles.index|roles.create|roles.edit|roles.delete');

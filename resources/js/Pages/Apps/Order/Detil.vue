@@ -39,7 +39,7 @@
                                 <hr/>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <div class="mb-3"><b>Status:</b> {{ order.status }}</div>
+                                        <div class="mb-3"><b>Status:</b> {{ order.ref_status }}</div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3"><b>Pegawai:</b> {{ order.pegawai }}</div>

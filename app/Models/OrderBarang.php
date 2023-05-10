@@ -17,5 +17,6 @@ class OrderBarang extends Model
         'keterangan',
         'pelanggan_id',
         'pegawai_id',
+        'is_input_item'
     ];
 }

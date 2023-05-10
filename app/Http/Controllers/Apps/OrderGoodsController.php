@@ -4,12 +4,9 @@ namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
-use App\Models\BarangKeluar;
 use App\Models\BarangKeluarItem;
-use App\Models\Item;
 use App\Models\OrderBarang;
 use App\Models\Perusahaan;
-use App\Models\SuratPermintaan;
 use App\Traits\GoodsTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -142,7 +139,7 @@ class OrderGoodsController extends Controller
                 'p.nama as pelanggan',
                 'keterangan',
                 'e.nama as pegawai',
-                'r.nama as status',
+                'r.nama as ref_status',
                 'order_barang.id',
                 'order_barang.referensi_status_order as status',
             )

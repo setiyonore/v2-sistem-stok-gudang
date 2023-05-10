@@ -13,5 +13,7 @@ return
         'status_permintaan_notApprove' => 13,
         'refensi_kondisi_barang_normal' => 14,
         'referensi_status_barang_tersedia' => 16,
-        'referensi_jenis_transaksi_barang_masuk' => 19
+        'referensi_status_barang_terpakai' => 17,
+        'referensi_jenis_transaksi_barang_masuk' => 19,
+        'referensi_jenis_transaksi_barang_keluar' => 20
     ];

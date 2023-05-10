@@ -79,6 +79,22 @@
                       Tolak
                     </button>
                   </div>
+                  <div class="col-6">
+                    <Link
+                      :href="`/apps/barang_keluar/inputItem/${barang_keluar.sp_id}`"
+                      class="btn btn-primary"
+                      v-if="
+                        hasAnyPermission(['order.input_item']) &&
+                        barang_keluar.status_sp ==
+                          config_status_order_approve &&
+                        barang_keluar.is_input_item == 0
+                      "
+                      >Input Item
+                    </Link>
+                    <Link class="btn btn-secondary disabled" v-else>
+                      Item Sudah Di Inputkan
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -94,6 +110,7 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import moment from "moment";
 import Swal from "sweetalert2";
 import { Inertia } from "@inertiajs/inertia";
+
 export default {
   layout: LayoutApp,
   components: {
@@ -103,6 +120,7 @@ export default {
   props: {
     barang_keluar: Object,
     items: Array,
+    config_status_order_approve: String,
   },
   methods: {
     approve() {
