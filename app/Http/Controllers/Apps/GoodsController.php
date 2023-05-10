@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Barang;
 use App\Models\Referensi;
 use Inertia\Inertia;
-
+use Illuminate\Support\Facades\DB;
 class GoodsController extends Controller
 {
     public function index()
@@ -18,13 +18,18 @@ class GoodsController extends Controller
             })
             ->leftJoin('referensi as satuan', 'satuan.id', 'barang.referensi_satuan')
             ->leftJoin('referensi as kategori', 'kategori.id', 'barang.referensi_kategori')
+            ->leftJoin('item as i', function ($join) {
+                $join->on('barang.id', '=', 'i.barang_id')
+                    ->where('i.referensi_status_item', '=', config('config.referensi_status_barang_tersedia'));
+            })
             ->select(
                 'barang.nama',
                 'satuan.nama as satuan',
                 'kategori.nama as kategori',
                 'barang.id',
-                'barang.stok'
+                DB::raw('COALESCE(COUNT(i.id), 0) AS stok')
             )
+            ->groupBy('barang.id')
             ->paginate(config('config.paginate'));
         return Inertia::render('Apps/Goods/Index', [
             'barang' => $barang
@@ -64,12 +69,12 @@ class GoodsController extends Controller
             ]
         );
         $barang = Barang::query()
-        ->create([
-            'nama' => $request->nama,
-            'referensi_satuan' => $request->satuan,
-            'referensi_kategori' => $request->kategori,
-            'stok' => $request->stok
-        ]);
+            ->create([
+                'nama' => $request->nama,
+                'referensi_satuan' => $request->satuan,
+                'referensi_kategori' => $request->kategori,
+                'stok' => $request->stok
+            ]);
         return redirect()->route('apps.goods.index');
     }
 
@@ -85,7 +90,7 @@ class GoodsController extends Controller
             ->where('jenis_referensi_id', config('config.referensi_satuan'))
             ->select('id', 'nama')
             ->get();
-        return Inertia::render('Apps/Goods/Edit',[
+        return Inertia::render('Apps/Goods/Edit', [
             'barang' => $barang,
             'kategori' => $kategori,
             'satuan' => $satuan,

@@ -53,6 +53,9 @@
                       <td>{{ data.kategori }}</td>
                       <td>{{ data.stok }}</td>
                       <td class="text-center">
+                        <Link class="btn btn-primary btn-sm me-2"
+                          ><i class="fas fa-eye"></i> Detil
+                        </Link>
                         <Link
                           :href="`/apps/goods/${data.id}/edit`"
                           v-if="hasAnyPermission(['barang.edit'])"
