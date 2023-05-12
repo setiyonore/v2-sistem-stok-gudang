@@ -13,5 +13,6 @@ class Item extends Model
         'barang_id',
         'referensi_kondisi_barang',
         'no_serial',
+        'referensi_status_item'
     ];
 }

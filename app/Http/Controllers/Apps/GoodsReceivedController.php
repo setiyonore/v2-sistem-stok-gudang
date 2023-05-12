@@ -75,7 +75,7 @@ class GoodsReceivedController extends Controller
             'no_sp.required' => 'Mohon inputkan No SP',
             'barang.required' => 'Mohon inputkan barang',
         ]);
-//        dd($request->barang);
+        //        dd($request->barang);
         $pegawai_id = Auth::user()->pegawai_id;
         $barang_masuk = barang_masuk::query()
             ->create([
@@ -92,7 +92,8 @@ class GoodsReceivedController extends Controller
                 ->create([
                     'barang_id' => $items[$i]['barang_id'],
                     'referensi_kondisi_barang' => config('config.refensi_kondisi_barang_normal'),
-                    'no_serial' => $items[$i]['no_serial']
+                    'no_serial' => $items[$i]['no_serial'],
+                    'referensi_status_item' => config('config.referensi_status_barang_tersedia')
                 ]);
             //insert to tbl barang_masuk_item
             $barang_masuk_item = barang_masuk_item::query()
@@ -178,7 +179,8 @@ class GoodsReceivedController extends Controller
                     ->create([
                         'barang_id' => $items[$i]['barang_id'],
                         'referensi_kondisi_barang' => config('config.refensi_kondisi_barang_normal'),
-                        'no_serial' => $items[$i]['no_serial']
+                        'no_serial' => $items[$i]['no_serial'],
+                        'referensi_status_item' => config('config.referensi_status_barang_tersedia')
 
                     ]);
                 //insert barang_masuk_item
@@ -244,18 +246,16 @@ class GoodsReceivedController extends Controller
 
     public function deleteItem($id)
     {
-        $findItem = Item::query()->where('id',$id)->count();
-        if ($findItem == 1){
+        $findItem = Item::query()->where('id', $id)->count();
+        if ($findItem == 1) {
             //delete in barang masuk item
-            barang_masuk_item::query()->where('item_id',$id)->delete();
+            barang_masuk_item::query()->where('item_id', $id)->delete();
             // delete in history status item
-            HistoryStatusItem::query()->where('item_id',$id)->delete();
+            HistoryStatusItem::query()->where('item_id', $id)->delete();
             //delete in item
             Item::query()->findOrFail($id)->delete();
             return response()->json('success');
         }
         return response()->json('failed');
-
-
     }
 }

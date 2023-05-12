@@ -172,6 +172,12 @@ class OutgoingGoodsController extends Controller
                     'referensi_status_item' => config('config.referensi_status_barang_terpakai'),
                     'referensi_jenis_transaksi' => config('config.referensi_jenis_transaksi_barang_keluar')
                 ]);
+            //update status item
+            Item::query()
+                ->where('no_serial', $request->barang[$i]['serial'])
+                ->update([
+                    'referensi_status_item' => config('config.referensi_status_barang_terpakai')
+                ]);
         }
         OrderBarang::query()
             ->where('no_sp', $request->no_sp)

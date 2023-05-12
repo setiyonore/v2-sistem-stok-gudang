@@ -91,7 +91,14 @@
                       "
                       >Input Item
                     </Link>
-                    <Link class="btn btn-secondary disabled" v-else>
+                    <Link
+                      class="btn btn-secondary disabled"
+                      v-else-if="
+                        barang_keluar.status_sp ==
+                          config_status_order_approve &&
+                        barang_keluar.is_input_item == 1
+                      "
+                    >
                       Item Sudah Di Inputkan
                     </Link>
                   </div>
