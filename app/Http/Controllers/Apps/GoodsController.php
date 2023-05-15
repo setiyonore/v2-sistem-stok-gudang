@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Apps;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Barang;
+use App\Models\Item;
 use App\Models\Referensi;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\Return_;
+
 class GoodsController extends Controller
 {
     public function index()
@@ -126,5 +129,23 @@ class GoodsController extends Controller
         $barang = Barang::query()->findOrFail($id);
         $barang->delete();
         return redirect()->route('apps.goods.index');
+    }
+
+    public function show($id)
+    {
+        $barang = Barang::query()
+            ->where('id', $id)
+            ->select('nama')
+            ->first();
+        $item = Item::query()
+            ->leftJoin('referensi as kt', 'kt.id', 'item.referensi_status_item')
+            ->leftJoin('referensi as kd', 'kd.id', 'item.referensi_kondisi_barang')
+            ->where('barang_id', $id)
+            ->select('item.id', 'no_serial', 'kt.nama as status', 'kd.nama as kondisi')
+            ->paginate(config('config.paginate'));
+        return Inertia::render('Apps/Goods/DetilItem', [
+            'barang' => $barang,
+            'item' => $item
+        ]);
     }
 }

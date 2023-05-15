@@ -53,7 +53,9 @@
                       <td>{{ data.kategori }}</td>
                       <td>{{ data.stok }}</td>
                       <td class="text-center">
-                        <Link class="btn btn-primary btn-sm me-2"
+                        <Link
+                          class="btn btn-primary btn-sm me-2"
+                          :href="`/apps/goods/${data.id}`"
                           ><i class="fas fa-eye"></i> Detil
                         </Link>
                         <Link
