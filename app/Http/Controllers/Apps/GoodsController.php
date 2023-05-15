@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Apps;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Barang;
+use App\Models\HistoryStatusItem;
 use App\Models\Item;
 use App\Models\Referensi;
 use Inertia\Inertia;
@@ -135,7 +136,7 @@ class GoodsController extends Controller
     {
         $barang = Barang::query()
             ->where('id', $id)
-            ->select('nama')
+            ->select('nama', 'id')
             ->first();
         $item = Item::query()
             ->leftJoin('referensi as kt', 'kt.id', 'item.referensi_status_item')
@@ -147,5 +148,23 @@ class GoodsController extends Controller
             'barang' => $barang,
             'item' => $item
         ]);
+    }
+
+    public function getItem($id)
+    {
+        $history = HistoryStatusItem::query()
+            ->where('item_id', $id)
+            ->leftJoin('referensi as st', 'st.id', 'history_status_item.referensi_status_item')
+            ->leftJoin('referensi as jt', 'jt.id', 'history_status_item.referensi_jenis_transaksi')
+            ->select(
+                'tanggal',
+                'st.nama as status',
+                'jt.nama as jenis_transaksi',
+                'history_status_item.id'
+            )
+            ->get();
+        return response()->json(
+            ['history' => $history]
+        );
     }
 }

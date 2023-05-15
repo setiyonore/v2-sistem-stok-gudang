@@ -46,6 +46,7 @@ Route::prefix('apps')->group(function () {
         // barang
         Route::resource('/goods', GoodsController::class, ['as' => 'apps'])
             ->middleware('permission:barang.index|barang.add|barang.edit|barang.delete');
+        Route::get('barang/historyItem/{id}', [GoodsController::class, 'getItem'])->name('apps.gooods.searchItem');
         // pegawai
         Route::resource('/employees', EmployeesController::class, ['as' => 'apps'])
             ->middleware('permission:pegawai.index|pegawai.add|pegawai.edit|pegawai.delete');
