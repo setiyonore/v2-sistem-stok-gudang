@@ -22281,6 +22281,7 @@ __webpack_require__.r(__webpack_exports__);
       this.noSerial = serial;
     },
     storeEdit: function storeEdit() {
+      var _this2 = this;
       axios__WEBPACK_IMPORTED_MODULE_4___default().post("/apps/barang/storeEdit", {
         item: this.itemEdit
       }).then(function (response) {
@@ -22291,6 +22292,20 @@ __webpack_require__.r(__webpack_exports__);
             icon: "success",
             showConfirmButton: false,
             timer: 2000
+          });
+          _this2.itemEdit.jenis_transaksi = "";
+          _this2.itemEdit.status = "";
+          _this2.itemEdit.kondisi = "";
+          _this2.itemEdit.itemId = "";
+        }
+      })["catch"](function (error) {
+        if (error.response) {
+          console.log(error.response.data.message);
+          sweetalert2__WEBPACK_IMPORTED_MODULE_5___default().fire({
+            title: "Data Gagal Disimpan !",
+            text: "".concat(error.response.data.message),
+            icon: "warning",
+            showConfirmButton: true
           });
         }
       });

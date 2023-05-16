@@ -268,6 +268,20 @@ export default {
                         showConfirmButton: false,
                         timer: 2000,
                     });
+                    this.itemEdit.jenis_transaksi = "";
+                    this.itemEdit.status = "";
+                    this.itemEdit.kondisi = "";
+                    this.itemEdit.itemId = "";
+                }
+            }).catch(error => {
+                if (error.response) {
+                    console.log(error.response.data.message);
+                    Swal.fire({
+                        title: "Data Gagal Disimpan !",
+                        text: `${error.response.data.message}`,
+                        icon: "warning",
+                        showConfirmButton: true,
+                    });
                 }
             })
         },

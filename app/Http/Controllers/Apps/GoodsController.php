@@ -189,6 +189,16 @@ class GoodsController extends Controller
 
     public function storeEdit(Request $request)
     {
+        $this->validate($request, [
+            'item.itemId' => 'required',
+            'item.status' => 'required',
+            'item.kondisi' => 'required',
+            'item.jenis_transaksi' => 'required',
+        ], [
+            'item.status.required' => 'Mohon Pilih status',
+            'item.kondisi.required' => 'Mohon Pilih kondisi',
+            'item.jenis_transaksi.required' => 'Mohon Pilih Jenis Transaksi'
+        ]);
 
         $tanggal = Carbon::now();
         $tanggal = $tanggal->format('Y-m-d');
