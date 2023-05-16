@@ -12,7 +12,6 @@ use App\Http\Controllers\Apps\GoodsController;
 use App\Http\Controllers\Apps\GoodsReceivedController;
 use App\Http\Controllers\Apps\OrderGoodsController;
 use App\Http\Controllers\Apps\OutgoingGoodsController;
-use App\Models\Referensi;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +46,7 @@ Route::prefix('apps')->group(function () {
         Route::resource('/goods', GoodsController::class, ['as' => 'apps'])
             ->middleware('permission:barang.index|barang.add|barang.edit|barang.delete');
         Route::get('barang/historyItem/{id}', [GoodsController::class, 'getItem'])->name('apps.gooods.searchItem');
+        Route::post('barang/storeEdit',[GoodsController::class,'storeEdit'])->name('apps.goods.storeEdit');
         // pegawai
         Route::resource('/employees', EmployeesController::class, ['as' => 'apps'])
             ->middleware('permission:pegawai.index|pegawai.add|pegawai.edit|pegawai.delete');

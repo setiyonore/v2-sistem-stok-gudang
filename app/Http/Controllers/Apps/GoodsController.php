@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Barang;
 use App\Models\HistoryStatusItem;
@@ -10,10 +11,12 @@ use App\Models\Item;
 use App\Models\Referensi;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Stmt\Return_;
+use App\Traits\HistoryStatusItemTraits;
 
 class GoodsController extends Controller
 {
+    use HistoryStatusItemTraits;
+
     public function index()
     {
         $barang = Barang::query()
@@ -125,6 +128,7 @@ class GoodsController extends Controller
         $barang->save();
         return redirect()->route('apps.goods.index');
     }
+
     public function destroy($id)
     {
         $barang = Barang::query()->findOrFail($id);
@@ -144,9 +148,24 @@ class GoodsController extends Controller
             ->where('barang_id', $id)
             ->select('item.id', 'no_serial', 'kt.nama as status', 'kd.nama as kondisi')
             ->paginate(config('config.paginate'));
+        $status = Referensi::query()
+            ->select('id', 'nama as text')
+            ->where('jenis_referensi_id', config('config.referensi_status_barang'))
+            ->get();
+        $kondisi = Referensi::query()
+            ->select('id', 'nama as text')
+            ->where('jenis_referensi_id', config('config.referensi_kondisi_barang'))
+            ->get();
+        $jenis_transaksi = Referensi::query()
+            ->select('id', 'nama as text')
+            ->where('jenis_referensi_id', config('config.referensi_jenis_transaksi'))
+            ->get();
         return Inertia::render('Apps/Goods/DetilItem', [
             'barang' => $barang,
-            'item' => $item
+            'item' => $item,
+            'status' => $status,
+            'kondisi' => $kondisi,
+            'jenis_transaksi' => $jenis_transaksi
         ]);
     }
 
@@ -166,5 +185,27 @@ class GoodsController extends Controller
         return response()->json(
             ['history' => $history]
         );
+    }
+
+    public function storeEdit(Request $request)
+    {
+
+        $tanggal = Carbon::now();
+        $tanggal = $tanggal->format('Y-m-d');
+        $history = $this->storeHistory($request->item['itemId'], $tanggal, $request->item['status'], $request->item['jenis_transaksi']);
+        $item = Item::query()
+            ->where('id', $request->item['itemId'])
+            ->update([
+                'referensi_kondisi_barang' => $request->item['kondisi'],
+                'referensi_status_item' => $request->item['status']
+            ]);
+        if ($history) {
+            return response()->json(
+                ['update' => 1]
+            );
+        }
+        return response()->json([
+            'update' => 0
+        ]);
     }
 }
