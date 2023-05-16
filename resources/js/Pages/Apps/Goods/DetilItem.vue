@@ -16,12 +16,13 @@
                   >
                                 </div>
                                 <div class="card-body">
-                                    <form action="">
+                                    <form @submit.prevent="handleSearch">
                                         <div class="input-group mb-3">
                                             <input
                                                 type="text"
                                                 class="form-control"
                                                 placeholder="Cari berdasarkan no serial ..."
+                                                v-model="search"
                                             />
                                             <button
                                                 class="btn btn-primary input-group-text"
@@ -212,6 +213,8 @@ import Pagination from "../../../Components/Pagination.vue";
 import Select2 from "vue3-select2-component";
 import axios from "axios";
 import Swal from "sweetalert2";
+import {ref} from "vue";
+import {Inertia} from "@inertiajs/inertia";
 
 export default {
     layout: LayoutApp,
@@ -286,7 +289,14 @@ export default {
             })
         },
     },
-    setup() {
+    setup(props) {
+        const search = ref("" || new URL(document.location).searchParams.get("q"));
+        const handleSearch = () => {
+            Inertia.get(`/apps/goods/${props.barang.id}`, {
+                q: search.value,
+            })
+        }
+        return {search, handleSearch}
     },
 };
 </script>

@@ -143,6 +143,9 @@ class GoodsController extends Controller
             ->select('nama', 'id')
             ->first();
         $item = Item::query()
+            ->when(request()->q, function ($item) {
+               $item = $item->where('no_serial', request()->q);
+            })
             ->leftJoin('referensi as kt', 'kt.id', 'item.referensi_status_item')
             ->leftJoin('referensi as kd', 'kd.id', 'item.referensi_kondisi_barang')
             ->where('barang_id', $id)
