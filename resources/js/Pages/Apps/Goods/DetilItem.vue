@@ -63,6 +63,7 @@
                       </tr>
                     </tbody>
                   </table>
+                  <Pagination :links="item.links" align="end"/>
                 </div>
               </div>
             </div>
