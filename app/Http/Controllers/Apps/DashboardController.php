@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
+use App\Models\OrderBarang;
 use App\Models\SuratPermintaan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -54,8 +55,8 @@ class DashboardController extends Controller
                 $total_barang_keluar[] = (int)$value->jumlah;
             }
         }
-        $order_pending = SuratPermintaan::query()
-            ->where('referensi_status_sp', config('config.status_permintaan_pending'))
+        $order_pending = OrderBarang::query()
+            ->where('referensi_status_order', config('config.status_permintaan_pending'))
             ->orderBy('tanggal', 'ASC')
             ->get();
         $stok_barang = Barang::query()
