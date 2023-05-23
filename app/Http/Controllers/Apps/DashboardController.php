@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
+use App\Models\Item;
 use App\Models\OrderBarang;
 use App\Models\SuratPermintaan;
 use Carbon\Carbon;
@@ -59,9 +60,12 @@ class DashboardController extends Controller
             ->where('referensi_status_order', config('config.status_permintaan_pending'))
             ->orderBy('tanggal', 'ASC')
             ->get();
-        $stok_barang = Barang::query()
-            ->where('stok', '<', 10)
-            ->select('nama', 'stok')
+        $stok_barang = DB::table('item')
+            ->leftJoin('barang as b', 'item.barang_id', '=', 'b.id')
+            ->select(DB::raw('COUNT(item.id) as stok'), 'b.nama')
+            ->where('referensi_status_item', config('config.referensi_status_barang_tersedia'))
+            ->groupBy('item.barang_id')
+            ->having(DB::raw('COUNT(item.id)'),'<',10)
             ->get();
         return Inertia::render('Apps/Dashboard/Index', [
             'stok' => $stok_barang,
