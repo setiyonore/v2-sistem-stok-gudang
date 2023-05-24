@@ -14,7 +14,7 @@
 <body>
     <div class="row">
         <div class="col-xs-6">
-            <h3><img src="{{url('/images/logo-small.png')}}" width="50" height="50"/>PT Dwi Tunggal Putra</h3>
+            <h3><img src="{{ public_path('images/logo-small.png') }}">PT Dwi Tunggal Putra</h3>
             <h5>Alamat: Jl. Embong Tanjung No.40</h5>
             <h5>Telepon: (031) 77735224</h5>
         </div>
