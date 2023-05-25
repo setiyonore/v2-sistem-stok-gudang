@@ -248,8 +248,6 @@ class OrderGoodsController extends Controller
         $order = OrderBarang::query()
             ->where('order_barang.id', $request->id)
             ->leftJoin('perusahaan as p', 'p.id', 'order_barang.pelanggan_id')
-            ->leftJoin('pegawai as e', 'e.id', 'order_barang.pegawai_id')
-            ->leftJoin('referensi as r', 'r.id', 'e.referensi_jabatan')
             ->select(
                 'no_sp',
                 'tanggal',
@@ -257,9 +255,7 @@ class OrderGoodsController extends Controller
                 'p.alamat',
                 'p.no_hp',
                 'p.email',
-                'e.nama as pegawai',
-                'e.nip',
-                'r.nama as jabatan'
+                'keterangan'
 
             )
             ->first();

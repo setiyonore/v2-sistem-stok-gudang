@@ -21,10 +21,10 @@
         <div class="col-xs-5">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <h3>Surat Permintaan</h3>
+                    <h3>Surat Pengantar</h3>
                     <h5>No SP: {{$order->no_sp}}</h5>
                     <h5>Tanggal: {{$order->tanggal}}</h5>
-                    <p><b>Yang Meminta: </b>{{$order->pegawai}} - {{$order->jabatan}}</p>
+                    <p><b>Keterangan: </b>{{$order->keterangan}}</p>
                 </div>
             </div>
         </div>
