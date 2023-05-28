@@ -65,5 +65,11 @@
             </table>
         </div>
     </div>
+    <div class="text-right">
+        <h5>Yang menerima</h5>
+    </div>
+    <div class="text-right" style="margin-top: 1cm">
+        <h5>(.....................)</h5>
+    </div>
 </body>
 </html>
