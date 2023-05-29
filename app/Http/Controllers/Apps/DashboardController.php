@@ -3,15 +3,11 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
-use App\Models\Barang;
-use App\Models\Item;
 use App\Models\OrderBarang;
-use App\Models\SuratPermintaan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-use WeakMap;
 
 class DashboardController extends Controller
 {
@@ -32,7 +28,7 @@ class DashboardController extends Controller
         $barang_masuk = DB::table('barang_masuk_item')
             ->leftJoin('barang_masuk as bm', 'bm.id', 'barang_masuk_item.barang_masuk_id')
             ->addSelect(DB::raw('DATE(bm.created_at) as date,COUNT(barang_masuk_item.id) as jumlah'))
-            // ->where('bm.created_at', '>=', $week)
+             ->where('bm.created_at', '>=', $week)
             ->groupBy('date')
             ->get();
         if (count($barang_masuk)) {
@@ -41,12 +37,10 @@ class DashboardController extends Controller
                 $total_barang_masuk[] = (int)$value->jumlah;
             }
         }
-        // dd($total);
         $barang_keluar = DB::table('barang_keluar_item')
             ->leftJoin('order_barang as bk', 'bk.id', 'barang_keluar_item.order_barang_id')
-//            ->leftJoin('surat_permintaan as sp', 'sp.id', 'bk.sp_id')
             ->addSelect(DB::raw('DATE(bk.created_at) as date,COUNT(barang_keluar_item.id) as jumlah'))
-            // ->where('bk.created_at', '>=', $week)
+             ->where('bk.created_at', '>=', $week)
             ->where('bk.referensi_status_order', config('config.status_permintaan_approve'))
             ->groupBy('date')
             ->get();
