@@ -270,6 +270,6 @@ class OrderGoodsController extends Controller
             'barang' => $barang_keluar_detil
         ];
         $pdf = PDF::loadView('print_order', $data);
-        return $pdf->download('order.pdf');
+        return $pdf->download($order->no_sp.'.pdf');
     }
 }
