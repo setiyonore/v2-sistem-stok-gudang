@@ -30,6 +30,8 @@ class OutgoingGoodsController extends Controller
                 'order_barang.id'
 
             )
+            ->orderBy('referensi_status_order')
+            ->orderBy('tanggal','DESC')
             ->paginate(config('config.paginate'));
         return Inertia::render('Apps/OutgoingGoods/Index', [
             'barang_keluar' => $barang_keluar
@@ -95,7 +97,9 @@ class OutgoingGoodsController extends Controller
             ->select(
                 'b.id as barang_id',
                 'barang_keluar_item.id',
-                'b.nama'
+                'b.nama',
+                DB::raw("'' AS serial")
+
             )
             ->get();
         return Inertia::render('Apps/OutgoingGoods/InputItem', [
@@ -151,10 +155,12 @@ class OutgoingGoodsController extends Controller
 
     public function insertItem(Request $request)
     {
+        // dd($request);
         $today = Carbon::now();
         $today = $today->format('Y-m-d');
         //update barang keluar item
         for ($i = 0; $i < count($request->barang); $i++) {
+            $this->validate($request,['barang.serial'=>'required']);
             $item = Item::query()
                 ->where('no_serial', $request->barang[$i]['serial'])
                 ->select('id')
