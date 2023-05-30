@@ -35,6 +35,7 @@ class OrderGoodsController extends Controller
                 'order_barang.id',
                 'order_barang.pegawai_id'
             )
+            ->orderBy('referensi_status_order')
             ->paginate(config('config.paginate'));
         $config_status_pending = config('config.status_permintaan_pending');
         $pegawai = Auth::user()->pegawai_id;
@@ -188,6 +189,7 @@ class OrderGoodsController extends Controller
         $barang = BarangKeluarItem::query()
             ->select('barang_id', DB::raw('COUNT(item_id) as jumlah'))
             ->groupBy('barang_id')
+            ->where('order_barang_id',$id)
             ->get();
         return Inertia::render('Apps/Order/Edit', [
             'order' => $order,
