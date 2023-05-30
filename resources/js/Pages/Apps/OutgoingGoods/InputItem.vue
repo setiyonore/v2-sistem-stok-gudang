@@ -142,24 +142,35 @@ export default {
       }
     },
     submit() {
-      Inertia.post(
-        "/apps/barang_keluar/insertItem",
-        {
-          barang: this.form.barang,
-          no_sp: this.order.no_sp,
-        },
-        {
-          onSuccess: () => {
-            Swal.fire({
-              title: "Success !",
-              text: "Data Berhasil Disimpan",
-              icon: "success",
-              showConfirmButton: false,
-              timer: 2000,
-            });
-          },
+      for (let i = 0; i < this.items.length; i++) {
+        if (this.items[i]["serial"].length == 0) {
+          Swal.fire({
+            title: "Warning !",
+            text: `Mohon Inputkan No Serial Pada "${this.items[i]["nama"]}"`,
+            icon: "warning",
+            showConfirmButton: true,
+          });
+        } else {
+          Inertia.post(
+            "/apps/barang_keluar/insertItem",
+            {
+              barang: this.form.barang,
+              no_sp: this.order.no_sp,
+            },
+            {
+              onSuccess: () => {
+                Swal.fire({
+                  title: "Success !",
+                  text: "Data Berhasil Disimpan",
+                  icon: "success",
+                  showConfirmButton: false,
+                  timer: 2000,
+                });
+              },
+            }
+          );
         }
-      );
+      }
     },
   },
   setup(props) {

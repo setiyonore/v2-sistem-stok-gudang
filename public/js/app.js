@@ -23529,20 +23529,31 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     submit: function submit() {
-      _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.post("/apps/barang_keluar/insertItem", {
-        barang: this.form.barang,
-        no_sp: this.order.no_sp
-      }, {
-        onSuccess: function onSuccess() {
+      for (var i = 0; i < this.items.length; i++) {
+        if (this.items[i]["serial"].length == 0) {
           sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().fire({
-            title: "Success !",
-            text: "Data Berhasil Disimpan",
-            icon: "success",
-            showConfirmButton: false,
-            timer: 2000
+            title: "Warning !",
+            text: "Mohon Inputkan No Serial Pada \"".concat(this.items[i]["nama"], "\""),
+            icon: "warning",
+            showConfirmButton: true
+          });
+        } else {
+          _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.post("/apps/barang_keluar/insertItem", {
+            barang: this.form.barang,
+            no_sp: this.order.no_sp
+          }, {
+            onSuccess: function onSuccess() {
+              sweetalert2__WEBPACK_IMPORTED_MODULE_2___default().fire({
+                title: "Success !",
+                text: "Data Berhasil Disimpan",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 2000
+              });
+            }
           });
         }
-      });
+      }
     }
   },
   setup: function setup(props) {
