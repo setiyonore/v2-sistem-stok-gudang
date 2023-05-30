@@ -9,13 +9,11 @@ use App\Models\barang_masuk_item;
 use App\Models\HistoryStatusItem;
 use App\Models\Item;
 use App\Models\Perusahaan;
-use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Traits\HistoryStatusItemTraits;
 use Carbon\Carbon;
-use function Termwind\renderUsing;
 
 class GoodsReceivedController extends Controller
 {
@@ -75,7 +73,7 @@ class GoodsReceivedController extends Controller
             'no_sp.required' => 'Mohon inputkan No SP',
             'barang.required' => 'Mohon inputkan barang',
         ]);
-        //        dd($request->barang);
+
         $pegawai_id = Auth::user()->pegawai_id;
         $barang_masuk = barang_masuk::query()
             ->create([
