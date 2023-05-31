@@ -160,7 +160,6 @@ class OutgoingGoodsController extends Controller
         $today = $today->format('Y-m-d');
         //update barang keluar item
         for ($i = 0; $i < count($request->barang); $i++) {
-            $this->validate($request,['barang.serial'=>'required']);
             $item = Item::query()
                 ->where('no_serial', $request->barang[$i]['serial'])
                 ->select('id')
