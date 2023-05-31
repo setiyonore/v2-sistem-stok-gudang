@@ -258,6 +258,13 @@ export default {
         }
       );
     },
+    reset() {
+      this.form.tanggal = "";
+      this.form.keterangan = "";
+      this.form.pelanggan = "";
+      this.form.barang = "";
+      this.form.jumlah = "";
+    },
   },
   setup(props) {
     const form = reactive({

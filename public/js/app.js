@@ -22951,6 +22951,13 @@ __webpack_require__.r(__webpack_exports__);
           _this2.items.splice(index, 1);
         }
       });
+    },
+    reset: function reset() {
+      this.form.tanggal = "";
+      this.form.keterangan = "";
+      this.form.pelanggan = "";
+      this.form.barang = "";
+      this.form.jumlah = "";
     }
   },
   setup: function setup() {
@@ -23185,6 +23192,13 @@ __webpack_require__.r(__webpack_exports__);
           });
         }
       });
+    },
+    reset: function reset() {
+      this.form.tanggal = "";
+      this.form.keterangan = "";
+      this.form.pelanggan = "";
+      this.form.barang = "";
+      this.form.jumlah = "";
     }
   },
   setup: function setup(props) {
@@ -28521,7 +28535,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "btn btn-warning shadow-sm rounded-sm ms-3",
     type: "reset",
     onClick: _cache[7] || (_cache[7] = function () {
-      return _ctx.reset && _ctx.reset.apply(_ctx, arguments);
+      return $options.reset && $options.reset.apply($options, arguments);
     })
   }, " Reset ")])])])])])])])])])], 64 /* STABLE_FRAGMENT */);
 }
@@ -28923,7 +28937,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "btn btn-warning shadow-sm rounded-sm ms-3",
     type: "reset",
     onClick: _cache[7] || (_cache[7] = function () {
-      return _ctx.reset && _ctx.reset.apply(_ctx, arguments);
+      return $options.reset && $options.reset.apply($options, arguments);
     })
   }, " Reset ")])])])])])])])])])], 64 /* STABLE_FRAGMENT */);
 }
