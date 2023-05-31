@@ -49,6 +49,7 @@
                     <button
                       class="btn btn-warning shadow-sm rounded-sm ms-3"
                       type="reset"
+                      @click="reset()"
                     >
                       Reset
                     </button>
@@ -171,6 +172,14 @@ export default {
           );
         }
       }
+    },
+    reset() {
+        //delete serial on item
+      for (let index = 0; index < this.items.length; index++) {
+        this.items[index]["serial"] = "";
+      }
+      //delete item tmp
+      this.item_tmp = [];
     },
   },
   setup(props) {

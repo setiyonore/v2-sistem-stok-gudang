@@ -23568,6 +23568,14 @@ __webpack_require__.r(__webpack_exports__);
           });
         }
       }
+    },
+    reset: function reset() {
+      //delete serial on item
+      for (var index = 0; index < this.items.length; index++) {
+        this.items[index]["serial"] = "";
+      }
+      //delete item tmp
+      this.item_tmp = [];
     }
   },
   setup: function setup(props) {
@@ -29445,11 +29453,6 @@ var _hoisted_14 = {
 var _hoisted_15 = {
   "class": "col-12"
 };
-var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  "class": "btn btn-warning shadow-sm rounded-sm ms-3",
-  type: "reset"
-}, " Reset ", -1 /* HOISTED */);
-
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Head = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Head");
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Head, null, {
@@ -29476,7 +29479,13 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onClick: _cache[0] || (_cache[0] = function () {
       return $options.submit && $options.submit.apply($options, arguments);
     })
-  }, " Simpan "), _hoisted_16])])])])])])])])])], 64 /* STABLE_FRAGMENT */);
+  }, " Simpan "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-warning shadow-sm rounded-sm ms-3",
+    type: "reset",
+    onClick: _cache[1] || (_cache[1] = function ($event) {
+      return $options.reset();
+    })
+  }, " Reset ")])])])])])])])])])], 64 /* STABLE_FRAGMENT */);
 }
 
 /***/ }),
