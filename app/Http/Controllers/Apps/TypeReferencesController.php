@@ -27,6 +27,9 @@ class TypeReferencesController extends Controller
         $this->validate($request, [
             'nama' => 'required',
             'deskripsi' => 'required',
+        ],[
+            'nama.required' => 'Mohon Inputkan Nama',
+            'deskripsi.required' => 'Mohon Inputkan Deskripsi'
         ]);
         $jenis_referensi = JenisReferensi::query()
             ->create([
