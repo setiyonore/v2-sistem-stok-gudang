@@ -42,6 +42,9 @@
                           v-model="form.deskripsi"
                           :class="{ 'is-invalid': errors.deskripsi }"
                         />
+                        <div v-if="errors.nama" class="alert alert-danger">
+                          {{ errors.nama }}
+                        </div>
                       </div>
                     </div>
                   </div>
