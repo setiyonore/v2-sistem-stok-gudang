@@ -36,6 +36,9 @@
                                             <label class="form-check-label"
                                                    :for="`check-${permission.id}`">{{ permission.name }}</label>
                                         </div>
+                                        <div v-if="errors.permissions" class="alert alert-danger">
+                                            {{ errors.permissions }}
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12">

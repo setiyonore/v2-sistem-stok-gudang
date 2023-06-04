@@ -47,6 +47,9 @@ class RoleController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'permissions' => 'required',
+        ], [
+            'name.required' => 'Mohon Inputkan Nama',
+            'permissions.required' => 'Mohon Inputkan Hak Akses',
         ]);
 
         $role = Role::create([
