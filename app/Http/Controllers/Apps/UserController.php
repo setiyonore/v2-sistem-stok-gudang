@@ -41,6 +41,13 @@ class UserController extends Controller
             'email' => 'required|unique:users',
             'password' => 'required|confirmed',
             'pegawai' => 'required',
+            'roles' => 'required'
+        ], [
+            'name.required' => 'Mohon Inputkan Nama',
+            'email.required' => 'Mohon Inputkan Email',
+            'password.required' => 'Mohon Inputkan Password',
+            'pegawai.required' => 'Mohon Pilih Pegawai',
+            'roles.required' => 'Mohon Pilih Roles'
         ]);
 
         $user = User::query()

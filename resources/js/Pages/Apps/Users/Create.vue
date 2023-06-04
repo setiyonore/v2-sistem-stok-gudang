@@ -98,8 +98,8 @@
                           </option>
                         </select>
                       </div>
-                      <div v-if="errors.jabatan" class="alert alert-danger">
-                        {{ errors.jabatan }}
+                      <div v-if="errors.pegawai" class="alert alert-danger">
+                        {{ errors.pegawai }}
                       </div>
                     </div>
                   </div>
