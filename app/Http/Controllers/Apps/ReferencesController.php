@@ -7,6 +7,7 @@ use App\Models\JenisReferensi;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Referensi;
+use Illuminate\Support\Facades\Redirect;
 
 class ReferencesController extends Controller
 {
@@ -46,15 +47,16 @@ class ReferencesController extends Controller
                 'nama' => $request->nama,
                 'deskripsi' => $request->deskripsi
             ]);
-        return redirect()->route('apps.references.index');
+        $parameterValue = $request->jenis_referensi;
+        return Redirect::to('/apps/referensi/filter?jenis_referensi=' . urlencode($parameterValue));
     }
 
     public function edit($id)
     {
         $referensi = Referensi::query()->findOrFail($id);
-        $jenis_referensi = JenisReferensi::query()->select('id','nama')->get();
+        $jenis_referensi = JenisReferensi::query()->select('id', 'nama')->get();
         $id_jenis_referensi = $id;
-        return Inertia::render('Apps/References/Edit',[
+        return Inertia::render('Apps/References/Edit', [
             'referensi' => $referensi,
             'jenis_referensi' => $jenis_referensi,
             'id_jenis_referensi' => $id_jenis_referensi
@@ -63,7 +65,7 @@ class ReferencesController extends Controller
 
     public function update(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'nama' => 'required',
             'deskripsi' => 'required',
             'jenis_referensi' => 'required'
@@ -73,13 +75,17 @@ class ReferencesController extends Controller
         $referensi->deskripsi = $request->deskripsi;
         $referensi->jenis_referensi_id = $request->jenis_referensi;
         $referensi->save();
-        return redirect()->route('apps.references.index');
+        $parameterValue = $request->jenis_referensi;
+        return Redirect::to('/apps/referensi/filter?jenis_referensi=' . urlencode($parameterValue));
     }
     public function destroy($id)
     {
+        $parameterValue = Referensi::query()->where('id', $id)
+            ->select('jenis_referensi_id')->first();
+        $parameterValue = $parameterValue->jenis_referensi_id;
         $referensi = Referensi::query()->findOrFail($id);
         $referensi->delete();
-        return redirect()->route('apps.references.index');
+        return Redirect::to('/apps/referensi/filter?jenis_referensi=' . urlencode($parameterValue));
     }
 
     public function filter(Request $request)
