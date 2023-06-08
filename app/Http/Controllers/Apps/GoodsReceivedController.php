@@ -22,8 +22,8 @@ class GoodsReceivedController extends Controller
     public function index()
     {
         $barang_masuk = barang_masuk::query()
-            ->when(request()->q, function ($barang_masuk) {
-                $barang_masuk->where('barang_masuk.tanggal', request()->q);
+            ->when(request()->datestart && request()->dateend, function ($barang_masuk) {
+                $barang_masuk->whereBetween('barang_masuk.tanggal', [request()->datestart, request()->dateend]);
             })
             ->leftJoin('pegawai as p', 'p.id', 'barang_masuk.pegawai_id')
             ->select(

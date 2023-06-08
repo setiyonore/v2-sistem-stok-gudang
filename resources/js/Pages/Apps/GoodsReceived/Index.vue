@@ -9,9 +9,21 @@
           <div class="col-md-12">
             <div class="card border-0 rounded-3 shadow border-top-purple">
               <div class="card-header">
-                <span class="font-weight-bold"
-                  ><i class="fas fa-box-open"></i> Barang Masuk</span
-                >
+                <div class="row">
+                  <div class="col-6">
+                    <span class="font-weight-bold"
+                      ><i class="fas fa-box-open"></i> Barang Masuk</span
+                    >
+                  </div>
+                  <div class="col-6 text-right">
+                    <button
+                      class="btn btn-primary input-group-text ml-1"
+                      @click="cetak"
+                    >
+                      <i class="fa fa-file-pdf"></i> Export
+                    </button>
+                  </div>
+                </div>
               </div>
               <div class="card-body">
                 <form @submit.prevent="handleSearch">
@@ -19,14 +31,26 @@
                     <Link
                       href="/apps/received_goods/create"
                       v-if="hasAnyPermission(['barang_masuk.add'])"
-                      class="btn btn-primary input-group-text"
+                      class="btn btn-primary input-group-text mr-1"
                       ><i class="fa fa-plus-circle me-2"></i> Tambah
                     </Link>
+                    <label for="" class="font-weight-bold input-group-text"
+                      >Tanggal Awal</label
+                    >
                     <input
                       type="date"
-                      v-model="search"
+                      v-model="dateStart"
                       class="form-control"
-                      placeholder="Cari barang masuk berdasarkan tanggal..."
+                      :placeholder="getDateStr"
+                    />
+                    <label for="" class="font-weight-bold input-group-text ml-1"
+                      >Tanggal Akhir</label
+                    >
+                    <input
+                      type="date"
+                      v-model="dateEnd"
+                      class="form-control"
+                      :placeholder="getDateStr"
                     />
 
                     <button
@@ -103,11 +127,22 @@ export default {
   props: {
     barang_masuk: Array,
   },
+  methods: {
+    cetak() {
+      alert("export");
+    },
+  },
   setup() {
-    const search = ref("" || new URL(document.location).searchParams.get("q"));
+    const dateStart = ref(
+      "" || new URL(document.location).searchParams.get("datestart")
+    );
+    const dateEnd = ref(
+      "" || new URL(document.location).searchParams.get("dateend")
+    );
     const handleSearch = () => {
       Inertia.get("/apps/received_goods", {
-        q: search.value,
+        datestart: dateStart.value,
+        dateend: dateEnd.value,
       });
     };
     const destroy = (id) => {
@@ -132,7 +167,7 @@ export default {
         }
       });
     };
-    return { search, handleSearch, destroy };
+    return { dateStart, dateEnd, handleSearch, destroy };
   },
 };
 </script>
