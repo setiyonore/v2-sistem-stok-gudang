@@ -22812,6 +22812,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_6__);
+
 
 
 
@@ -22830,7 +22833,21 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     cetak: function cetak() {
-      alert("export");
+      var dateAwal = this.dateStart;
+      var dateAkhir = this.dateEnd;
+      if (dateAwal == null && dateAkhir == null) {
+        var date = new Date(),
+          y = date.getFullYear(),
+          m = date.getMonth();
+        var fisrtDay = new Date(y, m, 1);
+        var lastDay = new Date(y, m + 1, 0);
+        var finalFirstDay = moment__WEBPACK_IMPORTED_MODULE_6___default()(fisrtDay).format("yyyy/MM/DD");
+        var finalLastDay = moment__WEBPACK_IMPORTED_MODULE_6___default()(lastDay).format("yyyy/MM/DD");
+        window.open("/apps/barang_masuk/recap/".concat(finalFirstDay + "/" + finalLastDay), "_blank");
+      } else {
+        var _date = dateAwal.replaceAll("-", "/") + "/" + dateAkhir.replaceAll("-", "/");
+        window.open("/apps/barang_masuk/recap/".concat(_date), "_blank");
+      }
     }
   },
   setup: function setup() {

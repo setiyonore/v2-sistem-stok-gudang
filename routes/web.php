@@ -46,7 +46,7 @@ Route::prefix('apps')->group(function () {
         Route::resource('/goods', GoodsController::class, ['as' => 'apps'])
             ->middleware('permission:barang.index|barang.add|barang.edit|barang.delete');
         Route::get('barang/historyItem/{id}', [GoodsController::class, 'getItem'])->name('apps.gooods.searchItem');
-        Route::post('barang/storeEdit',[GoodsController::class,'storeEdit'])->name('apps.goods.storeEdit');
+        Route::post('barang/storeEdit', [GoodsController::class, 'storeEdit'])->name('apps.goods.storeEdit');
         // pegawai
         Route::resource('/employees', EmployeesController::class, ['as' => 'apps'])
             ->middleware('permission:pegawai.index|pegawai.add|pegawai.edit|pegawai.delete');
@@ -58,6 +58,7 @@ Route::prefix('apps')->group(function () {
         Route::resource('/received_goods', GoodsReceivedController::class, ['as' => 'apps'])
             ->middleware('permission:barang_masuk.index|barang_masuk.add|barang_masuk.edit|barang_masuk.delete');
         Route::get('/barang_masuk/deleteItem/{id}', [GoodsReceivedController::class, 'deleteItem'])->name('apps.received_goods.deleteItem');
+        Route::get('/barang_masuk/recap/{yearAwal}/{monthAwal}/{dayAwal}/{yearAkhir}/{monthAkhir}/{dayAkhir}', [GoodsReceivedController::class, 'Recap'])->name('apps.received_goods.recap');
         //surat permintaan
         Route::post('/permintaan/searchGood', [OrderGoodsController::class, 'searchGood'])->name('apps.permintaan.search');
         Route::post('/permintaan/approve', [OrderGoodsController::class, 'approve'])->name('apps.permintaan.approve');

@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Traits\HistoryStatusItemTraits;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use PDF;
 
 class GoodsReceivedController extends Controller
 {
@@ -255,5 +257,41 @@ class GoodsReceivedController extends Controller
             return response()->json('success');
         }
         return response()->json('failed');
+    }
+
+    public function Recap($yearAwal, $monthAwal, $dayAwal, $yearAkhir, $monthAkhir, $dayAkhir)
+    {
+        $dateAwal = $yearAwal . "/" . $monthAwal . "/" . $dayAwal;
+        $dateAkhir = $yearAkhir . "/" . $monthAkhir . "/" . $dayAkhir;
+        $barang_masuk = barang_masuk::query()
+            ->leftJoin('barang_masuk_item as bmi', 'bmi.barang_masuk_id', 'barang_masuk.id')
+            ->leftJoin('item as i', 'i.id', 'bmi.item_id')
+            ->leftJoin('barang as b', 'b.id', 'i.barang_id')
+            ->leftJoin('referensi as r', 'r.id', 'b.referensi_satuan')
+            ->leftJoin('pegawai as p','p.id','barang_masuk.pegawai_id')
+            ->select(
+                DB::raw("DATE_FORMAT(barang_masuk.tanggal,'%d-%m-%Y') as tanggal"),
+                'barang_masuk.yang_menyerahkan',
+                'b.nama as barang',
+                'r.nama as satuan',
+                'p.nama as pegawai',
+                DB::raw('COUNT(i.id) as jumlah')
+            )
+            ->groupBy('barang_masuk.tanggal')
+            ->groupBy('barang_masuk.yang_menyerahkan')
+            ->groupBy('b.nama')
+            ->groupBy('r.nama')
+            ->groupBy('p.nama')
+            ->whereBetween('barang_masuk.tanggal', [$dateAwal, $dateAkhir])
+            ->orderBy('barang_masuk.tanggal', 'ASC')
+            ->get();
+        $dateAwal = Carbon::createFromFormat('Y/m/d', $dateAwal)->format('d-m-Y');
+        $dateAkhir = Carbon::createFromFormat('Y/m/d', $dateAkhir)->format('d-m-Y');
+        $data = [
+            'barang_masuk' => $barang_masuk,
+            'periode' => $dateAwal . ' - ' . $dateAkhir
+        ];
+        $pdf = PDF::loadView('print_barang_masuk', $data);
+        return $pdf->download('Barang Masuk' . $dateAwal . ' - ' . $dateAkhir . '.pdf');
     }
 }

@@ -117,6 +117,7 @@ import { Inertia } from "@inertiajs/inertia";
 import Pagination from "../../../Components/Pagination.vue";
 import Swal from "sweetalert2";
 import { ref } from "vue";
+import moment from "moment";
 export default {
   layout: LayoutApp,
   components: {
@@ -129,7 +130,25 @@ export default {
   },
   methods: {
     cetak() {
-      alert("export");
+      let dateAwal = this.dateStart;
+      let dateAkhir = this.dateEnd;
+      if (dateAwal == null && dateAkhir == null) {
+        let date = new Date(),
+          y = date.getFullYear(),
+          m = date.getMonth();
+        let fisrtDay = new Date(y, m, 1);
+        var lastDay = new Date(y, m + 1, 0);
+        let finalFirstDay = moment(fisrtDay).format("yyyy/MM/DD");
+        let finalLastDay = moment(lastDay).format("yyyy/MM/DD");
+        window.open(
+          `/apps/barang_masuk/recap/${finalFirstDay + "/" + finalLastDay}`,
+          "_blank"
+        );
+      } else {
+        let date =
+          dateAwal.replaceAll("-", "/") + "/" + dateAkhir.replaceAll("-", "/");
+        window.open(`/apps/barang_masuk/recap/${date}`, "_blank");
+      }
     },
   },
   setup() {
