@@ -11,14 +11,15 @@ use Inertia\Inertia;
 use App\Models\HistoryStatusItem;
 use App\Models\Item;
 use Carbon\Carbon;
+use PDF;
 
 class OutgoingGoodsController extends Controller
 {
     public function index()
     {
         $barang_keluar = OrderBarang::query()
-            ->when(request()->q, function ($barang_keluar) {
-                $barang_keluar->where('order_barang.tanggal', request()->q);
+            ->when(request()->datestart && request()->dateend, function ($barang_keluar) {
+                $barang_keluar->whereBetween('order_barang.tanggal', [request()->datestart, request()->dateend]);
             })
             ->leftJoin('perusahaan as p', 'p.id', 'order_barang.pelanggan_id')
             ->leftJoin('referensi as r', 'r.id', 'order_barang.referensi_status_order')
@@ -31,7 +32,7 @@ class OutgoingGoodsController extends Controller
 
             )
             ->orderBy('referensi_status_order')
-            ->orderBy('tanggal','DESC')
+            ->orderBy('tanggal', 'DESC')
             ->paginate(config('config.paginate'));
         return Inertia::render('Apps/OutgoingGoods/Index', [
             'barang_keluar' => $barang_keluar
@@ -190,5 +191,39 @@ class OutgoingGoodsController extends Controller
                 'is_input_item' => 1
             ]);
         return redirect()->route('apps.outgoing_goods.index');
+    }
+    function Recap($yearAwal, $monthAwal, $dayAwal, $yearAkhir, $monthAkhir, $dayAkhir)
+    {
+        $dateAwal = $yearAwal . "/" . $monthAwal . "/" . $dayAwal;
+        $dateAkhir = $yearAkhir . "/" . $monthAkhir . "/" . $dayAkhir;
+        $barang_keluar = OrderBarang::query()
+            ->leftJoin('barang_keluar_item as bki', 'bki.order_barang_id', 'order_barang.id')
+            ->leftJoin('item as i', 'i.id', 'bki.item_id')
+            ->leftJoin('barang as b', 'b.id', 'i.barang_id')
+            ->leftJoin('referensi as r', 'r.id', 'b.referensi_satuan')
+            ->leftJoin('pegawai as p', 'p.id', 'order_barang.pegawai_id')
+            ->select(
+                DB::raw("DATE_FORMAT(order_barang.tanggal,'%d-%m-%Y') as tanggal"),
+                'b.nama as barang',
+                'r.nama as satuan',
+                'p.nama as pegawai',
+                DB::raw('COUNT(i.id) as jumlah')
+            )
+            ->groupBy('order_barang.tanggal')
+            ->groupBy('b.nama')
+            ->groupBy('r.nama')
+            ->groupBy('p.nama')
+            ->whereBetween('order_barang.tanggal', [$dateAwal, $dateAkhir])
+            ->where('order_barang.referensi_status_order', config('config.status_permintaan_approve'))
+            ->orderBy('order_barang.tanggal', 'ASC')
+            ->get();
+        $dateAwal = Carbon::createFromFormat('Y/m/d', $dateAwal)->format('d-m-Y');
+        $dateAkhir = Carbon::createFromFormat('Y/m/d', $dateAkhir)->format('d-m-Y');
+        $data = [
+            'barang_keluar' => $barang_keluar,
+            'periode' => $dateAwal . ' - ' . $dateAkhir
+        ];
+        $pdf = PDF::loadView('print_barang_keluar', $data);
+        return $pdf->download('Barang Keluar' . $dateAwal . ' - ' . $dateAkhir . '.pdf');
     }
 }

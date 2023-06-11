@@ -76,6 +76,7 @@ Route::prefix('apps')->group(function () {
         Route::post('/barang_keluar/insertItem', [OutgoingGoodsController::class, 'insertItem'])->name('apps.barang_keluar.insertItem');
         Route::post('/barang_keluar/searchSerial/', [OutgoingGoodsController::class, 'searchSerial'])->name('apps.barang_keluar.searchSerial');
         Route::get('/barang_keluar/availableItem/{serial}', [OutgoingGoodsController::class, 'availableItem'])->name('apps.barang_keluar.availableItem');
+        Route::get('/barang_keluar/recap/{yearAwal}/{monthAwal}/{dayAwal}/{yearAkhir}/{monthAkhir}/{dayAkhir}', [OutgoingGoodsController::class, 'Recap'])->name('apps.barang_keluar.recap');
         //route resource roles
         Route::resource('/roles', RoleController::class, ['as' => 'apps'])
             ->middleware('permission:roles.index|roles.create|roles.edit|roles.delete');

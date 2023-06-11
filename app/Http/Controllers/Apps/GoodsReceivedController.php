@@ -36,6 +36,7 @@ class GoodsReceivedController extends Controller
                 'p.nama as supplier',
                 'barang_masuk.keterangan'
             )
+            ->orderBy('barang_masuk.tanggal','DESC')
             ->paginate(config('config.paginate'));
         return Inertia::render('Apps/GoodsReceived/Index', [
             'barang_masuk' => $barang_masuk
