@@ -7,7 +7,7 @@
         <div class="fade-in">
             <div class="text-center mb-4">
                 <a href="" class="text-dark text-decoration-none">
-                    <img src="/images/gudang-logo.png" width="70">
+                    <img src="/images/logo-small-transparent.png" width="70">
                     <h3 class="mt-2 font-weight-bold">Sistem Informasi Stok Gudang</h3>
                 </a>
             </div>
