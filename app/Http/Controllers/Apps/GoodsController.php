@@ -144,12 +144,13 @@ class GoodsController extends Controller
             ->first();
         $item = Item::query()
             ->when(request()->q, function ($item) {
-               $item = $item->where('no_serial', request()->q);
+                $item = $item->where('no_serial', request()->q);
             })
             ->leftJoin('referensi as kt', 'kt.id', 'item.referensi_status_item')
             ->leftJoin('referensi as kd', 'kd.id', 'item.referensi_kondisi_barang')
             ->where('barang_id', $id)
             ->select('item.id', 'no_serial', 'kt.nama as status', 'kd.nama as kondisi')
+            ->orderBy('kt.id')
             ->paginate(config('config.paginate'));
         $status = Referensi::query()
             ->select('id', 'nama as text')
