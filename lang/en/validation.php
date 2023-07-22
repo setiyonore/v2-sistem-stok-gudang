@@ -145,6 +145,12 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'email' => [
+            'required' => 'Email Harus Di isi'
+        ],
+        'password' => [
+            'required' => 'Password Harus Di isi'
+        ],
     ],
 
     /*
