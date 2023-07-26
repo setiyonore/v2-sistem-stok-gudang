@@ -24263,7 +24263,7 @@ __webpack_require__.r(__webpack_exports__);
     var destroy = function destroy(id) {
       sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire({
         title: "Konfirmasi !!!",
-        text: "Anda Akan Menghapus Data ?",
+        text: "Anda Akan Menghapus Data Jenis Referensi Dan Data Referensi yang terkait ?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",

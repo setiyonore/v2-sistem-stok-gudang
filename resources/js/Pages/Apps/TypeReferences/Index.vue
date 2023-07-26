@@ -98,7 +98,7 @@ export default {
     const destroy = (id) => {
       Swal.fire({
         title: "Konfirmasi !!!",
-        text: "Anda Akan Menghapus Data ?",
+        text: "Anda Akan Menghapus Data Jenis Referensi Dan Data Referensi yang terkait ?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",

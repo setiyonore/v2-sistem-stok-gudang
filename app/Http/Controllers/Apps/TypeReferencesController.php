@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Apps;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\JenisReferensi;
+use App\Models\Referensi;
 use Inertia\Inertia;
 
 class TypeReferencesController extends Controller
@@ -62,6 +63,8 @@ class TypeReferencesController extends Controller
 
     public function destroy($id)
     {
+        $referensi = Referensi::query()->where('jenis_referensi_id',$id);
+        $referensi->delete();
         $jenis_referensi = JenisReferensi::query()->findOrFail($id);
         $jenis_referensi->delete();
         return redirect()->route('apps.type_references.index');
