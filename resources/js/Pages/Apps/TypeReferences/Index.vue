@@ -58,13 +58,13 @@
                         class="btn btn-success btn-sm me-2"
                         ><i class="fa fa-pencil-alt me-1"></i> Edit</Link
                       >
-                      <button
+                      <!-- <button
                         @click.prevent="destroy(data.id)"
                         v-if="hasAnyPermission(['jenis_referensi.delete'])"
                         class="btn btn-danger btn-sm"
                       >
                         <i class="fa fa-trash"></i> Delete
-                      </button>
+                      </button> -->
                     </td>
                   </tr>
                 </tbody>

@@ -29979,12 +29979,6 @@ var _hoisted_24 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "class": "fa fa-pencil-alt me-1"
 }, null, -1 /* HOISTED */);
 var _hoisted_25 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" EDIT ");
-var _hoisted_26 = ["onClick"];
-var _hoisted_27 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-  "class": "fa fa-trash"
-}, null, -1 /* HOISTED */);
-var _hoisted_28 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" DELETE ");
-var _hoisted_29 = [_hoisted_27, _hoisted_28];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Head = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Head");
   var _component_Link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Link");
@@ -30028,13 +30022,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return [_hoisted_24, _hoisted_25];
       }),
       _: 2 /* DYNAMIC */
-    }, 1032 /* PROPS, DYNAMIC_SLOTS */, ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.hasAnyPermission(['referensi.delete']) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
-      key: 1,
-      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
-        return $setup.destroy(data.id);
-      }, ["prevent"]),
-      "class": "btn btn-danger btn-sm"
-    }, _hoisted_29, 8 /* PROPS */, _hoisted_26)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
+    }, 1032 /* PROPS, DYNAMIC_SLOTS */, ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <button\n                            @click.prevent=\"destroy(data.id)\"\n                            v-if=\"hasAnyPermission(['referensi.delete'])\"\n                            class=\"btn btn-danger btn-sm\"\n                          >\n                            <i class=\"fa fa-trash\"></i> DELETE\n                          </button> ")])]);
   }), 128 /* KEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Pagination, {
     links: $props.referensi.links,
     align: "end"
@@ -30724,12 +30712,6 @@ var _hoisted_16 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "class": "fa fa-pencil-alt me-1"
 }, null, -1 /* HOISTED */);
 var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Edit");
-var _hoisted_18 = ["onClick"];
-var _hoisted_19 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-  "class": "fa fa-trash"
-}, null, -1 /* HOISTED */);
-var _hoisted_20 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Delete ");
-var _hoisted_21 = [_hoisted_19, _hoisted_20];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Head = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Head");
   var _component_Link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Link");
@@ -30767,13 +30749,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         return [_hoisted_16, _hoisted_17];
       }),
       _: 2 /* DYNAMIC */
-    }, 1032 /* PROPS, DYNAMIC_SLOTS */, ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _ctx.hasAnyPermission(['jenis_referensi.delete']) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
-      key: 1,
-      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function ($event) {
-        return $setup.destroy(data.id);
-      }, ["prevent"]),
-      "class": "btn btn-danger btn-sm"
-    }, _hoisted_21, 8 /* PROPS */, _hoisted_18)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]);
+    }, 1032 /* PROPS, DYNAMIC_SLOTS */, ["href"])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <button\n                        @click.prevent=\"destroy(data.id)\"\n                        v-if=\"hasAnyPermission(['jenis_referensi.delete'])\"\n                        class=\"btn btn-danger btn-sm\"\n                      >\n                        <i class=\"fa fa-trash\"></i> Delete\n                      </button> ")])]);
   }), 128 /* KEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Pagination, {
     links: $props.jenis_referensi.links,
     align: "end"
