@@ -143,6 +143,7 @@ export default {
       }
     },
     submit() {
+      let qty = 0;
       for (let i = 0; i < this.items.length; i++) {
         if (this.items[i]["serial"].length == 0) {
           Swal.fire({
@@ -152,29 +153,33 @@ export default {
             showConfirmButton: true,
           });
         } else {
-          Inertia.post(
-            "/apps/barang_keluar/insertItem",
-            {
-              barang: this.form.barang,
-              no_sp: this.order.no_sp,
-            },
-            {
-              onSuccess: () => {
-                Swal.fire({
-                  title: "Success !",
-                  text: "Data Berhasil Disimpan",
-                  icon: "success",
-                  showConfirmButton: false,
-                  timer: 2000,
-                });
-              },
-            }
-          );
+          qty += 1;
         }
+      }
+
+      if (this.items.length === qty) {
+        Inertia.post(
+          "/apps/barang_keluar/insertItem",
+          {
+            barang: this.form.barang,
+            no_sp: this.order.no_sp,
+          },
+          {
+            onSuccess: () => {
+              Swal.fire({
+                title: "Success !",
+                text: "Data Berhasil Disimpan",
+                icon: "success",
+                showConfirmButton: false,
+                timer: 2000,
+              });
+            },
+          }
+        );
       }
     },
     reset() {
-        //delete serial on item
+      //delete serial on item
       for (let index = 0; index < this.items.length; index++) {
         this.items[index]["serial"] = "";
       }

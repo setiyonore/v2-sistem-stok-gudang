@@ -156,7 +156,6 @@ class OutgoingGoodsController extends Controller
 
     public function insertItem(Request $request)
     {
-        // dd($request);
         $today = Carbon::now();
         $today = $today->format('Y-m-d');
         //update barang keluar item
