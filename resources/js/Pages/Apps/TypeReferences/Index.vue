@@ -13,7 +13,7 @@
               >
             </div>
             <div class="card-body">
-              <form>
+              <form @submit.prevent="handleSearch">
                 <div class="input-group mb-3">
                   <Link
                     href="/apps/type_references/create"
@@ -83,6 +83,7 @@ import { Head, Link } from "@inertiajs/inertia-vue3";
 import Pagination from "../../../Components/Pagination.vue";
 import { Inertia } from "@inertiajs/inertia";
 import Swal from "sweetalert2";
+import { ref } from "vue";
 
 export default {
   layout: LayoutApp,
@@ -95,6 +96,12 @@ export default {
     jenis_referensi: Object,
   },
   setup() {
+    const search = ref("" || new URL(document.location).searchParams.get("q"));
+    const handleSearch = () => {
+      Inertia.get("/apps/type_references", {
+        q: search.value,
+      });
+    };
     const destroy = (id) => {
       Swal.fire({
         title: "Konfirmasi !!!",
@@ -117,7 +124,7 @@ export default {
         }
       });
     };
-    return { destroy };
+    return { destroy, search, handleSearch };
   },
 };
 </script>

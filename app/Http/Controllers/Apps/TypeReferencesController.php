@@ -13,6 +13,9 @@ class TypeReferencesController extends Controller
     public function index()
     {
         $jenis_referensi = JenisReferensi::query()
+            ->when(request()->q, function ($jenis_referensi) {
+                $jenis_referensi->where('jenis_referensi.nama', 'like', '%' . request()->q . '%');
+            })
             ->select('id', 'nama', 'deskripsi')
             ->paginate(config('config.paginate'));
         return Inertia::render('Apps/TypeReferences/Index', [
@@ -28,7 +31,7 @@ class TypeReferencesController extends Controller
         $this->validate($request, [
             'nama' => 'required',
             'deskripsi' => 'required',
-        ],[
+        ], [
             'nama.required' => 'Mohon Inputkan Nama',
             'deskripsi.required' => 'Mohon Inputkan Deskripsi'
         ]);
@@ -50,7 +53,7 @@ class TypeReferencesController extends Controller
 
     public function update(Request $request)
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'nama' => 'required',
             'deskripsi' => 'required'
         ]);
@@ -63,7 +66,7 @@ class TypeReferencesController extends Controller
 
     public function destroy($id)
     {
-        $referensi = Referensi::query()->where('jenis_referensi_id',$id);
+        $referensi = Referensi::query()->where('jenis_referensi_id', $id);
         $referensi->delete();
         $jenis_referensi = JenisReferensi::query()->findOrFail($id);
         $jenis_referensi->delete();
