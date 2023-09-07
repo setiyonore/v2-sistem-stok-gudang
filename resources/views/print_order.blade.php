@@ -58,7 +58,7 @@
                         <tr>
                             <td>{{ $key + 1 }}</td>
                             <td>{{$item->barang}}</td>
-                            <td>{{$item->jumlah}}</td>
+                            <td>{{$item->jumlah}} {{$item->satuan}}</td>
                         </tr>
                     @endforeach
                 </tbody>

@@ -189,7 +189,7 @@ class OrderGoodsController extends Controller
         $barang = BarangKeluarItem::query()
             ->select('barang_id', DB::raw('COUNT(item_id) as jumlah'))
             ->groupBy('barang_id')
-            ->where('order_barang_id',$id)
+            ->where('order_barang_id', $id)
             ->get();
         return Inertia::render('Apps/Order/Edit', [
             'order' => $order,
@@ -264,7 +264,12 @@ class OrderGoodsController extends Controller
         $barang_keluar_detil = BarangKeluarItem::query()
             ->where('barang_keluar_item.order_barang_id', $request->id)
             ->leftJoin('barang as b', 'b.id', 'barang_keluar_item.barang_id')
-            ->select('b.nama as barang', DB::raw('COUNT(item_id) as jumlah'))
+            ->leftJoin('referensi as r', 'r.id', 'b.referensi_satuan')
+            ->select(
+                'b.nama as barang',
+                DB::raw('COUNT(item_id) as jumlah'),
+                'r.nama as satuan',
+            )
             ->groupBy('barang_id')
             ->get();
         $data = [
@@ -272,6 +277,6 @@ class OrderGoodsController extends Controller
             'barang' => $barang_keluar_detil
         ];
         $pdf = PDF::loadView('print_order', $data);
-        return $pdf->download($order->no_sp.'.pdf');
+        return $pdf->download($order->no_sp . '.pdf');
     }
 }
