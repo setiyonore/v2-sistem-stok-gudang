@@ -6,7 +6,7 @@
   <main class="c-main">
     <div class="container-fluid">
       <div class="fade-in">
-        <div class="row">
+        <div class="row" v-if="hasAnyPermission(['dashboard.barang'])">
           <div class="col-md-6">
             <div class="card border-0 rounded-3 shadow border-top-purple">
               <div class="card-header">
@@ -42,7 +42,7 @@
         </div>
 
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-6" v-if="hasAnyPermission(['dashboard.surat_pending'])">
             <div class="card border-0 rounded-3 shadow border-top-warning">
               <div class="card-header">
                 <span class="font-weight-bold"
@@ -67,7 +67,32 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
+            <div class="col-md-6" v-if="hasAnyPermission(['dashboard.surat_pending.manager'])">
+                <div class="card border-0 rounded-3 shadow border-top-warning">
+                    <div class="card-header">
+                <span class="font-weight-bold"
+                ><i class="fas fa-mail-bulk"></i> Surat Permintaan
+                  Pending</span
+                >
+                    </div>
+                    <div class="card-body">
+                        <div class="row" v-for="(data, index) in order" :key="index">
+                            <div class="col-8">
+                                <a
+                                    :href="`/apps/outgoing_goods/${data.id}`"
+                                    style="text-decoration: none; color: black"
+                                >
+                                    <b>{{ data.no_sp }}</b>
+                                </a>
+                            </div>
+                            <div class="col-4 text-right text-danger">
+                                {{ data.tanggal }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          <div class="col-md-6" v-if="hasAnyPermission(['dashboard.stok-barang'])">
             <div class="card border-0 rounded-3 shadow border-top-danger">
               <div class="card-header">
                 <span class="font-weight-bold"
