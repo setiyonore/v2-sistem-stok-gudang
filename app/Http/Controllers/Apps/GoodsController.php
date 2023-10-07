@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
+use App\Models\barang_masuk;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Barang;
@@ -221,5 +222,17 @@ class GoodsController extends Controller
         return response()->json([
             'update' => 0
         ]);
+    }
+
+    public function checkUsage($id)
+    {
+
+        $item = Item::query()
+            ->where('barang_id', $id)
+            ->count();
+        if ($item > 0) {
+            return response()->json(['usage' => 1]);
+        }
+        return response()->json(['usage' => 0]);
     }
 }

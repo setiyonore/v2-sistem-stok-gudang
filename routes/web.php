@@ -47,6 +47,7 @@ Route::prefix('apps')->group(function () {
             ->middleware('permission:barang.index|barang.add|barang.edit|barang.delete');
         Route::get('barang/historyItem/{id}', [GoodsController::class, 'getItem'])->name('apps.gooods.searchItem');
         Route::post('barang/storeEdit', [GoodsController::class, 'storeEdit'])->name('apps.goods.storeEdit');
+        Route::get('/barang/checkUsage/{id}', [GoodsController::class, 'checkUsage']);
         // pegawai
         Route::resource('/employees', EmployeesController::class, ['as' => 'apps'])
             ->middleware('permission:pegawai.index|pegawai.add|pegawai.edit|pegawai.delete');

@@ -22816,10 +22816,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layouts_App_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../Layouts/App.vue */ "./resources/js/Layouts/App.vue");
 /* harmony import */ var _Components_Pagination_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../Components/Pagination.vue */ "./resources/js/Components/Pagination.vue");
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
-/* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
+/* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
 /* harmony import */ var _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @inertiajs/inertia */ "./node_modules/@inertiajs/inertia/dist/index.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
+
 
 
 
@@ -22837,30 +22840,44 @@ __webpack_require__.r(__webpack_exports__);
     barang: Array
   },
   setup: function setup() {
-    var search = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_5__.ref)( false || new URL(document.location).searchParams.get("q"));
+    var search = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_6__.ref)( false || new URL(document.location).searchParams.get("q"));
     var handleSearch = function handleSearch() {
       _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia.get("/apps/goods", {
         q: search.value
       });
     };
     var destroy = function destroy(id) {
-      sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire({
-        title: "Konfirmasi !!!",
-        text: "Anda Akan Menghapus Data ?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Hapus"
-      }).then(function (result) {
-        if (result.isConfirmed) {
-          _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia["delete"]("/apps/goods/".concat(id));
+      axios__WEBPACK_IMPORTED_MODULE_5___default().get("/apps/barang/checkUsage/".concat(id)).then(function (response) {
+        if (response.data.usage === 1) {
           sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire({
-            title: "Sukses",
-            text: "Data Berhasil Di Hapus",
-            icon: "success",
-            timer: 2000,
-            showConfirmButton: false
+            title: "Info !!!",
+            text: "Anda Tidak dapat Menghapus Data,Karena Digunakan Pada Barang Masuk / Barang Keluar ?",
+            icon: "warning",
+            showCancelButton: false,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Oke"
+          });
+        } else {
+          sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire({
+            title: "Konfirmasi !!!",
+            text: "Anda Akan Menghapus Data ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Hapus"
+          }).then(function (result) {
+            if (result.isConfirmed) {
+              _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_3__.Inertia["delete"]("/apps/goods/".concat(id));
+              sweetalert2__WEBPACK_IMPORTED_MODULE_4___default().fire({
+                title: "Sukses",
+                text: "Data Berhasil Di Hapus",
+                icon: "success",
+                timer: 2000,
+                showConfirmButton: false
+              });
+            }
           });
         }
       });
