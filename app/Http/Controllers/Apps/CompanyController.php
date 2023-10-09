@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
+use App\Models\OrderBarang;
 use App\Models\Perusahaan;
 use App\Traits\HelperMasterTraits;
 use Illuminate\Http\Request;
@@ -122,5 +123,16 @@ class CompanyController extends Controller
         $perusahaan = Perusahaan::query()->findOrFail($id);
         $perusahaan->delete();
         return redirect()->route('apps.company.index');
+    }
+
+    public function checkUsage($id)
+    {
+        $usage = OrderBarang::query()
+            ->where('pelanggan_id',$id)
+            ->count();
+        if ($usage >0){
+            return response()->json(['usage'=>1]);
+        }
+        return response()->json(['usage'=>0]);
     }
 }

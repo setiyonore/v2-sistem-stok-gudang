@@ -55,13 +55,14 @@ Route::prefix('apps')->group(function () {
         //perusahaan
         Route::resource('/company', CompanyController::class, ['as' => 'apps'])
             ->middleware('permission:perusahaan.index|perusahaan.add|perusahaan.edit|perusahaan.delete');
+        Route::get('/company/checkUsage/{id}',[CompanyController::class,'checkUsage']);
         //barang masuk
         Route::post('/barang_masuk/searchGood/', [GoodsReceivedController::class, 'searchGood'])->name('apps.received_goods.search');
         Route::resource('/received_goods', GoodsReceivedController::class, ['as' => 'apps'])
             ->middleware('permission:barang_masuk.index|barang_masuk.add|barang_masuk.edit|barang_masuk.delete');
         Route::get('/barang_masuk/deleteItem/{id}', [GoodsReceivedController::class, 'deleteItem'])->name('apps.received_goods.deleteItem');
         Route::get('/barang_masuk/recap/{yearAwal}/{monthAwal}/{dayAwal}/{yearAkhir}/{monthAkhir}/{dayAkhir}', [GoodsReceivedController::class, 'Recap'])->name('apps.received_goods.recap');
-        //surat permintaan
+        //surat permintaan(order barang)
         Route::post('/permintaan/searchGood', [OrderGoodsController::class, 'searchGood'])->name('apps.permintaan.search');
         Route::post('/permintaan/approve', [OrderGoodsController::class, 'approve'])->name('apps.permintaan.approve');
         Route::post('/permintaan/notApprove', [OrderGoodsController::class, 'notApprove'])->name('apps.permintaan.notApprove');
