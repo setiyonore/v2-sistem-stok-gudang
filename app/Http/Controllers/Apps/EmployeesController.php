@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Apps;
 
 use App\Http\Controllers\Controller;
+use http\Client\Curl\User;
 use Illuminate\Http\Request;
 use App\Models\Pegawai;
 use Inertia\Inertia;
@@ -122,5 +123,16 @@ class EmployeesController extends Controller
         return Inertia::render('Apps/Employees/Detil', [
             'pegawai' => $pegawai,
         ]);
+    }
+
+    public function checkUsage($id)
+    {
+        $user = \App\Models\User::query()
+            ->where('pegawai_id',$id)
+            ->count();
+        if($user>0){
+            return response()->json(['usage' => 1]);
+        }
+        return response()->json(['usage' => 0]);
     }
 }

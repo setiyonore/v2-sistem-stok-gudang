@@ -22090,6 +22090,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Components_Pagination_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../Components/Pagination.vue */ "./resources/js/Components/Pagination.vue");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_6__);
+
 
 
 
@@ -22114,23 +22117,37 @@ __webpack_require__.r(__webpack_exports__);
       });
     };
     var destroy = function destroy(id) {
-      sweetalert2__WEBPACK_IMPORTED_MODULE_5___default().fire({
-        title: "Konfirmasi !!!",
-        text: "Anda Akan Menghapus Data ?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Hapus"
-      }).then(function (result) {
-        if (result.isConfirmed) {
-          _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia["delete"]("/apps/employees/".concat(id));
+      axios__WEBPACK_IMPORTED_MODULE_6___default().get("/apps/pegawai/checkUsage/".concat(id)).then(function (response) {
+        if (response.data.usage === 1) {
           sweetalert2__WEBPACK_IMPORTED_MODULE_5___default().fire({
-            title: "Sukses",
-            text: "Data Berhasil Di Hapus",
-            icon: "success",
-            timer: 2000,
-            showConfirmButton: false
+            title: "Info !!!",
+            text: "Anda Tidak dapat Menghapus Data,Karena Pegawai Terdaftar Pada User aplikasi ?",
+            icon: "warning",
+            showCancelButton: false,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Oke"
+          });
+        } else {
+          sweetalert2__WEBPACK_IMPORTED_MODULE_5___default().fire({
+            title: "Konfirmasi !!!",
+            text: "Anda Akan Menghapus Data ?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Hapus"
+          }).then(function (result) {
+            if (result.isConfirmed) {
+              _inertiajs_inertia__WEBPACK_IMPORTED_MODULE_2__.Inertia["delete"]("/apps/employees/".concat(id));
+              sweetalert2__WEBPACK_IMPORTED_MODULE_5___default().fire({
+                title: "Sukses",
+                text: "Data Berhasil Di Hapus",
+                icon: "success",
+                timer: 2000,
+                showConfirmButton: false
+              });
+            }
           });
         }
       });

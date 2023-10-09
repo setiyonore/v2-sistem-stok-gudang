@@ -94,6 +94,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { ref } from "vue";
 import Pagination from "../../../Components/Pagination.vue";
 import Swal from "sweetalert2";
+import axios from "axios";
 export default {
   layout: LayoutApp,
   components: {
@@ -112,26 +113,41 @@ export default {
       });
     };
     const destroy = (id) => {
-      Swal.fire({
-        title: "Konfirmasi !!!",
-        text: "Anda Akan Menghapus Data ?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Hapus",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Inertia.delete(`/apps/employees/${id}`);
-          Swal.fire({
-            title: "Sukses",
-            text: "Data Berhasil Di Hapus",
-            icon: "success",
-            timer: 2000,
-            showConfirmButton: false,
-          });
-        }
-      });
+        axios.get(`/apps/pegawai/checkUsage/${id}`)
+            .then((response)=>{
+               if (response.data.usage ===1){
+                   Swal.fire({
+                       title: "Info !!!",
+                       text: "Anda Tidak dapat Menghapus Data,Karena Pegawai Terdaftar Pada User aplikasi ?",
+                       icon: "warning",
+                       showCancelButton: false,
+                       confirmButtonColor: "#3085d6",
+                       cancelButtonColor: "#d33",
+                       confirmButtonText: "Oke",
+                   })
+               }else{
+                   Swal.fire({
+                       title: "Konfirmasi !!!",
+                       text: "Anda Akan Menghapus Data ?",
+                       icon: "warning",
+                       showCancelButton: true,
+                       confirmButtonColor: "#3085d6",
+                       cancelButtonColor: "#d33",
+                       confirmButtonText: "Hapus",
+                   }).then((result) => {
+                       if (result.isConfirmed) {
+                           Inertia.delete(`/apps/employees/${id}`);
+                           Swal.fire({
+                               title: "Sukses",
+                               text: "Data Berhasil Di Hapus",
+                               icon: "success",
+                               timer: 2000,
+                               showConfirmButton: false,
+                           });
+                       }
+                   });
+               }
+            })
     };
     return { search, handleSearch, destroy };
   },

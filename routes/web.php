@@ -51,6 +51,7 @@ Route::prefix('apps')->group(function () {
         // pegawai
         Route::resource('/employees', EmployeesController::class, ['as' => 'apps'])
             ->middleware('permission:pegawai.index|pegawai.add|pegawai.edit|pegawai.delete');
+        Route::get('/pegawai/checkUsage/{id}',[EmployeesController::class,'checkUsage']);
         //perusahaan
         Route::resource('/company', CompanyController::class, ['as' => 'apps'])
             ->middleware('permission:perusahaan.index|perusahaan.add|perusahaan.edit|perusahaan.delete');
