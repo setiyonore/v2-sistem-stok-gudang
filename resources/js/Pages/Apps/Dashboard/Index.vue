@@ -42,7 +42,10 @@
         </div>
 
         <div class="row">
-          <div class="col-md-6" v-if="hasAnyPermission(['dashboard.surat_pending'])">
+          <div
+            class="col-md-6"
+            v-if="hasAnyPermission(['dashboard.surat_pending'])"
+          >
             <div class="card border-0 rounded-3 shadow border-top-warning">
               <div class="card-header">
                 <span class="font-weight-bold"
@@ -67,32 +70,38 @@
               </div>
             </div>
           </div>
-            <div class="col-md-6" v-if="hasAnyPermission(['dashboard.surat_pending.manager'])">
-                <div class="card border-0 rounded-3 shadow border-top-warning">
-                    <div class="card-header">
+          <div
+            class="col-md-6"
+            v-if="hasAnyPermission(['dashboard.surat_pending.manager'])"
+          >
+            <div class="card border-0 rounded-3 shadow border-top-warning">
+              <div class="card-header">
                 <span class="font-weight-bold"
-                ><i class="fas fa-mail-bulk"></i> Surat Permintaan
+                  ><i class="fas fa-mail-bulk"></i> Surat Permintaan
                   Pending</span
                 >
-                    </div>
-                    <div class="card-body">
-                        <div class="row" v-for="(data, index) in order" :key="index">
-                            <div class="col-8">
-                                <a
-                                    :href="`/apps/outgoing_goods/${data.id}`"
-                                    style="text-decoration: none; color: black"
-                                >
-                                    <b>{{ data.no_sp }}</b>
-                                </a>
-                            </div>
-                            <div class="col-4 text-right text-danger">
-                                {{ data.tanggal }}
-                            </div>
-                        </div>
-                    </div>
+              </div>
+              <div class="card-body">
+                <div class="row" v-for="(data, index) in order" :key="index">
+                  <div class="col-8">
+                    <a
+                      :href="`/apps/outgoing_goods/${data.id}`"
+                      style="text-decoration: none; color: black"
+                    >
+                      <b>{{ data.no_sp }}</b>
+                    </a>
+                  </div>
+                  <div class="col-4 text-right text-danger">
+                    {{ data.tanggal }}
+                  </div>
                 </div>
+              </div>
             </div>
-          <div class="col-md-6" v-if="hasAnyPermission(['dashboard.stok-barang'])">
+          </div>
+          <div
+            class="col-md-6"
+            v-if="hasAnyPermission(['dashboard.stok_barang'])"
+          >
             <div class="card border-0 rounded-3 shadow border-top-danger">
               <div class="card-header">
                 <span class="font-weight-bold"
@@ -105,12 +114,7 @@
                     <li
                       v-for="product in stok"
                       :key="product.id"
-                      class="
-                        list-group-item
-                        d-flex
-                        justify-content-between
-                        align-items-start
-                      "
+                      class="list-group-item d-flex justify-content-between align-items-start"
                     >
                       <div class="ms-2 me-auto">
                         <div class="fw-bold">{{ product.nama }}</div>
